@@ -19,41 +19,71 @@ const alertVariants = cva(
   }
 )
 
-const Alert = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement> & VariantProps<typeof alertVariants>
->(({ className, variant, ...props }, ref) => (
-  <div
-    ref={ref}
-    role="alert"
-    className={cn(alertVariants({ variant }), className)}
-    {...props}
-  />
-))
+interface AlertProps extends React.HTMLAttributes<HTMLDivElement>, VariantProps<typeof alertVariants> {
+  /**
+   * The content of the alert.
+   */
+  children: React.ReactNode;
+  /**
+   * The variant of the alert.
+   */
+  variant?: 'default' | 'destructive';
+}
+
+const Alert = React.forwardRef<HTMLDivElement, AlertProps>(({ className, variant, children, ...props }, ref) => {
+  if (!children) {
+    throw new Error('Alert component requires children');
+  }
+
+  return (
+    <div
+      ref={ref}
+      role="alert"
+      className={cn(alertVariants({ variant }), className)}
+      {...props}
+    >
+      {children}
+    </div>
+  )
+})
 Alert.displayName = "Alert"
 
-const AlertTitle = React.forwardRef<
-  HTMLParagraphElement,
-  React.HTMLAttributes<HTMLHeadingElement>
->(({ className, ...props }, ref) => (
-  <h5
-    ref={ref}
-    className={cn("mb-1 font-medium leading-none tracking-tight", className)}
-    {...props}
-  />
-))
+Alert.defaultProps = {
+  variant: 'default',
+}
+
+interface AlertTitleProps extends React.HTMLAttributes<HTMLHeadingElement> {}
+
+const AlertTitle = React.forwardRef<HTMLParagraphElement, AlertTitleProps>(({ className, ...props }, ref) => {
+  return (
+    <h5
+      ref={ref}
+      className={cn("mb-1 font-medium leading-none tracking-tight", className)}
+      {...props}
+    />
+  )
+})
 AlertTitle.displayName = "AlertTitle"
 
-const AlertDescription = React.forwardRef<
-  HTMLParagraphElement,
-  React.HTMLAttributes<HTMLParagraphElement>
->(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={cn("text-sm [&_p]:leading-relaxed", className)}
-    {...props}
-  />
-))
+AlertTitle.defaultProps = {
+  className: "default-title-class",
+}
+
+interface AlertDescriptionProps extends React.HTMLAttributes<HTMLParagraphElement> {}
+
+const AlertDescription = React.forwardRef<HTMLParagraphElement, AlertDescriptionProps>(({ className, ...props }, ref) => {
+  return (
+    <div
+      ref={ref}
+      className={cn("text-sm [&_p]:leading-relaxed", className)}
+      {...props}
+    />
+  )
+})
 AlertDescription.displayName = "AlertDescription"
+
+AlertDescription.defaultProps = {
+  className: "default-description-class",
+}
 
 export { Alert, AlertTitle, AlertDescription }
