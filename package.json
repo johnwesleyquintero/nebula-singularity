@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@auth/core": "^0.34.2",
+    "@auth/core": "0.34.2",
     "@auth/prisma-adapter": "latest",
     "@hookform/resolvers": "latest",
     "@prisma/client": "latest",
