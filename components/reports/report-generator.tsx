@@ -47,49 +47,19 @@ const defaultValues: Partial<ReportFormValues> = {
 }
 
 const metrics = [
-  {
-    id: "sales",
-    label: "Sales",
-  },
-  {
-    id: "orders",
-    label: "Orders",
-  },
-  {
-    id: "units_sold",
-    label: "Units Sold",
-  },
-  {
-    id: "conversion_rate",
-    label: "Conversion Rate",
-  },
-  {
-    id: "ppc_spend",
-    label: "PPC Spend",
-  },
-  {
-    id: "acos",
-    label: "ACOS",
-  },
-  {
-    id: "tacos",
-    label: "TACOS",
-  },
-  {
-    id: "impressions",
-    label: "Impressions",
-  },
-  {
-    id: "clicks",
-    label: "Clicks",
-  },
-  {
-    id: "ctr",
-    label: "CTR",
-  },
+  { id: "sales", label: "Sales" },
+  { id: "orders", label: "Orders" },
+  { id: "units_sold", label: "Units Sold" },
+  { id: "conversion_rate", label: "Conversion Rate" },
+  { id: "ppc_spend", label: "PPC Spend" },
+  { id: "acos", label: "ACOS" },
+  { id: "tacos", label: "TACOS" },
+  { id: "impressions", label: "Impressions" },
+  { id: "clicks", label: "Clicks" },
+  { id: "ctr", label: "CTR" },
 ]
 
-export function ReportGenerator() {
+function ReportGenerator() {
   const [isGenerating, setIsGenerating] = useState(false)
 
   const form = useForm<ReportFormValues>({
@@ -97,7 +67,7 @@ export function ReportGenerator() {
     defaultValues,
   })
 
-  function onSubmit(data: ReportFormValues) {
+  const handleSubmit = (data: ReportFormValues) => {
     setIsGenerating(true)
 
     // Simulate API call
@@ -110,166 +80,165 @@ export function ReportGenerator() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-8">
         <div className="grid gap-6 md:grid-cols-2">
-          <FormField
-            control={form.control}
-            name="reportName"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Report Name</FormLabel>
-                <FormControl>
-                  <Input placeholder="Enter report name" {...field} />
-                </FormControl>
-                <FormDescription>Give your report a descriptive name.</FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="reportType"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Report Type</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select report type" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectItem value="sales">Sales Report</SelectItem>
-                    <SelectItem value="inventory">Inventory Report</SelectItem>
-                    <SelectItem value="ppc">PPC Report</SelectItem>
-                    <SelectItem value="custom">Custom Report</SelectItem>
-                  </SelectContent>
-                </Select>
-                <FormDescription>Select the type of report you want to generate.</FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          <ReportNameField control={form.control} />
+          <ReportTypeField control={form.control} />
         </div>
 
-        <FormField
-          control={form.control}
-          name="dateRange"
-          render={({ field }) => (
-            <FormItem className="flex flex-col">
-              <FormLabel>Date Range</FormLabel>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <FormControl>
-                    <Button
-                      variant={"outline"}
-                      className={cn(
-                        "w-full justify-start text-left font-normal",
-                        !field.value && "text-muted-foreground",
-                      )}
-                    >
-                      <CalendarIcon className="mr-2 h-4 w-4" />
-                      {field.value?.from ? (
-                        field.value.to ? (
-                          <>
-                            {format(field.value.from, "LLL dd, y")} - {format(field.value.to, "LLL dd, y")}
-                          </>
-                        ) : (
-                          format(field.value.from, "LLL dd, y")
-                        )
-                      ) : (
-                        <span>Pick a date range</span>
-                      )}
-                    </Button>
-                  </FormControl>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
-                  <Calendar mode="range" selected={field.value} onSelect={field.onChange} initialFocus />
-                </PopoverContent>
-              </Popover>
-              <FormDescription>Select the date range for your report data.</FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        <DateRangeField control={form.control} />
 
-        <FormField
-          control={form.control}
-          name="format"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Report Format</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select format" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  <SelectItem value="csv">CSV</SelectItem>
-                  <SelectItem value="pdf">PDF</SelectItem>
-                  <SelectItem value="xlsx">Excel</SelectItem>
-                </SelectContent>
-              </Select>
-              <FormDescription>Choose the file format for your report.</FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        <FormatField control={form.control} />
 
-        <FormField
-          control={form.control}
-          name="metrics"
-          render={() => (
-            <FormItem>
-              <div className="mb-4">
-                <FormLabel className="text-base">Metrics</FormLabel>
-                <FormDescription>Select the metrics to include in your report.</FormDescription>
-              </div>
-              <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
-                {metrics.map((metric) => (
-                  <FormField
-                    key={metric.id}
-                    control={form.control}
-                    name="metrics"
-                    render={({ field }) => {
-                      return (
-                        <FormItem key={metric.id} className="flex flex-row items-start space-x-3 space-y-0">
-                          <FormControl>
-                            <Checkbox
-                              checked={field.value?.includes(metric.id)}
-                              onCheckedChange={(checked) => {
-                                return checked
-                                  ? field.onChange([...field.value, metric.id])
-                                  : field.onChange(field.value?.filter((value) => value !== metric.id))
-                              }}
-                            />
-                          </FormControl>
-                          <FormLabel className="font-normal">{metric.label}</FormLabel>
-                        </FormItem>
-                      )
-                    }}
-                  />
-                ))}
-              </div>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        <MetricsField control={form.control} metrics={metrics} />
 
         <Button type="submit" disabled={isGenerating}>
-          {isGenerating ? (
-            <>
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              Generating Report...
-            </>
-          ) : (
-            "Generate Report"
-          )}
+          {isGenerating ? <Loader2 className="animate-spin" /> : "Generate Report"}
         </Button>
       </form>
     </Form>
   )
 }
 
+const ReportNameField = ({ control }) => (
+  <FormField
+    control={control}
+    name="reportName"
+    render={({ field }) => (
+      <FormItem>
+        <FormLabel>Report Name</FormLabel>
+        <FormControl>
+          <Input placeholder="Enter report name" {...field} />
+        </FormControl>
+        <FormDescription>Give your report a descriptive name.</FormDescription>
+        <FormMessage />
+      </FormItem>
+    )}
+  />
+)
+
+const ReportTypeField = ({ control }) => (
+  <FormField
+    control={control}
+    name="reportType"
+    render={({ field }) => (
+      <FormItem>
+        <FormLabel>Report Type</FormLabel>
+        <Select onValueChange={field.onChange} defaultValue={field.value}>
+          <FormControl>
+            <SelectTrigger>
+              <SelectValue placeholder="Select report type" />
+            </SelectTrigger>
+          </FormControl>
+          <SelectContent>
+            <SelectItem value="sales">Sales Report</SelectItem>
+            <SelectItem value="inventory">Inventory Report</SelectItem>
+            <SelectItem value="ppc">PPC Report</SelectItem>
+            <SelectItem value="custom">Custom Report</SelectItem>
+          </SelectContent>
+        </Select>
+        <FormDescription>Select the type of report you want to generate.</FormDescription>
+        <FormMessage />
+      </FormItem>
+    )}
+  />
+)
+
+const DateRangeField = ({ control }) => (
+  <FormField
+    control={control}
+    name="dateRange"
+    render={({ field }) => (
+      <FormItem className="flex flex-col">
+        <FormLabel>Date Range</FormLabel>
+        <Popover>
+          <PopoverTrigger asChild>
+            <FormControl>
+              <Button
+                variant={"outline"}
+                className={cn(
+                  "w-full justify-start text-left font-normal",
+                  !field.value && "text-muted-foreground",
+                )}
+              >
+                <CalendarIcon className="mr-2 h-4 w-4" />
+                {field.value?.from ? (
+                  field.value.to ? (
+                    <> {format(field.value.from, "LLL dd, y")} - {format(field.value.to, "LLL dd, y")} </>
+                  ) : (
+                    format(field.value.from, "LLL dd, y")
+                  )
+                ) : (
+                  <span>Pick a date range</span>
+                )}
+              </Button>
+            </FormControl>
+          </PopoverTrigger>
+          <PopoverContent className="w-auto p-0" align="start">
+            <Calendar mode="range" selected={field.value} onSelect={field.onChange} initialFocus />
+          </PopoverContent>
+        </Popover>
+        <FormDescription>Select the date range for your report data.</FormDescription>
+        <FormMessage />
+      </FormItem>
+    )}
+  />
+)
+
+const FormatField = ({ control }) => (
+  <FormField
+    control={control}
+    name="format"
+    render={({ field }) => (
+      <FormItem>
+        <FormLabel>Format</FormLabel>
+        <Select onValueChange={field.onChange} defaultValue={field.value}>
+          <FormControl>
+            <SelectTrigger>
+              <SelectValue placeholder="Select format" />
+            </SelectTrigger>
+          </FormControl>
+          <SelectContent>
+            <SelectItem value="pdf">PDF</SelectItem>
+            <SelectItem value="csv">CSV</SelectItem>
+          </SelectContent>
+        </Select>
+        <FormDescription>Select the format for your report.</FormDescription>
+        <FormMessage />
+      </FormItem>
+    )}
+  />
+)
+
+const MetricsField = ({ control, metrics }) => (
+  <FormField
+    control={control}
+    name="metrics"
+    render={({ field }) => (
+      <FormItem>
+        <FormLabel>Metrics</FormLabel>
+        <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
+          {metrics.map((metric) => (
+            <FormControl key={metric.id}>
+              <Checkbox
+                checked={field.value.includes(metric.id)}
+                onCheckedChange={(checked) => {
+                  if (checked) {
+                    field.onChange([...field.value, metric.id])
+                  } else {
+                    field.onChange(field.value.filter((value) => value !== metric.id))
+                  }
+                }}
+              />
+              <FormLabel className="font-normal">{metric.label}</FormLabel>
+            </FormControl>
+          ))}
+        </div>
+        <FormDescription>Select the metrics to include in your report.</FormDescription>
+        <FormMessage />
+      </FormItem>
+    )}
+  />
+)
+
+export { ReportGenerator }

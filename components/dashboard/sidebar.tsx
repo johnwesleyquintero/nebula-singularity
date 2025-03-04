@@ -102,7 +102,7 @@ export function DashboardSidebar({ user, className, ...props }: SidebarNavProps)
       <SidebarHeader className="flex h-14 items-center border-b px-4">
         <Link href="/dashboard" className="flex items-center gap-2">
           <div className="relative h-6 w-6">
-            <Image src="/logo.svg" alt="Nebula-Suite Logo" fill priority className="rounded-md object-contain" />
+            <Image src="/android-chrome-192x192.png" alt="Nebula-Suite Logo" fill priority className="rounded-md object-contain" />
           </div>
           <span className="text-lg font-semibold">Nebula-Suite</span>
         </Link>
@@ -154,4 +154,3 @@ export function DashboardSidebarWrapper({ children, user }: { children: React.Re
     </SidebarProvider>
   )
 }
-

@@ -8,6 +8,9 @@
 [![Vercel](https://img.shields.io/badge/Vercel-latest-blue)](https://vercel.com/)
 [![Supabase](https://img.shields.io/badge/Supabase-latest-blue)](https://supabase.com/)
 [![Build](https://github.com/johnwesleyquintero/next-nebula-saas/actions/workflows/build.yml/badge.svg)](https://github.com/johnwesleyquintero/next-nebula-saas/actions/workflows/build.yml)
+
+---
+
 [![SonarQube Cloud](https://sonarcloud.io/images/project_badges/sonarcloud-light.svg)](https://sonarcloud.io/summary/new_code?id=johnwesleyquintero_next-nebula-saas)
 
 ## Project Overview

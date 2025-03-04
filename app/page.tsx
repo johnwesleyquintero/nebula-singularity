@@ -11,7 +11,7 @@ export default function LandingPage() {
         <div className="container flex h-14 items-center justify-between">
           <Link href="/" className="flex items-center space-x-2">
             <div className="relative h-8 w-8">
-              <Image src="/logo.svg" alt="Nebula-Suite Logo" fill priority className="rounded-md object-contain" />
+              <Image src="/android-chrome-192x192.png" alt="Nebula-Suite Logo" fill priority className="rounded-md object-contain" />
             </div>
             <span className="font-bold">Nebula-Suite</span>
           </Link>
@@ -413,4 +413,3 @@ export default function LandingPage() {
     </div>
   )
 }
-
