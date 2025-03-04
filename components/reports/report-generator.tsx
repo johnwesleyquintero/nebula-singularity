@@ -67,15 +67,21 @@ function ReportGenerator() {
     defaultValues,
   })
 
-  const handleSubmit = (data: ReportFormValues) => {
-    setIsGenerating(true)
+  const handleSubmit = async (data: ReportFormValues) => {
+    setIsGenerating(true);
 
     // Simulate API call
     setTimeout(() => {
-      setIsGenerating(false)
-      toast.success("Report generated successfully!")
-      console.log(data)
-    }, 2000)
+      try {
+        setIsGenerating(false);
+        toast.success("Report generated successfully!");
+        console.log(data);
+      } catch (error) {
+        setIsGenerating(false);
+        toast.error("Failed to generate report.");
+        console.error(error);
+      }
+    }, 2000);
   }
 
   return (
@@ -100,7 +106,7 @@ function ReportGenerator() {
   )
 }
 
-const ReportNameField = ({ control }) => (
+const ReportNameField = ({ control }: { control: any }) => (
   <FormField
     control={control}
     name="reportName"
@@ -117,7 +123,7 @@ const ReportNameField = ({ control }) => (
   />
 )
 
-const ReportTypeField = ({ control }) => (
+const ReportTypeField = ({ control }: { control: any }) => (
   <FormField
     control={control}
     name="reportType"
@@ -144,7 +150,7 @@ const ReportTypeField = ({ control }) => (
   />
 )
 
-const DateRangeField = ({ control }) => (
+const DateRangeField = ({ control }: { control: any }) => (
   <FormField
     control={control}
     name="dateRange"
@@ -185,7 +191,7 @@ const DateRangeField = ({ control }) => (
   />
 )
 
-const FormatField = ({ control }) => (
+const FormatField = ({ control }: { control: any }) => (
   <FormField
     control={control}
     name="format"
@@ -210,7 +216,7 @@ const FormatField = ({ control }) => (
   />
 )
 
-const MetricsField = ({ control, metrics }) => (
+const MetricsField = ({ control, metrics }: { control: any; metrics: any[] }) => (
   <FormField
     control={control}
     name="metrics"
@@ -218,19 +224,20 @@ const MetricsField = ({ control, metrics }) => (
       <FormItem>
         <FormLabel>Metrics</FormLabel>
         <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
-          {metrics.map((metric) => (
+          {metrics.map((metric: any) => (
             <FormControl key={metric.id}>
               <Checkbox
+                id={metric.id}
                 checked={field.value.includes(metric.id)}
                 onCheckedChange={(checked) => {
                   if (checked) {
                     field.onChange([...field.value, metric.id])
                   } else {
-                    field.onChange(field.value.filter((value) => value !== metric.id))
+                    field.onChange(field.value.filter((value: any) => value !== metric.id))
                   }
                 }}
               />
-              <FormLabel className="font-normal">{metric.label}</FormLabel>
+              <FormLabel htmlFor={metric.id} className="font-normal">{metric.label}</FormLabel>
             </FormControl>
           ))}
         </div>
