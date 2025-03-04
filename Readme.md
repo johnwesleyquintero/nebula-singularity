@@ -7,6 +7,7 @@
 [![Shadcn/UI](https://img.shields.io/badge/Shadcn/UI-latest-blue)](https://ui.shadcn.com/)
 [![Vercel](https://img.shields.io/badge/Vercel-latest-blue)](https://vercel.com/)
 [![Supabase](https://img.shields.io/badge/Supabase-latest-blue)](https://supabase.com/)
+[![Build](https://github.com/johnwesleyquintero/next-nebula-saas/actions/workflows/build.yml/badge.svg)](https://github.com/johnwesleyquintero/next-nebula-saas/actions/workflows/build.yml)
 
 ## Project Overview
 
