@@ -1,0 +1,21 @@
+// This is your Prisma schema file
+
+// datasource block to configure your database connection
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+// generator block to generate the Prisma client
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// Sample model
+model User {
+  id    Int     @id @default(autoincrement())
+  name  String  
+  email String  @unique
+}
