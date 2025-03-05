@@ -21,6 +21,23 @@ const nextConfig = {
     parallelServerBuildTraces: true,
     parallelServerCompiles: true,
   },
+  webpack: (config, { dev, isServer }) => {
+    if (!dev && !isServer) {
+      const { PurgeCSSPlugin } = require('purgecss-webpack-plugin');
+      const glob = require('glob');
+      const path = require('path');
+
+      config.plugins.push(
+        new PurgeCSSPlugin({
+          paths: glob.sync(`${path.join(__dirname, 'app')}/**/*`, { nodir: true }),
+          safelist: {
+            standard: ['body', 'html'],
+          },
+        })
+      );
+    }
+    return config;
+  },
 }
 
 mergeConfig(nextConfig, userConfig)
