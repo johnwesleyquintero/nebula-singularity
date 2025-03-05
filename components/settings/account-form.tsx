@@ -26,6 +26,46 @@ const defaultValues: Partial<AccountFormValues> = {
   dataSharing: true,
 }
 
+const MarketplaceSwitch = ({ field, code, label }: { field: any; code: string; label: string }) => (
+  <FormItem className="flex flex-row items-center space-x-3 space-y-0">
+    <FormControl>
+      <Switch
+        checked={field.value?.includes(code)}
+        onCheckedChange={(checked) => {
+          return checked
+            ? field.onChange([...field.value, code])
+            : field.onChange(field.value?.filter((value: string) => value !== code))
+        }}
+      />
+    </FormControl>
+    <FormLabel className="font-normal">{label}</FormLabel>
+  </FormItem>
+);
+
+const TwoFactorAuthField = ({ field }: { field: any }) => (
+  <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+    <div className="space-y-0.5">
+      <FormLabel className="text-base">Two-factor Authentication</FormLabel>
+      <FormDescription>Add an extra layer of security to your account.</FormDescription>
+    </div>
+    <FormControl>
+      <Switch checked={field.value} onCheckedChange={field.onChange} />
+    </FormControl>
+  </FormItem>
+);
+
+const DataSharingField = ({ field }: { field: any }) => (
+  <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+    <div className="space-y-0.5">
+      <FormLabel className="text-base">Data Sharing</FormLabel>
+      <FormDescription>Allow us to collect anonymous usage data to improve our services.</FormDescription>
+    </div>
+    <FormControl>
+      <Switch checked={field.value} onCheckedChange={field.onChange} />
+    </FormControl>
+  </FormItem>
+);
+
 export function AccountForm() {
   const [isLoading, setIsLoading] = useState(false)
 
@@ -57,120 +97,12 @@ export function AccountForm() {
               <FormLabel>Amazon Marketplaces</FormLabel>
               <FormDescription>Select the Amazon marketplaces where you sell products.</FormDescription>
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-                <FormField
-                  control={form.control}
-                  name="marketplaces"
-                  render={({ field }) => (
-                    <FormItem className="flex flex-row items-center space-x-3 space-y-0">
-                      <FormControl>
-                        <Switch
-                          checked={field.value?.includes("us")}
-                          onCheckedChange={(checked) => {
-                            return checked
-                              ? field.onChange([...field.value, "us"])
-                              : field.onChange(field.value?.filter((value) => value !== "us"))
-                          }}
-                        />
-                      </FormControl>
-                      <FormLabel className="font-normal">United States (US)</FormLabel>
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="marketplaces"
-                  render={({ field }) => (
-                    <FormItem className="flex flex-row items-center space-x-3 space-y-0">
-                      <FormControl>
-                        <Switch
-                          checked={field.value?.includes("ca")}
-                          onCheckedChange={(checked) => {
-                            return checked
-                              ? field.onChange([...field.value, "ca"])
-                              : field.onChange(field.value?.filter((value) => value !== "ca"))
-                          }}
-                        />
-                      </FormControl>
-                      <FormLabel className="font-normal">Canada (CA)</FormLabel>
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="marketplaces"
-                  render={({ field }) => (
-                    <FormItem className="flex flex-row items-center space-x-3 space-y-0">
-                      <FormControl>
-                        <Switch
-                          checked={field.value?.includes("uk")}
-                          onCheckedChange={(checked) => {
-                            return checked
-                              ? field.onChange([...field.value, "uk"])
-                              : field.onChange(field.value?.filter((value) => value !== "uk"))
-                          }}
-                        />
-                      </FormControl>
-                      <FormLabel className="font-normal">United Kingdom (UK)</FormLabel>
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="marketplaces"
-                  render={({ field }) => (
-                    <FormItem className="flex flex-row items-center space-x-3 space-y-0">
-                      <FormControl>
-                        <Switch
-                          checked={field.value?.includes("de")}
-                          onCheckedChange={(checked) => {
-                            return checked
-                              ? field.onChange([...field.value, "de"])
-                              : field.onChange(field.value?.filter((value) => value !== "de"))
-                          }}
-                        />
-                      </FormControl>
-                      <FormLabel className="font-normal">Germany (DE)</FormLabel>
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="marketplaces"
-                  render={({ field }) => (
-                    <FormItem className="flex flex-row items-center space-x-3 space-y-0">
-                      <FormControl>
-                        <Switch
-                          checked={field.value?.includes("fr")}
-                          onCheckedChange={(checked) => {
-                            return checked
-                              ? field.onChange([...field.value, "fr"])
-                              : field.onChange(field.value?.filter((value) => value !== "fr"))
-                          }}
-                        />
-                      </FormControl>
-                      <FormLabel className="font-normal">France (FR)</FormLabel>
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="marketplaces"
-                  render={({ field }) => (
-                    <FormItem className="flex flex-row items-center space-x-3 space-y-0">
-                      <FormControl>
-                        <Switch
-                          checked={field.value?.includes("it")}
-                          onCheckedChange={(checked) => {
-                            return checked
-                              ? field.onChange([...field.value, "it"])
-                              : field.onChange(field.value?.filter((value) => value !== "it"))
-                          }}
-                        />
-                      </FormControl>
-                      <FormLabel className="font-normal">Italy (IT)</FormLabel>
-                    </FormItem>
-                  )}
-                />
+                <MarketplaceSwitch field={field} code="us" label="United States (US)" />
+                <MarketplaceSwitch field={field} code="ca" label="Canada (CA)" />
+                <MarketplaceSwitch field={field} code="uk" label="United Kingdom (UK)" />
+                <MarketplaceSwitch field={field} code="de" label="Germany (DE)" />
+                <MarketplaceSwitch field={field} code="fr" label="France (FR)" />
+                <MarketplaceSwitch field={field} code="it" label="Italy (IT)" />
               </div>
               <FormMessage />
             </FormItem>
@@ -179,45 +111,18 @@ export function AccountForm() {
         <FormField
           control={form.control}
           name="twoFactorAuth"
-          render={({ field }) => (
-            <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
-              <div className="space-y-0.5">
-                <FormLabel className="text-base">Two-factor Authentication</FormLabel>
-                <FormDescription>Add an extra layer of security to your account.</FormDescription>
-              </div>
-              <FormControl>
-                <Switch checked={field.value} onCheckedChange={field.onChange} />
-              </FormControl>
-            </FormItem>
-          )}
+          render={({ field }) => <TwoFactorAuthField field={field} />}
         />
         <FormField
           control={form.control}
           name="dataSharing"
-          render={({ field }) => (
-            <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
-              <div className="space-y-0.5">
-                <FormLabel className="text-base">Data Sharing</FormLabel>
-                <FormDescription>Allow us to collect anonymous usage data to improve our services.</FormDescription>
-              </div>
-              <FormControl>
-                <Switch checked={field.value} onCheckedChange={field.onChange} />
-              </FormControl>
-            </FormItem>
-          )}
+          render={({ field }) => <DataSharingField field={field} />}
         />
         <Button type="submit" disabled={isLoading}>
-          {isLoading ? (
-            <>
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              Updating...
-            </>
-          ) : (
-            "Update account"
-          )}
+          {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+          Update account
         </Button>
       </form>
     </Form>
   )
 }
-
