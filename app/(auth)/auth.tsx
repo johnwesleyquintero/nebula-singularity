@@ -6,11 +6,7 @@ import { useToast } from '../../components/ui/use-toast';
 import { Toaster } from '../../components/ui/toaster';
 import { supabase } from '../../lib/supabaseClient';
 
-interface Session {
-  user: {
-    name: string;
-  };
-}
+import { Session } from '@supabase/supabase-js';
 
 interface AuthError {
   message: string;
@@ -25,18 +21,17 @@ const AuthPage = () => {
   const { toast } = useToast();
 
   useEffect(() => {
-    const session = supabase.auth.session();
-    if (session) {
-      console.log('User is logged in:', session.user);
-      router.push('/dashboard'); // Redirect to dashboard or another page
-    } else {
-      console.log('No user session found.');
-    }
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session) {
+        console.log('User is logged in:', session.user);
+        router.push('/dashboard');
+      }
+    });
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_: unknown, session: Session | null) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       if (session) {
         console.log('User signed in:', session.user);
-        router.push('/dashboard'); // Redirect to dashboard or another page
+        router.push('/dashboard');
       } else {
         console.log('User signed out');
       }
@@ -45,7 +40,7 @@ const AuthPage = () => {
     return () => {
       subscription.unsubscribe();
     };
-  }, []);
+  }, [router]);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -57,23 +52,29 @@ const AuthPage = () => {
         if (error) {
           throw error;
         } else {
-          alert('Sign up successful! Please check your email to verify.');
-          router.push('/dashboard'); // Redirect to dashboard or another page
+          toast({
+            title: 'Sign up successful!',
+            description: 'Please check your email to verify.',
+          });
+          router.push('/dashboard');
         }
       } else {
         const { error } = await signIn({ email, password });
         if (error) {
           throw error;
         } else {
-          alert('Sign in successful!');
-          router.push('/dashboard'); // Redirect to dashboard or another page
+          toast({
+            title: 'Sign in successful!',
+            description: 'Welcome back!',
+          });
+          router.push('/dashboard');
         }
       }
-    } catch (error: unknown) {
+    } catch (error: any) {
       console.error('Authentication error:', error);
       toast({
         title: 'Authentication Failed',
-        description: 'Please check your credentials and try again.',
+        description: error.message || 'Please check your credentials and try again.',
         variant: 'destructive',
       });
     } finally {
@@ -83,6 +84,7 @@ const AuthPage = () => {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+      <Toaster />
       <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 w-full max-w-md">
         <h1 className="text-2xl font-bold mb-6">{isSignUp ? 'Sign Up' : 'Sign In'}</h1>
         <form onSubmit={handleSubmit}>
@@ -129,7 +131,6 @@ const AuthPage = () => {
           {isSignUp ? 'Already have an account? Sign In' : 'Need an account? Sign Up'}
         </button>
       </div>
-      <Toaster />
     </div>
   );
 };
