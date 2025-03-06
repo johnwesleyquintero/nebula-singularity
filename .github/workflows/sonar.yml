@@ -35,11 +35,17 @@ jobs:
       - name: Run Tests
         run: npm test
 
+      - name: Verify SonarQube Secrets
+        if: env.SONAR_HOST_URL == '' || env.SONAR_PROJECT_KEY == ''
+        run: |
+          echo 'Error: SONAR_HOST_URL or SONAR_PROJECT_KEY is not defined.'
+          exit 1
+
       - name: Build and analyze
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-          SONAR_PROJECT_KEY: ${{ secrets.SONAR_PROJECT_KEY }}  # Use an environment variable for the project key
+          SONAR_PROJECT_KEY: ${{ secrets.SONAR_PROJECT_KEY }}
         run: |
           npm run build
-          npx sonarqube-scanner -Dsonar.projectKey=${{ env.SONAR_PROJECT_KEY }}
+          npx sonarqube-scanner -Dsonar.projectKey=$SONAR_PROJECT_KEY -Dsonar.host.url=$SONAR_HOST_URL

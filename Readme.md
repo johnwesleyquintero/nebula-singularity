@@ -97,6 +97,73 @@ Nebula-Suite is a comprehensive Next.js 14 SaaS platform for Amazon sellers, emp
 -   Modular, reusable component structure
 -   Follow atomic design principles (atoms, molecules, organisms)
 
+## Enhanced Windsurf Rules
+
+### Code Quality
+
+#### Type Safety
+- [ ] Verify typing in critical modules (NextAuth.js, Supabase, React Query)
+- **Implementation Example**:
+```typescript
+interface User {
+  id: string;
+  email: string;
+  role: 'admin' | 'user';
+}
+
+function getUser(id: string): Promise<User> {
+  // ...
+}
+```
+
+#### Clean Code
+- [ ] Remove unused variables/imports
+- **Checklist**:
+  - Run ESLint with `--fix` flag
+  - Use TypeScript compiler to find unused code
+
+### Performance
+
+#### Optimize Re-renders
+- [ ] Audit state-heavy components
+- **Metrics**:
+  - Memoize expensive computations
+  - Keep component renders under 50ms
+
+### Security
+
+#### Input Validation
+- [ ] Validate all user inputs using Zod
+- **Implementation Example**:
+```typescript
+const userSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(8)
+});
+```
+
+#### Authentication
+- [ ] Use HTTP-only cookies for JWTs
+- **Checklist**:
+  - Implement refresh token rotation
+  - Set proper session expiration
+
+### Testing
+
+#### Unit & Integration Tests
+- [ ] Achieve 80% test coverage
+- **Metrics**:
+  - Use Jest and React Testing Library
+  - Mock external dependencies
+
+### Deployment
+
+#### Vercel Configuration
+- [ ] Set proper caching headers
+- **Checklist**:
+  - Configure environment variables
+  - Enable automatic deployments
+
 ## Deployment Preparation
 
 -   Configuration for Vercel deployment

@@ -1,4 +1,4 @@
-import { AvatarFallback } from "@/components/ui/avatar"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 export function RecentSales() {
   return (
     <div className="space-y-8">
