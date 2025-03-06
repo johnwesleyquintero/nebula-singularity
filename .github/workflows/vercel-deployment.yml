@@ -6,8 +6,24 @@ on:
   pull_request:
     branches: [main]
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run lint
+
   test:
+    needs: lint
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -18,32 +34,89 @@ jobs:
       - run: npm ci
       - run: npm run test
       - run: npm run build
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-artifacts
+          path: .next/
+          retention-days: 1
 
   deploy:
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     needs: test
     runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: ${{ secrets.PRODUCTION_URL }}
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - name: Download build artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: build-artifacts
+          path: .next/
       - name: Install Vercel CLI
         run: npm install --global vercel@latest
       - name: Pull Vercel Environment Information
         run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
-      - name: Build Project Artifacts
-        run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
-      - name: Deploy Project Artifacts to Vercel
-        run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
+      - name: Deploy to Vercel
+        id: deploy
+        run: |
+          DEPLOY_URL=$(vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }})
+          echo "::set-output name=url::$DEPLOY_URL"
+          echo "DEPLOY_URL=$DEPLOY_URL" >> $GITHUB_ENV
 
   healthcheck:
     needs: deploy
     runs-on: ubuntu-latest
     steps:
+      - name: Wait for deployment to stabilize
+        run: sleep 30
       - name: Check deployment health
+        id: healthcheck
         run: |
-          response=$(curl -s -o /dev/null -w "%{http_code}" ${{ secrets.PRODUCTION_URL }})
-          if [ "$response" != "200" ]; then
-            echo "Deployment health check failed with status $response"
-            exit 1
-          fi
+          MAX_RETRIES=5
+          RETRY_COUNT=0
+          while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
+            response=$(curl -s -o /dev/null -w "%{http_code}" ${{ secrets.PRODUCTION_URL }})
+            if [ "$response" = "200" ]; then
+              echo "Deployment health check passed"
+              exit 0
+            fi
+            echo "Attempt $((RETRY_COUNT+1))/$MAX_RETRIES: Health check failed with status $response"
+            RETRY_COUNT=$((RETRY_COUNT+1))
+            if [ $RETRY_COUNT -lt $MAX_RETRIES ]; then
+              sleep 30
+            fi
+          done
+          echo "All health check attempts failed"
+          exit 1
+
+      - name: Rollback on failure
+        if: failure()
+        run: |
+          echo "Initiating rollback due to failed health checks"
+          vercel rollback --token=${{ secrets.VERCEL_TOKEN }} --yes
+
+      - name: Notify on failure
+        if: failure()
+        uses: actions/github-script@v6
+        with:
+          script: |
+            github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: '🚨 Production Deployment Failed',
+              body: `Deployment to production failed health checks.
+Workflow: ${context.workflow}
+Run: ${context.runId}
+Commit: ${context.sha}
+Deployment URL: ${process.env.DEPLOY_URL}`
+            })
 
 env:
   VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
