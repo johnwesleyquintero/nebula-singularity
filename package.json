@@ -49,7 +49,12 @@
     "@radix-ui/react-toggle-group": "^1.1.1",
     "@radix-ui/react-tooltip": "^1.1.6",
     "@sentry/nextjs": "^9.4.0",
-    "@tanstack/react-table": "latest"
+    "@tanstack/react-table": "latest",
+    "glob": "^10.3.10",
+    "purgecss-webpack-plugin": "^5.0.0",
+    "terser-webpack-plugin": "^5.3.10",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^6.1.4",
