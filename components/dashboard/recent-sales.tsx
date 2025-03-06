@@ -1,57 +1,61 @@
-import { Avatar, AvatarFallback } from './ui/avatar';
+"use client"
+
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import React from 'react'
+
+interface Sale {
+  name: string
+  email: string
+  amount: string
+  initials: string
+}
+
+const SaleItem = ({ sale }: { sale: Sale }) => (
+  <div className="flex items-center">
+    <Avatar className="h-9 w-9">
+      <AvatarFallback>{sale.initials}</AvatarFallback>
+    </Avatar>
+    <div className="ml-4 space-y-1">
+      <p className="text-sm font-medium leading-none">{sale.name}</p>
+      <p className="text-sm text-muted-foreground">{sale.email}</p>
+    </div>
+    <div className="ml-auto font-medium">{sale.amount}</div>
+  </div>
+)
+
 export function RecentSales() {
+  const sales: Sale[] = [
+    {
+      name: 'John Doe',
+      email: 'john.doe@example.com',
+      amount: '+$249.00',
+      initials: 'JD'
+    },
+    {
+      name: 'Jane Miller',
+      email: 'jane.miller@example.com',
+      amount: '+$149.00',
+      initials: 'JM'
+    },
+    {
+      name: 'Robert Williams',
+      email: 'robert.williams@example.com',
+      amount: '+$99.00',
+      initials: 'RW'
+    },
+    {
+      name: 'Sarah Davis',
+      email: 'sarah.davis@example.com',
+      amount: '+$39.00',
+      initials: 'SD'
+    }
+  ]
+
   return (
     <div className="space-y-8">
-      <div className="flex items-center">
-        <Avatar className="h-9 w-9">
-          <AvatarFallback>JD</AvatarFallback>
-        </Avatar>
-        <div className="ml-4 space-y-1">
-          <p className="text-sm font-medium leading-none">John Doe</p>
-          <p className="text-sm text-muted-foreground">john.doe@example.com</p>
-        </div>
-        <div className="ml-auto font-medium">+$249.00</div>
-      </div>
-      <div className="flex items-center">
-        <Avatar className="h-9 w-9">
-          <AvatarFallback>JM</AvatarFallback>
-        </Avatar>
-        <div className="ml-4 space-y-1">
-          <p className="text-sm font-medium leading-none">Jane Miller</p>
-          <p className="text-sm text-muted-foreground">jane.miller@example.com</p>
-        </div>
-        <div className="ml-auto font-medium">+$149.00</div>
-      </div>
-      <div className="flex items-center">
-        <Avatar className="h-9 w-9">
-          <AvatarFallback>RW</AvatarFallback>
-        </Avatar>
-        <div className="ml-4 space-y-1">
-          <p className="text-sm font-medium leading-none">Robert Williams</p>
-          <p className="text-sm text-muted-foreground">robert.williams@example.com</p>
-        </div>
-        <div className="ml-auto font-medium">+$99.00</div>
-      </div>
-      <div className="flex items-center">
-        <Avatar className="h-9 w-9">
-          <AvatarFallback>SD</AvatarFallback>
-        </Avatar>
-        <div className="ml-4 space-y-1">
-          <p className="text-sm font-medium leading-none">Sarah Davis</p>
-          <p className="text-sm text-muted-foreground">sarah.davis@example.com</p>
-        </div>
-        <div className="ml-auto font-medium">+$39.00</div>
-      </div>
-      <div className="flex items-center">
-        <Avatar className="h-9 w-9">
-          <AvatarFallback>MB</AvatarFallback>
-        </Avatar>
-        <div className="ml-4 space-y-1">
-          <p className="text-sm font-medium leading-none">Michael Brown</p>
-          <p className="text-sm text-muted-foreground">michael.brown@example.com</p>
-        </div>
-        <div className="ml-auto font-medium">+$199.00</div>
-      </div>
+      {sales.map((sale) => (
+        <SaleItem key={sale.email} sale={sale} />
+      ))}
     </div>
   )
 }

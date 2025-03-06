@@ -20,9 +20,14 @@ const reportFilterSchema = z.object({
   metrics: z.array(z.string()).min(1)
 });
 
-export default async function ReportsPage() {
-  useForm<z.infer<typeof reportFilterSchema>>({
-    resolver: zodResolver(reportFilterSchema)
+export default function ReportsPage() {
+  const methods = useForm<z.infer<typeof reportFilterSchema>>({  
+    resolver: zodResolver(reportFilterSchema),
+    defaultValues: {
+      startDate: new Date(),
+      endDate: new Date(),
+      metrics: []
+    }
   });
 
   const ErrorFallback = ({ error }: { error: Error }) => (

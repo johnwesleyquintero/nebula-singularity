@@ -3,6 +3,9 @@ import { cva, type VariantProps } from "class-variance-authority"
 
 import { cn } from "@/lib/utils"
 
+/**
+ * Alert component variants
+ */
 const alertVariants = cva(
   "relative w-full rounded-lg border p-4 [&>svg~*]:pl-7 [&>svg+div]:translate-y-[-3px] [&>svg]:absolute [&>svg]:left-4 [&>svg]:top-4 [&>svg]:text-foreground",
   {
@@ -19,20 +22,27 @@ const alertVariants = cva(
   }
 )
 
+/**
+ * Alert component props
+ */
 interface AlertProps extends React.HTMLAttributes<HTMLDivElement>, VariantProps<typeof alertVariants> {
   /**
-   * The content of the alert.
+   * The content of the alert
    */
-  children: React.ReactNode;
+  children: React.ReactNode
   /**
-   * The variant of the alert.
+   * The variant of the alert
    */
-  variant?: 'default' | 'destructive';
+  variant?: 'default' | 'destructive'
+  /**
+   * Custom class name
+   */
+  className?: string
 }
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(({ className, variant, children, ...props }, ref) => {
   if (!children) {
-    throw new Error('Alert component requires children');
+    throw new Error('Alert component requires children')
   }
 
   return (

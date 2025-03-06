@@ -52,10 +52,59 @@ interface DashboardSidebarWrapperProps {
   user: User
 }
 
-export function DashboardSidebar({ user, className, ...props }: SidebarNavProps) {
-  const pathname = usePathname()
+interface SidebarRoute {
+  title: string;
+  href: string;
+  icon: React.ComponentType;
+  variant: string;
+  role?: UserRole;
+}
 
-  const routes = [
+type UserRole = 'admin' | 'user';
+
+const SidebarHeaderComponent = () => (
+  <SidebarHeader className="flex h-14 items-center border-b px-4">
+    <Link href="/dashboard" className="flex items-center gap-2">
+      <div className="relative h-6 w-6">
+        <Image src="/android-chrome-192x192.png" alt="Nebula-Suite Logo" fill priority className="rounded-md object-contain" />
+      </div>
+      <span className="text-lg font-semibold">Nebula-Suite</span>
+    </Link>
+    <SidebarTrigger className="ml-auto h-8 w-8 lg:hidden" />
+  </SidebarHeader>
+);
+
+const SidebarFooterComponent = () => (
+  <SidebarFooter>
+    <SidebarSeparator />
+    <div className="p-4">
+      <Button variant="outline" className="w-full justify-start" onClick={() => signOut({ callbackUrl: "/login" })}>
+        <LogOut className="mr-2 h-4 w-4" />
+        Log out
+      </Button>
+    </div>
+  </SidebarFooter>
+);
+
+const renderRoute = (route: SidebarRoute, pathname: string, userRole?: UserRole) => {
+  if (route.role === 'admin' && userRole !== 'admin') return null;
+
+  return (
+    <SidebarMenuItem key={route.href}>
+      <SidebarMenuButton asChild isActive={pathname === route.href} tooltip={route.title}>
+        <Link href={route.href}>
+          <route.icon className="h-5 w-5" />
+          <span>{route.title}</span>
+        </Link>
+      </SidebarMenuButton>
+    </SidebarMenuItem>
+  );
+};
+
+const DashboardSidebar = ({ user, className, ...props }: SidebarNavProps) => {
+  const pathname = usePathname();
+
+  const routes: SidebarRoute[] = [
     {
       title: "Dashboard",
       href: "/dashboard",
@@ -110,47 +159,15 @@ export function DashboardSidebar({ user, className, ...props }: SidebarNavProps)
 
   return (
     <Sidebar className={cn("border-r", className)} {...props}>
-      <SidebarHeader className="flex h-14 items-center border-b px-4">
-        <Link href="/dashboard" className="flex items-center gap-2">
-          <div className="relative h-6 w-6">
-            <Image src="/android-chrome-192x192.png" alt="Nebula-Suite Logo" fill priority className="rounded-md object-contain" />
-          </div>
-          <span className="text-lg font-semibold">Nebula-Suite</span>
-        </Link>
-        <SidebarTrigger className="ml-auto h-8 w-8 lg:hidden" />
-      </SidebarHeader>
+      <SidebarHeaderComponent />
       <SidebarContent>
         <ScrollArea className="h-[calc(100vh-8rem)]">
           <SidebarMenu>
-            {routes.map((route) => {
-              // Skip routes that require admin role if user is not admin
-              if (route.role === "admin" && user?.role !== "admin") {
-                return null
-              }
-
-              return (
-                <SidebarMenuItem key={route.href}>
-                  <SidebarMenuButton asChild isActive={pathname === route.href} tooltip={route.title}>
-                    <Link href={route.href}>
-                      <route.icon className="h-5 w-5" />
-                      <span>{route.title}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              )
-            })}
+            {routes.map((route) => renderRoute(route, pathname, user?.role as UserRole))}
           </SidebarMenu>
         </ScrollArea>
       </SidebarContent>
-      <SidebarFooter>
-        <SidebarSeparator />
-        <div className="p-4">
-          <Button variant="outline" className="w-full justify-start" onClick={() => signOut({ callbackUrl: "/login" })}>
-            <LogOut className="mr-2 h-4 w-4" />
-            Log out
-          </Button>
-        </div>
-      </SidebarFooter>
+      <SidebarFooterComponent />
     </Sidebar>
   )
 }

@@ -4,13 +4,15 @@ import { Redis } from '@upstash/redis';
 import { csrfMiddleware } from '@/middleware/csrf';
 import { handleError, withErrorHandling } from '@/lib/errorHandling';
 
+type ErrorResponse = NextResponse<{ error: { message: string; details?: any } }>
+
 const ratelimit = new Ratelimit({
   redis: Redis.fromEnv(),
   limiter: Ratelimit.slidingWindow(100, '1 m'),
   analytics: true
 });
 
-const handler = async (req: NextRequest) => {
+const handler = async (req: NextRequest): Promise<NextResponse> => {
   const csrfResponse = await csrfMiddleware(req);
   if (csrfResponse.status !== 200) return csrfResponse;
 
@@ -35,6 +37,6 @@ const handler = async (req: NextRequest) => {
   return response;
 };
 
-export async function GET(request: NextRequest) {
+export async function GET(request: NextRequest): Promise<NextResponse> {
   return withErrorHandling(async () => handler(request));
 }

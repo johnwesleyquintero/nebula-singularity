@@ -1,4 +1,6 @@
-import React, { useEffect, MouseEvent } from 'react';
+'use client';
+
+import React, { useEffect, useState } from 'react';
 import Link from "next/link"
 import Image from "next/image"
 import { HeroSection } from '@/components/landing/HeroSection';
@@ -9,27 +11,59 @@ import { Footer } from '@/components/landing/Footer';
 import { Button } from "@/components/ui/button"
 import { ModeToggle } from "@/components/mode-toggle"
 import { Input } from "@/components/ui/input";
-import { ArrowRight, BarChart2, CheckCircle, Lock, ShieldCheck } from 'lucide-react';
-// eslint-disable-next-line @typescript-eslint/no-unused-expressions
-"use client";
+import { ArrowRight, BarChart2, Lock, ShieldCheck, Menu } from 'lucide-react';
+import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
+import { NewsletterForm } from '@/components/landing/NewsletterForm';
 
 export default function LandingPage() {
+  const [isOpen, setIsOpen] = useState(false);
+
   useEffect(() => {
-    document.querySelectorAll<HTMLAnchorElement>('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click', (e: MouseEvent<HTMLAnchorElement>) => {
-        e.preventDefault();
-        const href = anchor.getAttribute('href');
-        if (href) {
-          const target = document.querySelector(href);
-          if (target) {
-            target.scrollIntoView({
-              behavior: 'smooth'
-            });
-          }
+    const handleSmoothScroll = (e: Event, anchor: HTMLAnchorElement) => {
+      e.preventDefault();
+      const href = anchor.getAttribute('href');
+      if (href) {
+        const target = document.querySelector(href);
+        if (target) {
+          target.scrollIntoView({
+            behavior: 'smooth'
+          });
+          setIsOpen(false);
         }
-      });
+      }
+    };
+
+    const anchors = document.querySelectorAll<HTMLAnchorElement>('a[href^="#"]');
+    anchors.forEach(anchor => {
+      anchor.addEventListener('click', (e) => handleSmoothScroll(e, anchor));
     });
+
+    return () => {
+      anchors.forEach(anchor => {
+        anchor.removeEventListener('click', (e) => handleSmoothScroll(e, anchor));
+      });
+    };
   }, []);
+
+  const navigationLinks = [
+    { href: '#features', label: 'Features' },
+    { href: '#pricing', label: 'Pricing' },
+    { href: '#testimonials', label: 'Testimonials' },
+    { href: '#faq', label: 'FAQ' },
+  ];
+
+  const renderNavigationLinks = () => (
+    navigationLinks.map(({ href, label }) => (
+      <Link
+        key={href}
+        href={href}
+        className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+        aria-label={`${label} section`}
+      >
+        {label}
+      </Link>
+    ))
+  );
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -40,32 +74,33 @@ export default function LandingPage() {
         <div className="container flex h-14 items-center justify-between">
           <Link href="/" className="flex items-center space-x-2" aria-label="Home">
             <div className="relative h-8 w-8">
-              <Image 
-                src="/android-chrome-192x192.png" 
-                alt="Nebula-Suite Logo" 
-                fill 
-                priority 
-                className="rounded-md object-contain" 
+              <Image
+                src="/android-chrome-192x192.png"
+                alt="Nebula-Suite Logo"
+                fill
+                priority
+                className="rounded-md object-contain"
                 aria-hidden="true"
               />
             </div>
             <span className="font-bold">Nebula-Suite</span>
           </Link>
           <nav className="hidden md:flex items-center gap-6" aria-label="Main navigation">
-            <Link href="#features" className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2" aria-label="Features section">
-              Features
-            </Link>
-            <Link href="#pricing" className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2" aria-label="Pricing section">
-              Pricing
-            </Link>
-            <Link href="#testimonials" className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2" aria-label="Testimonials section">
-              Testimonials
-            </Link>
-            <Link href="#faq" className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2" aria-label="FAQ section">
-              FAQ
-            </Link>
+            {renderNavigationLinks()}
           </nav>
           <div className="flex items-center gap-2">
+            <Drawer open={isOpen} onOpenChange={setIsOpen}>
+              <DrawerTrigger asChild className="md:hidden">
+                <Button variant="ghost" size="icon" aria-label="Open menu">
+                  <Menu className="h-5 w-5" />
+                </Button>
+              </DrawerTrigger>
+              <DrawerContent>
+                <nav className="flex flex-col items-center gap-4 p-4">
+                  {renderNavigationLinks()}
+                </nav>
+              </DrawerContent>
+            </Drawer>
             <ModeToggle aria-label="Toggle theme" />
             <Link href="/login">
               <Button variant="outline" size="sm" aria-label="Log in">
@@ -83,7 +118,7 @@ export default function LandingPage() {
         <section id="features" className="w-full py-12 md:py-24 lg:py-32 bg-muted/50">
           <div className="container px-4 md:px-6">
             <div className="flex flex-col items-center justify-center space-y-4 text-center">
-              <div className="space-y-2 ">
+              <div className="space-y-2">
                 <div className="inline-block rounded-lg bg-muted px-3 py-1 text-sm">Features</div>
                 <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
                   Everything You Need to Succeed
@@ -105,7 +140,7 @@ export default function LandingPage() {
         <section id="faq" className="w-full py-12 md:py-24 lg:py-32 bg-background">
           <div className="container px-4 md:px-6">
             <div className="flex flex-col items-center justify-center space-y-4 text-center">
-              <div className="space-y-2 ">
+              <div className="space-y-2">
                 <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
                   Frequently Asked Questions
                 </h2>
@@ -130,7 +165,7 @@ export default function LandingPage() {
         <section className="w-full py-12 md:py-24 lg:py-32 bg-muted/50">
           <div className="container px-4 md:px-6">
             <div className="flex flex-col items-center justify-center space-y-4 text-center">
-              <div className="space-y-2 ">
+              <div className="space-y-2">
                 <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
                   Trusted by Leading Brands
                 </h2>
@@ -149,7 +184,7 @@ export default function LandingPage() {
         <section className="w-full py-12 md:py-24 lg:py-32 bg-background">
           <div className="container px-4 md:px-6">
             <div className="flex flex-col items-center justify-center space-y-4 text-center">
-              <div className="space-y-2 ">
+              <div className="space-y-2">
                 <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
                   Join 10,000+ Amazon Sellers
                 </h2>
@@ -157,12 +192,12 @@ export default function LandingPage() {
                   Get exclusive tips and updates to grow your Amazon business
                 </p>
               </div>
-              {/* TODO: Create or fix path to NewsletterForm component */}
+              <NewsletterForm />
             </div>
           </div>
         </section>
         <Footer />
       </main>
     </div>
-  )
+  );
 }

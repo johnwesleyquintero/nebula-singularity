@@ -2,7 +2,6 @@
 
 import React, { FormEvent, useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { signUp } from '../../lib/auth';
 import { useToast } from '../../components/ui/use-toast';
 import { Toaster } from '../../components/ui/toaster';
 import { supabase } from '../../lib/supabaseClient';

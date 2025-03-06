@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { toast } from 'react-toastify';
+import { toast } from 'sonner';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 import { Switch } from '../ui/switch';
+import { Loader2 } from 'lucide-react';
 
 export type ReportType = 'pdf' | 'csv' | 'xlsx';
 
@@ -107,6 +108,47 @@ const ChartToggle: React.FC<ChartToggleProps> = ({ includeCharts, onToggle }) =>
   </div>
 );
 
+const MetricCheckbox = ({ metric, field }: { metric: any; field: any }) => {
+  const handleChange = (checked: boolean) => {
+    const newValue = checked
+      ? [...field.value, metric.id]
+      : field.value.filter((value: any) => value !== metric.id)
+    field.onChange(newValue)
+  }
+
+  return (
+    <FormControl>
+      <Checkbox
+        id={metric.id}
+        checked={field.value.includes(metric.id)}
+        onCheckedChange={handleChange}
+      />
+      <FormLabel htmlFor={metric.id} className="font-normal">
+        {metric.label}
+      </FormLabel>
+    </FormControl>
+  )
+}
+
+const MetricsField = ({ control, metrics }: { control: any; metrics: any[] }) => (
+  <FormField
+    control={control}
+    name="metrics"
+    render={({ field }) => (
+      <FormItem>
+        <FormLabel>Metrics</FormLabel>
+        <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
+          {metrics.map((metric: any) => (
+            <MetricCheckbox key={metric.id} metric={metric} field={field} />
+          ))}
+        </div>
+        <FormDescription>Select the metrics to include in your report.</FormDescription>
+        <FormMessage />
+      </FormItem>
+    )}
+  />
+)
+
 const ReportGenerator: React.FC<ReportGeneratorProps> = ({ reportType, onGenerate }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [startDate, setStartDate] = useState('');
@@ -115,11 +157,25 @@ const ReportGenerator: React.FC<ReportGeneratorProps> = ({ reportType, onGenerat
   const [status, setStatus] = useState('');
   const [includeCharts, setIncludeCharts] = useState(false);
 
-  const handleGenerate = async () => {
+  const validateDates = () => {
     if (!startDate || !endDate) {
-      toast.error('Please select a valid date range');
-      return;
+      toast.error('Please select both start and end dates');
+      return false;
     }
+
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+
+    if (end < start) {
+      toast.error('End date cannot be earlier than start date');
+      return false;
+    }
+
+    return true;
+  };
+
+  const handleGenerate = async () => {
+    if (!validateDates()) return;
 
     const reportData: ReportData = {
       startDate,
@@ -135,8 +191,11 @@ const ReportGenerator: React.FC<ReportGeneratorProps> = ({ reportType, onGenerat
       setIsLoading(true);
       await onGenerate(reportData);
       toast.success('Report generated successfully');
-    } catch {
-      toast.error('Failed to generate report');
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to generate report';
+      toast.error('Error generating report', {
+        description: errorMessage,
+      });
     } finally {
       setIsLoading(false);
     }
@@ -160,8 +219,15 @@ const ReportGenerator: React.FC<ReportGeneratorProps> = ({ reportType, onGenerat
         includeCharts={includeCharts}
         onToggle={setIncludeCharts}
       />
-      <Button onClick={handleGenerate} disabled={isLoading}>
-        {isLoading ? 'Generating...' : `Generate ${reportType.toUpperCase()} Report`}
+      <Button onClick={handleGenerate} disabled={isLoading} className="w-full">
+        {isLoading ? (
+          <>
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            Generating...
+          </>
+        ) : (
+          `Generate ${reportType.toUpperCase()} Report`
+        )}
       </Button>
     </div>
   );
