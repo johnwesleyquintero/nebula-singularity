@@ -1,8 +1,10 @@
+import { useForm } from 'react-hook-form';
+
 import type { Metadata } from "next"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { ReportsList } from "@/components/reports/reports-list"
-import { ReportGenerator } from "@/components/reports/report-generator"
+import { ReportNameField } from "@/components/reports/report-generator"
 
 export const metadata: Metadata = {
   title: "Reports | Nebula-Suite",
@@ -10,6 +12,8 @@ export const metadata: Metadata = {
 }
 
 export default function ReportsPage() {
+  const { control } = useForm();
+
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center justify-between">
@@ -39,7 +43,7 @@ export default function ReportsPage() {
               <CardDescription>Create a custom report by selecting metrics and date ranges.</CardDescription>
             </CardHeader>
             <CardContent>
-              <ReportGenerator />
+              <ReportNameField control={control} />
             </CardContent>
           </Card>
         </TabsContent>
@@ -58,4 +62,3 @@ export default function ReportsPage() {
     </div>
   )
 }
-

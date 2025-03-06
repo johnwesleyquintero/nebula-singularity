@@ -6,7 +6,7 @@ import { useToast } from '../../components/ui/use-toast';
 import { Toaster } from '../../components/ui/toaster';
 import { supabase } from '../../lib/supabaseClient';
 
-import { Session } from '@supabase/supabase-js';
+// Removed unused Session import
 
 interface AuthError {
   message: string;
@@ -20,38 +20,45 @@ const AuthPage = () => {
   const router = useRouter();
   const { toast } = useToast();
 
+  // Effect to check for existing session and redirect to dashboard
   useEffect(() => {
+    // Check for existing session on component mount
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session) {
         console.log('User is logged in:', session.user);
-        router.push('/dashboard');
+        router.push('/dashboard'); // Redirect to dashboard if user is already logged in
       }
     });
 
+    // Set up a listener for authentication state changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       if (session) {
         console.log('User signed in:', session.user);
-        router.push('/dashboard');
+        router.push('/dashboard'); // Redirect to dashboard on sign-in
       } else {
         console.log('User signed out');
       }
     });
 
+    // Clean up the subscription on unmount
     return () => {
       subscription.unsubscribe();
     };
   }, [router]);
 
+  // Handles form submission for sign-up and sign-in
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
 
     try {
       if (isSignUp) {
+        // Sign up the user
         const { error } = await signUp({ email, password });
         if (error) {
           throw error;
         } else {
+          // Show success toast and redirect to dashboard
           toast({
             title: 'Sign up successful!',
             description: 'Please check your email to verify.',
@@ -59,10 +66,12 @@ const AuthPage = () => {
           router.push('/dashboard');
         }
       } else {
+        // Sign in the user
         const { error } = await signIn({ email, password });
         if (error) {
           throw error;
         } else {
+          // Show success toast and redirect to dashboard
           toast({
             title: 'Sign in successful!',
             description: 'Welcome back!',
@@ -71,6 +80,7 @@ const AuthPage = () => {
         }
       }
     } catch (error: any) {
+      // Handle authentication errors
       console.error('Authentication error:', error);
       toast({
         title: 'Authentication Failed',
@@ -123,7 +133,7 @@ const AuthPage = () => {
               {isLoading ? 'Loading...' : isSignUp ? 'Sign Up' : 'Sign In'}
             </button>
           </div>
-        </form >
+        </form>
         <button
           className="mt-4 text-sm text-blue-500 hover:text-blue-700"
           onClick={() => setIsSignUp(!isSignUp)}

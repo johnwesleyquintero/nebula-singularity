@@ -18,9 +18,9 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: {
+}: Readonly<{
   children: React.ReactNode
-}) {
+}>) {
   React.useEffect(() => {
     initializeTheme();
   }, []);
@@ -31,6 +31,20 @@ export default function RootLayout({
         <link rel="preload" href="/globals.css" as="style" />
         <link rel="preload" href="/theme.js" as="script" />
         <link rel="icon" href="/favicon.ico" />
+         <style>{`
+           /* 404.css */
+           .error-container {
+             display: flex;
+             justify-content: center;
+             align-items: center;
+             height: 100vh;
+             background-color: var(--background-color);
+           }
+           .error-message {
+             font-size: 1.5rem;
+             color: var(--text-color);
+           }
+         `}</style>
       </head>
       <body className={inter.className}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>

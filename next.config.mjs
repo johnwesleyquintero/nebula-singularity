@@ -1,9 +1,17 @@
-let userConfig = undefined
-try {
-  userConfig = await import('./v0-user-next.config')
-} catch (e) {
-  // ignore error
-}
+import path from 'path';
+import * as glob from 'glob';
+import { PurgeCSSPlugin } from 'purgecss-webpack-plugin';
+import TerserPlugin from 'terser-webpack-plugin';
+
+const userConfig = (() => {
+  try {
+    return require('./v0-user-next.config');
+  } catch (e) {
+    console.warn('User configuration not found, proceeding with default settings.');
+    // Optionally, you could return a default config here if needed.
+    return null;
+  }
+})();
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -22,44 +30,46 @@ const nextConfig = {
     parallelServerCompiles: true,
   },
   webpack: (config, { dev, isServer }) => {
-    if (!dev && !isServer) {
-      const { PurgeCSSPlugin } = require('purgecss-webpack-plugin');
-      const glob = require('glob');
-      const path = require('path');
+    // Optimization logic
+    config.optimization = {
+      minimize: true,
+      minimizer: [new TerserPlugin()],
+      splitChunks: { chunks: 'all' },
+    };
 
+    if (!dev && !isServer) {
       config.plugins.push(
         new PurgeCSSPlugin({
-          paths: glob.sync(`${path.join(__dirname, 'app')}/**/*`, { nodir: true }),
+          paths: glob.sync(`${path.resolve('./app')}/**/*`, { nodir: true }),
           safelist: {
             standard: ['body', 'html'],
           },
         })
       );
     }
+
     return config;
   },
+};
+
+// Merge user config if it exists
+if (userConfig) {
+  mergeConfig(nextConfig, userConfig);
 }
 
-mergeConfig(nextConfig, userConfig)
-
 function mergeConfig(nextConfig, userConfig) {
-  if (!userConfig) {
-    return
-  }
+  if (!userConfig) return;
 
   for (const key in userConfig) {
-    if (
-      typeof nextConfig[key] === 'object' &&
-      !Array.isArray(nextConfig[key])
-    ) {
+    if (typeof nextConfig[key] === 'object' && !Array.isArray(nextConfig[key])) {
       nextConfig[key] = {
         ...nextConfig[key],
         ...userConfig[key],
-      }
+      };
     } else {
-      nextConfig[key] = userConfig[key]
+      nextConfig[key] = userConfig[key];
     }
   }
 }
 
-export default nextConfig
+export default nextConfig;

@@ -20,9 +20,13 @@ Table.defaultProps = {
   className: "",
 }
 
+interface TableHeaderProps extends React.ComponentProps<"thead"> {
+  className?: string;
+}
+
 const TableHeader = React.forwardRef<
   HTMLTableSectionElement,
-  React.ComponentProps<"thead">
+  TableHeaderProps
 >(({ className, ...props }, ref) => (
   <thead ref={ref} className={cn("[&_tr]:border-b", className)} {...props} />
 ))
@@ -32,9 +36,13 @@ TableHeader.defaultProps = {
   className: "",
 }
 
+interface TableBodyProps extends React.ComponentProps<"tbody"> {
+  className?: string;
+}
+
 const TableBody = React.forwardRef<
   HTMLTableSectionElement,
-  React.ComponentProps<"tbody">
+  TableBodyProps
 >(({ className, ...props }, ref) => (
   <tbody
     ref={ref}
@@ -48,9 +56,13 @@ TableBody.defaultProps = {
   className: "",
 }
 
+interface TableFooterProps extends React.ComponentProps<"tfoot"> {
+  className?: string;
+}
+
 const TableFooter = React.forwardRef<
   HTMLTableSectionElement,
-  React.ComponentProps<"tfoot">
+  TableFooterProps
 >(({ className, ...props }, ref) => (
   <tfoot
     ref={ref}
@@ -67,9 +79,13 @@ TableFooter.defaultProps = {
   className: "",
 }
 
+interface TableRowProps extends React.ComponentProps<"tr"> {
+  className?: string;
+}
+
 const TableRow = React.forwardRef<
   HTMLTableRowElement,
-  React.ComponentProps<"tr">
+  TableRowProps
 >(({ className, ...props }, ref) => (
   <tr
     ref={ref}
@@ -86,9 +102,13 @@ TableRow.defaultProps = {
   className: "",
 }
 
+interface TableHeadProps extends React.ThHTMLAttributes<HTMLTableCellElement> {
+  className?: string;
+}
+
 const TableHead = React.forwardRef<
   HTMLTableCellElement,
-  React.ThHTMLAttributes<HTMLTableCellElement>
+  TableHeadProps
 >(({ className, ...props }, ref) => (
   <th
     ref={ref}
@@ -105,9 +125,13 @@ TableHead.defaultProps = {
   className: "",
 }
 
+interface TableCellProps extends React.TdHTMLAttributes<HTMLTableCellElement> {
+  className?: string;
+}
+
 const TableCell = React.forwardRef<
   HTMLTableCellElement,
-  React.TdHTMLAttributes<HTMLTableCellElement>
+  TableCellProps
 >(({ className, ...props }, ref) => (
   <td
     ref={ref}
@@ -121,9 +145,13 @@ TableCell.defaultProps = {
   className: "",
 }
 
+interface TableCaptionProps extends React.ComponentProps<"caption"> {
+  className?: string;
+}
+
 const TableCaption = React.forwardRef<
   HTMLTableCaptionElement,
-  React.ComponentProps<"caption">
+  TableCaptionProps
 >(({ className, ...props }, ref) => (
   <caption
     ref={ref}

@@ -1,0 +1,13 @@
+{
+    "ipynb.experimental.serialization": true,
+    "color-highlight.matchWords": true,
+    "color-highlight.matchRgbWithNoFunction": true,
+    "color-highlight.matchHslWithNoFunction": true,
+    "color-highlight.useARGB": true,
+    "css.format.spaceAroundSelectorSeparator": true,
+    "window.autoDetectColorScheme": false,
+    "window.closeWhenEmpty": true,
+    "workbench.settings.openDefaultKeybindings": true,
+    "workbench.settings.openDefaultSettings": true,
+    "workbench.settings.useSplitJSON": true
+}

@@ -4,12 +4,13 @@ import { ChevronLeft, ChevronRight, MoreHorizontal } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { ButtonProps, buttonVariants } from "@/components/ui/button"
 
+// Pagination component for navigation
 interface PaginationProps extends React.ComponentProps<"nav"> {
   className?: string;
 }
 
 const Pagination = React.forwardRef<
-  HTMLNavElement,
+  HTMLElement,
   PaginationProps
 >(({ className, ...props }, ref) => (
   <nav
@@ -20,11 +21,12 @@ const Pagination = React.forwardRef<
     {...props}
   />
 ))
-Pagination.displayName = "Pagination"
+Pagination.displayName = "Pagination";
 Pagination.defaultProps = {
   className: "",
-}
+};
 
+// PaginationContent component for wrapping pagination items
 const PaginationContent = React.forwardRef<
   HTMLUListElement,
   React.ComponentProps<"ul">
@@ -35,30 +37,35 @@ const PaginationContent = React.forwardRef<
     {...props}
   />
 ))
-PaginationContent.displayName = "PaginationContent"
+PaginationContent.displayName = "PaginationContent";
 PaginationContent.defaultProps = {
   className: "",
-}
+};
 
+// PaginationItem component for individual pagination items
 const PaginationItem = React.forwardRef<
   HTMLLIElement,
   React.ComponentProps<"li">
 >(({ className, ...props }, ref) => (
   <li ref={ref} className={cn("", className)} {...props} />
 ))
-PaginationItem.displayName = "PaginationItem"
+PaginationItem.displayName = "PaginationItem";
 PaginationItem.defaultProps = {
   className: "",
+};
+
+// Combined PaginationLinkProps interface
+interface PaginationLinkProps extends React.ComponentProps<"a"> {
+  size?: "default" | "sm" | "lg" | "icon" | null;
+  isActive?: boolean;
 }
 
-interface PaginationLinkProps extends Pick<ButtonProps, "size"> {
-  isActive?: boolean;
-} & React.ComponentProps<"a">
-
+// PaginationLink component for pagination links
 const PaginationLink = React.forwardRef<
   HTMLAnchorElement,
   PaginationLinkProps
->(({ className, isActive, size = "icon", ...props }, ref) => (
+>(({ isActive, size = "icon", ...props }, ref) => {
+  return (
   <a
     aria-current={isActive ? "page" : undefined}
     className={cn(
@@ -66,58 +73,57 @@ const PaginationLink = React.forwardRef<
         variant: isActive ? "outline" : "ghost",
         size,
       }),
-      className
+      props.className
     )}
     ref={ref}
     {...props}
   />
-))
-PaginationLink.displayName = "PaginationLink"
+  )
+})
+PaginationLink.displayName = "PaginationLink";
 PaginationLink.defaultProps = {
-  className: "",
-  size: "icon",
-}
+  size: "icon"
+};
 
+// PaginationPrevious component for previous page link
 const PaginationPrevious = React.forwardRef<
   HTMLAnchorElement,
-  React.ComponentProps<typeof PaginationLink>
->(({ className, ...props }, ref) => (
+  PaginationLinkProps
+>(({  ...props }, ref) => {
+  return (
   <PaginationLink
     aria-label="Go to previous page"
     size="default"
-    className={cn("gap-1 pl-2.5", className)}
+    className={cn("gap-1 pl-2.5")}
     ref={ref}
     {...props}
-  >
-    <ChevronLeft className="h-4 w-4" />
-    <span>Previous</span>
-  </PaginationLink>
-))
-PaginationPrevious.displayName = "PaginationPrevious"
+  />
+  )
+})
+PaginationPrevious.displayName = "PaginationPrevious";
 PaginationPrevious.defaultProps = {
-  className: "",
-}
+}; // Add a semicolon here
 
+// PaginationNext component for next page link
 const PaginationNext = React.forwardRef<
   HTMLAnchorElement,
-  React.ComponentProps<typeof PaginationLink>
->(({ className, ...props }, ref) => (
+  PaginationLinkProps
+>(({  ...props }, ref) => {
+  return (
   <PaginationLink
     aria-label="Go to next page"
     size="default"
-    className={cn("gap-1 pr-2.5", className)}
+    className={cn("gap-1 pr-2.5")}
     ref={ref}
     {...props}
-  >
-    <span>Next</span>
-    <ChevronRight className="h-4 w-4" />
-  </PaginationLink>
-))
-PaginationNext.displayName = "PaginationNext"
+  />
+  )
+})
+PaginationNext.displayName = "PaginationNext";
 PaginationNext.defaultProps = {
-  className: "",
-}
+};
 
+// PaginationEllipsis component for ellipsis in pagination
 const PaginationEllipsis = React.forwardRef<
   HTMLSpanElement,
   React.ComponentProps<"span">
@@ -127,15 +133,11 @@ const PaginationEllipsis = React.forwardRef<
     className={cn("flex h-9 w-9 items-center justify-center", className)}
     ref={ref}
     {...props}
-  >
-    <MoreHorizontal className="h-4 w-4" />
-    <span className="sr-only">More pages</span>
-  </span>
+  />
 ))
-PaginationEllipsis.displayName = "PaginationEllipsis"
+PaginationEllipsis.displayName = "PaginationEllipsis";
 PaginationEllipsis.defaultProps = {
-  className: "",
-}
+};
 
 export {
   Pagination,
