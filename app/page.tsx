@@ -11,7 +11,7 @@ import { Footer } from '@/components/landing/Footer';
 import { Button } from "@/components/ui/button"
 import { ModeToggle } from "@/components/mode-toggle"
 import { Input } from "@/components/ui/input";
-import { ArrowRight, BarChart2, Lock, ShieldCheck, Menu } from 'lucide-react';
+import { BarChart2, Lock, ShieldCheck, Menu } from 'lucide-react';
 import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
 import { NewsletterForm } from '@/components/landing/NewsletterForm';
 

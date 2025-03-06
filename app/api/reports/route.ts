@@ -3,8 +3,9 @@ import { Ratelimit } from '@upstash/ratelimit';
 import { Redis } from '@upstash/redis';
 import { csrfMiddleware } from '@/middleware/csrf';
 import { handleError, withErrorHandling } from '@/lib/errorHandling';
+import { applySecurityHeaders } from '@/lib/securityHeaders';
 
-type ErrorResponse = NextResponse<{ error: { message: string; details?: any } }>
+// Since ErrorResponse is not used, we can remove the type declaration
 
 const ratelimit = new Ratelimit({
   redis: Redis.fromEnv(),
@@ -29,10 +30,7 @@ const handler = async (req: NextRequest): Promise<NextResponse> => {
 
   // Add security headers
   const response = NextResponse.json({ data: [] });
-  response.headers.set('Content-Security-Policy', "default-src 'self'");
-  response.headers.set('X-Frame-Options', 'DENY');
-  response.headers.set('X-Content-Type-Options', 'nosniff');
-  response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
+  applySecurityHeaders(response);
 
   return response;
 };

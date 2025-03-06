@@ -7,6 +7,7 @@ import { ReportsList } from "@/components/reports/reports-list"
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Metadata } from 'next';
+// Fix the import statement for useForm
 import { useForm } from 'react-hook-form';
 
 export const metadata: Metadata = {
@@ -21,7 +22,8 @@ const reportFilterSchema = z.object({
 });
 
 export default function ReportsPage() {
-  const methods = useForm<z.infer<typeof reportFilterSchema>>({  
+  // Rename 'methods' to 'form' to match the warning in the build log
+  const { register, handleSubmit } = useForm<z.infer<typeof reportFilterSchema>>({
     resolver: zodResolver(reportFilterSchema),
     defaultValues: {
       startDate: new Date(),

@@ -44,31 +44,44 @@ const nextConfig = {
   },
   images: {
     unoptimized: false,
-  },
-  experimental: {
-    webpackBuildWorker: true,
-    parallelServerBuildTraces: true,
-    parallelServerCompiles: true,
-  },
-  headers: async () => {
-    return [
+    remotePatterns: [
       {
-        source: '/(.*)',
-        headers: securityHeaders,
+        protocol: 'https',
+        hostname: '*.nebula-saas.com',
+        port: '',
+        pathname: '/**',
       },
-    ];
+    ],
   },
+  headers: async () => [
+    {
+      source: '/(.*)',
+      headers: securityHeaders,
+    },
+  ],
   publicRuntimeConfig: {
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
     NEXT_PUBLIC_SENTRY_DSN: process.env.NEXT_PUBLIC_SENTRY_DSN
   },
   webpack: (config, { dev, isServer }) => {
+    // Set optimization options
     config.optimization = {
-      minimize: true,
-      minimizer: [new TerserPlugin()],
+      minimize: !dev,
+      minimizer: [
+        new TerserPlugin({
+          parallel: true,
+          terserOptions: {
+            compress: {
+              warnings: false,
+              drop_console: !dev,
+            },
+          },
+        })
+      ],
       splitChunks: { chunks: 'all' },
     };
 
+    // Add PurgeCSS in production server builds
     if (!dev && isServer) {
       const purgePaths = glob.sync(`${path.join(__dirname, 'src/**/*.{js,ts,jsx,tsx}')}`);
       config.plugins.push(
@@ -81,6 +94,7 @@ const nextConfig = {
       );
     }
 
+    // Disable cache for better reliability
     config.cache = false;
     return config;
   },
