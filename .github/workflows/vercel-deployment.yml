@@ -2,9 +2,9 @@ name: Vercel Deployment
 
 on:
   push:
-    branches: [main, staging]
+    branches: [main]
   pull_request:
-    branches: [main, staging]
+    branches: [main]
 
 jobs:
   test:

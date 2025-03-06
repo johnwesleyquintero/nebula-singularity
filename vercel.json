@@ -7,7 +7,9 @@
   "regions": ["iad1"],
   "github": {
     "enabled": true,
-    "silent": true
+    "silent": true,
+    "autoAlias": true,
+    "productionBranch": "main"
   },
   "headers": [
     {
