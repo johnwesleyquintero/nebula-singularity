@@ -94,11 +94,16 @@ export function AccountForm() {
     setIsLoading(true)
 
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      // Make actual API call to update account settings
+      await fetch('/api/settings/account', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
+      });
       setIsLoading(false)
       toast.success("Account settings updated successfully!")
-      console.log(data)
     } catch (error) {
       setIsLoading(false)
       const errorResponse = handleError(error);

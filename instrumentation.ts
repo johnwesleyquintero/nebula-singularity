@@ -1,7 +1,9 @@
 import * as Sentry from '@sentry/nextjs';
 
 export const register = async () => {
-  console.log('Sentry instrumentation running');
+  Sentry.captureMessage('Sentry instrumentation initialized', {
+    level: 'info',
+  });
   if (process.env.NEXT_RUNTIME === 'nodejs') {
     Sentry.init({
       dsn: process.env.SENTRY_DSN,

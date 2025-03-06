@@ -43,11 +43,16 @@ export function NotificationsForm() {
     setIsLoading(true)
 
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      // Make actual API call to update notification preferences
+      await fetch('/api/settings/notifications', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
+      });
       setIsLoading(false)
       toast.success("Notification preferences updated successfully!")
-      console.log(data)
     } catch (error) {
       setIsLoading(false)
       const errorResponse = handleError(error);
