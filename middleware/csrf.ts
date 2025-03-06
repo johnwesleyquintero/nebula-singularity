@@ -16,10 +16,10 @@ interface CsrfToken {
 }
 
 const DEFAULT_CONFIG: CsrfConfig = {
-  tokenExpiry: 3600, // 1 hour
-  httpOnly: true,
+  tokenExpiry: parseInt(process.env.CSRF_TOKEN_EXPIRY || '3600'), // 1 hour default
+  httpOnly: process.env.CSRF_HTTP_ONLY === 'true',
   secure: process.env.NODE_ENV === 'production',
-  sameSite: 'strict',
+  sameSite: process.env.CSRF_SAME_SITE as 'strict' | 'lax' | 'none' || 'strict',
 };
 
 // Paths that don't require CSRF protection
@@ -34,6 +34,11 @@ const isExcludedPath = (path: string): boolean => {
   return EXCLUDED_PATHS.some(excludedPath => path.startsWith(excludedPath));
 };
 
+/**
+ * Enhanced CSRF middleware with token validation and caching
+ * @param {NextRequest} req - The incoming request object
+ * @returns {Promise<NextResponse>} - Response object with CSRF protection
+ */
 export const csrfMiddleware = async (req: NextRequest) => {
   // Enhanced CSRF protection with additional validation
   if (!req.nextUrl) {
@@ -51,11 +56,15 @@ export const csrfMiddleware = async (req: NextRequest) => {
   return response;
   }
 
-  let parsedToken: CsrfToken | null = null;
+  const cache = new Map<string, CsrfToken>();
+let parsedToken: CsrfToken | null = null;
 
   try {
     const cookieStore = await cookies();
     const cookieValue = cookieStore.get('csrf-token')?.value;
+if (cookieValue && cache.has(cookieValue)) {
+  parsedToken = cache.get(cookieValue);
+} else {
     if (cookieValue) {
       parsedToken = JSON.parse(cookieValue);
       if (!parsedToken || typeof parsedToken.value !== 'string' || typeof parsedToken.expires !== 'number') {
@@ -64,7 +73,8 @@ export const csrfMiddleware = async (req: NextRequest) => {
     }
   } catch (error) {
     console.error('Failed to parse CSRF token:', error);
-    parsedToken = null;
+    cache.set(cookieValue, parsedToken);
+parsedToken = null;
   }
 
   if (req.method === 'GET') {
