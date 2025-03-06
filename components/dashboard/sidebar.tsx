@@ -41,6 +41,17 @@ interface SidebarNavProps extends React.HTMLAttributes<HTMLDivElement> {
   }
 }
 
+interface User {
+  name?: string | null
+  email?: string | null
+  role?: string | null
+}
+
+interface DashboardSidebarWrapperProps {
+  children: React.ReactNode
+  user: User
+}
+
 export function DashboardSidebar({ user, className, ...props }: SidebarNavProps) {
   const pathname = usePathname()
 
@@ -144,7 +155,7 @@ export function DashboardSidebar({ user, className, ...props }: SidebarNavProps)
   )
 }
 
-export function DashboardSidebarWrapper({ children, user }: { children: React.ReactNode; user: any }) {
+export function DashboardSidebarWrapper({ children, user }: DashboardSidebarWrapperProps) {
   return (
     <SidebarProvider>
       <div className="grid min-h-screen w-full lg:grid-cols-[280px_1fr]">

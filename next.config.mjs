@@ -1,9 +1,41 @@
+import { fileURLToPath } from 'url';
 import path from 'path';
+// eslint-disable-next-line no-unused-vars
+import fs from 'fs';
+import { glob } from 'glob';
 import { PurgeCSSPlugin } from 'purgecss-webpack-plugin';
 import TerserPlugin from 'terser-webpack-plugin';
+import { withSentryConfig } from '@sentry/nextjs';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+const securityHeaders = [
+  {
+    key: 'X-DNS-Prefetch-Control',
+    value: 'on'
+  },
+  {
+    key: 'Strict-Transport-Security',
+    value: 'max-age=63072000; includeSubDomains; preload'
+  },
+  {
+    key: 'X-XSS-Protection',
+    value: '1; mode=block'
+  },
+  {
+    key: 'X-Frame-Options',
+    value: 'SAMEORIGIN'
+  },
+  {
+    key: 'X-Content-Type-Options',
+    value: 'nosniff'
+  }
+];
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  compress: true,
+  poweredByHeader: false,
   eslint: {
     ignoreDuringBuilds: false,
   },
@@ -18,6 +50,18 @@ const nextConfig = {
     parallelServerBuildTraces: true,
     parallelServerCompiles: true,
   },
+  headers: async () => {
+    return [
+      {
+        source: '/(.*)',
+        headers: securityHeaders,
+      },
+    ];
+  },
+  publicRuntimeConfig: {
+    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
+    NEXT_PUBLIC_SENTRY_DSN: process.env.NEXT_PUBLIC_SENTRY_DSN
+  },
   webpack: (config, { dev, isServer }) => {
     config.optimization = {
       minimize: true,
@@ -25,14 +69,11 @@ const nextConfig = {
       splitChunks: { chunks: 'all' },
     };
 
-    if (!dev && !isServer) {
+    if (!dev && isServer) {
+      const purgePaths = glob.sync(`${path.join(__dirname, 'src/**/*.{js,ts,jsx,tsx}')}`);
       config.plugins.push(
         new PurgeCSSPlugin({
-          paths: [
-            path.join(__dirname, 'app/**/*.{js,jsx,ts,tsx}'),
-            path.join(__dirname, 'components/**/*.{js,jsx,ts,tsx}'),
-            path.join(__dirname, 'pages/**/*.{js,jsx,ts,tsx}'),
-          ],
+          paths: purgePaths,
           safelist: {
             standard: ['body', 'html'],
           },
@@ -40,8 +81,13 @@ const nextConfig = {
       );
     }
 
+    config.cache = false;
     return config;
   },
 };
 
-export default nextConfig;
+const sentryWebpackPluginOptions = {
+  silent: true,
+};
+
+export default withSentryConfig(nextConfig, sentryWebpackPluginOptions);

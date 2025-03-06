@@ -1,7 +1,8 @@
-import { NextResponse } from 'next/server';
+import { NextResponse, NextRequest } from 'next/server';
 import { Ratelimit } from '@upstash/ratelimit';
 import { Redis } from '@upstash/redis';
 import { csrfMiddleware } from '@/middleware/csrf';
+import { handleError, withErrorHandling } from '@/lib/errorHandling';
 
 const ratelimit = new Ratelimit({
   redis: Redis.fromEnv(),
@@ -9,7 +10,7 @@ const ratelimit = new Ratelimit({
   analytics: true
 });
 
-const handler = async (req: Request) => {
+const handler = async (req: NextRequest) => {
   const csrfResponse = await csrfMiddleware(req);
   if (csrfResponse.status !== 200) return csrfResponse;
 
@@ -17,8 +18,9 @@ const handler = async (req: Request) => {
   const { success } = await ratelimit.limit(ip);
 
   if (!success) {
+    const errorResponse = handleError({ message: 'Too many requests', statusCode: 429 });
     return NextResponse.json(
-      { error: 'Too many requests' },
+      errorResponse,
       { status: 429 }
     );
   }
@@ -33,6 +35,6 @@ const handler = async (req: Request) => {
   return response;
 };
 
-export async function GET(request: Request) {
-  return handler(request);
+export async function GET(request: NextRequest) {
+  return withErrorHandling(async () => handler(request));
 }

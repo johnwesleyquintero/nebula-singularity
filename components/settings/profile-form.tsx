@@ -10,6 +10,7 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, For
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { toast } from "sonner"
+import { handleError } from "@/lib/errorHandling"
 
 const profileFormSchema = z.object({
   name: z
@@ -43,15 +44,22 @@ export function ProfileForm() {
     mode: "onChange",
   })
 
-  function onSubmit(data: ProfileFormValues) {
+  async function onSubmit(data: ProfileFormValues) {
     setIsLoading(true)
 
-    // Simulate API call
-    setTimeout(() => {
+    try {
+      // Simulate API call
+      await new Promise((resolve) => setTimeout(resolve, 1000));
       setIsLoading(false)
       toast.success("Profile updated successfully!")
       console.log(data)
-    }, 1000)
+    } catch (error) {
+      setIsLoading(false)
+      const errorResponse = handleError(error);
+      toast.error(errorResponse.error.message, {
+        description: errorResponse.error.details ? JSON.stringify(errorResponse.error.details, null, 2) : undefined,
+      });
+    }
   }
 
   return (
@@ -127,4 +135,3 @@ export function ProfileForm() {
     </Form>
   )
 }
-

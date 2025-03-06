@@ -1,22 +1,13 @@
-import { useForm } from 'react-hook-form';
-import { useState, useEffect, lazy, Suspense } from 'react';
+import { Suspense } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
-import { Chart } from '@/components/Chart';
-import type { Metadata } from "next"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { ReportsList } from "@/components/reports/reports-list"
-import { ReportNameField } from "@/components/reports/report-generator"
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-
-interface ReportData {
-  id: string;
-  date: Date;
-  metric: number;
-  category: string;
-}
+import { Metadata } from 'next';
+import { useForm } from 'react-hook-form';
 
 export const metadata: Metadata = {
   title: "Reports | Nebula-Suite",
@@ -30,8 +21,7 @@ const reportFilterSchema = z.object({
 });
 
 export default async function ReportsPage() {
-  const reportData = await getReportData();
-  const { control, handleSubmit, formState: { errors } } = useForm({
+  useForm<z.infer<typeof reportFilterSchema>>({
     resolver: zodResolver(reportFilterSchema)
   });
 
@@ -73,7 +63,6 @@ export default async function ReportsPage() {
                   <CardDescription>Create a custom report by selecting metrics and date ranges.</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <ReportNameField control={control} />
                 </CardContent>
               </Card>
             </TabsContent>
@@ -89,28 +78,8 @@ export default async function ReportsPage() {
               </Card>
             </TabsContent>
           </Tabs>
-          {errors && (
-            <div role="alert" className="text-red-500">
-              {Object.values(errors).map(error => (
-                <p key={error.message}>{error.message}</p>
-              ))}
-            </div>
-          )}
-          <Chart data={reportData} aria-label="Report data visualization" />
         </div>
       </Suspense>
     </ErrorBoundary>
   )
-}
-
-async function getReportData() {
-  const res = await fetch('https://api.nebula.com/reports', {
-    next: { revalidate: 3600 }
-  });
-  
-  if (!res.ok) {
-    throw new Error('Failed to fetch report data');
-  }
-
-  return res.json();
 }

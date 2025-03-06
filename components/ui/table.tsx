@@ -1,5 +1,6 @@
 import * as React from "react"
 import { cn } from "@/lib/utils"
+import PropTypes from 'prop-types';
 
 interface TableProps extends React.HTMLAttributes<HTMLTableElement> {
   className?: string;
@@ -20,6 +21,10 @@ Table.defaultProps = {
   className: "",
 }
 
+Table.propTypes = {
+  className: PropTypes.string,
+};
+
 interface TableHeaderProps extends React.ComponentProps<"thead"> {
   className?: string;
 }
@@ -35,6 +40,10 @@ TableHeader.displayName = "TableHeader"
 TableHeader.defaultProps = {
   className: "",
 }
+
+TableHeader.propTypes = {
+  className: PropTypes.string,
+};
 
 interface TableBodyProps extends React.ComponentProps<"tbody"> {
   className?: string;
@@ -55,6 +64,10 @@ TableBody.displayName = "TableBody"
 TableBody.defaultProps = {
   className: "",
 }
+
+TableBody.propTypes = {
+  className: PropTypes.string,
+};
 
 interface TableFooterProps extends React.ComponentProps<"tfoot"> {
   className?: string;
@@ -79,6 +92,10 @@ TableFooter.defaultProps = {
   className: "",
 }
 
+TableFooter.propTypes = {
+  className: PropTypes.string,
+};
+
 interface TableRowProps extends React.ComponentProps<"tr"> {
   className?: string;
 }
@@ -101,6 +118,10 @@ TableRow.displayName = "TableRow"
 TableRow.defaultProps = {
   className: "",
 }
+
+TableRow.propTypes = {
+  className: PropTypes.string,
+};
 
 interface TableHeadProps extends React.ThHTMLAttributes<HTMLTableCellElement> {
   className?: string;
@@ -125,6 +146,10 @@ TableHead.defaultProps = {
   className: "",
 }
 
+TableHead.propTypes = {
+  className: PropTypes.string,
+};
+
 interface TableCellProps extends React.TdHTMLAttributes<HTMLTableCellElement> {
   className?: string;
 }
@@ -145,6 +170,10 @@ TableCell.defaultProps = {
   className: "",
 }
 
+TableCell.propTypes = {
+  className: PropTypes.string,
+};
+
 interface TableCaptionProps extends React.ComponentProps<"caption"> {
   className?: string;
 }
@@ -164,6 +193,10 @@ TableCaption.displayName = "TableCaption"
 TableCaption.defaultProps = {
   className: "",
 }
+
+TableCaption.propTypes = {
+  className: PropTypes.string,
+};
 
 export {
   Table,

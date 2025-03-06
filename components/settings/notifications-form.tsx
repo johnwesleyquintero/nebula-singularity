@@ -10,6 +10,7 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, For
 import { Switch } from "@/components/ui/switch"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { toast } from "sonner"
+import { handleError } from "@/lib/errorHandling"
 
 const notificationsFormSchema = z.object({
   emailNotifications: z.boolean().default(true),
@@ -38,15 +39,22 @@ export function NotificationsForm() {
     mode: "onChange",
   })
 
-  function onSubmit(data: NotificationsFormValues) {
+  async function onSubmit(data: NotificationsFormValues) {
     setIsLoading(true)
 
-    // Simulate API call
-    setTimeout(() => {
+    try {
+      // Simulate API call
+      await new Promise((resolve) => setTimeout(resolve, 1000));
       setIsLoading(false)
       toast.success("Notification preferences updated successfully!")
       console.log(data)
-    }, 1000)
+    } catch (error) {
+      setIsLoading(false)
+      const errorResponse = handleError(error);
+      toast.error(errorResponse.error.message, {
+        description: errorResponse.error.details ? JSON.stringify(errorResponse.error.details, null, 2) : undefined,
+      });
+    }
   }
 
   return (
@@ -152,4 +160,3 @@ export function NotificationsForm() {
     </Form>
   )
 }
-

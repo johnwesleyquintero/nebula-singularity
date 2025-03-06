@@ -18,7 +18,6 @@ yarn-error.log*
 
 # env files
 .env*
-.env
 .env.local
 .env.development
 .env.production
@@ -32,3 +31,6 @@ next-env.d.ts
 
 # windsurf rules
 .windsurfrules
+
+# Environment variables
+.env

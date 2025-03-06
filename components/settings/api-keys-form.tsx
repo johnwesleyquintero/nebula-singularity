@@ -10,6 +10,7 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, For
 import { Input } from "@/components/ui/input"
 import { toast } from "sonner"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { handleError } from "@/lib/errorHandling"
 
 const apiKeysFormSchema = z.object({
   clientId: z.string().min(1, {
@@ -42,16 +43,23 @@ export function ApiKeysForm() {
     mode: "onChange",
   })
 
-  function onSubmit(data: ApiKeysFormValues) {
+  async function onSubmit(data: ApiKeysFormValues) {
     setIsLoading(true)
 
-    // Simulate API call
-    setTimeout(() => {
+    try {
+      // Simulate API call
+      await new Promise((resolve) => setTimeout(resolve, 1000));
       setIsLoading(false)
       setHasKeys(true)
       toast.success("API keys saved successfully!")
       console.log(data)
-    }, 1000)
+    } catch (error) {
+      setIsLoading(false)
+      const errorResponse = handleError(error);
+      toast.error(errorResponse.error.message, {
+        description: errorResponse.error.details ? JSON.stringify(errorResponse.error.details, null, 2) : undefined,
+      });
+    }
   }
 
   return (
@@ -212,4 +220,3 @@ export function ApiKeysForm() {
     </div>
   )
 }
-

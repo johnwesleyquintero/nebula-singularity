@@ -8,35 +8,26 @@ on:
     types: [opened, synchronize, reopened]
 
 jobs:
-  sonarcloud:
+  standalone-job:
     runs-on: ubuntu-latest
-    needs: build
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
+        uses: actions/checkout@v3
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
-
-      - name: Verify SonarQube Secrets
-        if: env.SONAR_HOST_URL == '' || env.SONAR_PROJECT_KEY == ''
+      - name: Validate SonarQube Configuration
         run: |
-          echo 'Error: SONAR_HOST_URL or SONAR_PROJECT_KEY is not defined.'
-          exit 1
-
-      - name: SonarQube Scan
+          if [ -z "$SONAR_TOKEN" ] || [ -z "$SONAR_HOST_URL" ] || [ -z "$SONAR_PROJECT_KEY" ]; then
+            echo '::error::SonarQube configuration is incomplete. Please set SONAR_TOKEN, SONAR_HOST_URL, and SONAR_PROJECT_KEY secrets.'
+            exit 1
+          fi
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
           SONAR_PROJECT_KEY: ${{ secrets.SONAR_PROJECT_KEY }}
-        run: |
-          npm install -g sonarqube-scanner
-          npx sonarqube-scanner \
-            -Dsonar.projectKey=$SONAR_PROJECT_KEY \
-            -Dsonar.host.url=$SONAR_HOST_URL \
-            -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
+
+      - name: SonarQube Scan
+        uses: sonarsource/sonarqube-scan-action@master
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+          SONAR_PROJECT_KEY: ${{ secrets.SONAR_PROJECT_KEY }}

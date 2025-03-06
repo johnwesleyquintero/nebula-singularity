@@ -1,90 +1,75 @@
-import React, { FormEvent } from 'react';
-import { useState, useEffect } from 'react';
+'use client'
+
+import React, { FormEvent, useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { signUp, signIn, signOut } from '../../lib/auth';
+import { signUp } from '../../lib/auth';
 import { useToast } from '../../components/ui/use-toast';
 import { Toaster } from '../../components/ui/toaster';
 import { supabase } from '../../lib/supabaseClient';
 
-// Removed unused Session import
-
-interface AuthError {
-  message: string;
-}
-
 const AuthPage = () => {
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
-  const [isSignUp, setIsSignUp] = useState<boolean>(true);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [isSignUp, setIsSignUp] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const { toast } = useToast();
 
-  // Effect to check for existing session and redirect to dashboard
   useEffect(() => {
-    // Check for existing session on component mount
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session) {
-        console.log('User is logged in:', session.user);
-        router.push('/dashboard'); // Redirect to dashboard if user is already logged in
+        router.push('/dashboard');
       }
     });
 
-    // Set up a listener for authentication state changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_, session) => {
       if (session) {
-        console.log('User signed in:', session.user);
-        router.push('/dashboard'); // Redirect to dashboard on sign-in
-      } else {
-        console.log('User signed out');
+        router.push('/dashboard');
       }
     });
 
-    // Clean up the subscription on unmount
     return () => {
       subscription.unsubscribe();
     };
   }, [router]);
 
-  // Handles form submission for sign-up and sign-in
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
 
     try {
       if (isSignUp) {
-        // Sign up the user
-        const { error } = await signUp({ email, password });
+        const { data, error } = await supabase.auth.signUp({ email, password });
         if (error) {
-          throw error;
-        } else {
-          // Show success toast and redirect to dashboard
-          toast({
-            title: 'Sign up successful!',
-            description: 'Please check your email to verify.',
-          });
-          router.push('/dashboard');
+          throw new Error(error.message);
         }
+        if (!data.user) {
+          throw new Error('Sign up failed');
+        }
+        toast({
+          title: 'Sign up successful!',
+          description: 'Please check your email to verify.',
+        });
+        router.push('/dashboard');
       } else {
-        // Sign in the user
-        const { error } = await signIn({ email, password });
+        const { data, error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) {
-          throw error;
-        } else {
-          // Show success toast and redirect to dashboard
-          toast({
-            title: 'Sign in successful!',
-            description: 'Welcome back!',
-          });
-          router.push('/dashboard');
+          throw new Error(error.message);
         }
+        if (!data.user) {
+          throw new Error('Sign in failed');
+        }
+        toast({
+          title: 'Sign in successful!',
+          description: 'Welcome back!',
+        });
+        router.push('/dashboard');
       }
-    } catch (error: any) {
-      // Handle authentication errors
-      console.error('Authentication error:', error);
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : 'Authentication failed';
       toast({
         title: 'Authentication Failed',
-        description: error.message || 'Please check your credentials and try again.',
+        description: message,
         variant: 'destructive',
       });
     } finally {

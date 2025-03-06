@@ -2,13 +2,14 @@
 
 import { useState } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
+import { useForm, ControllerRenderProps } from "react-hook-form"
 import * as z from "zod"
 import { Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Switch } from "@/components/ui/switch"
 import { toast } from "sonner"
+import { handleError } from "@/lib/errorHandling"
 
 const accountFormSchema = z.object({
   marketplaces: z.array(z.string()).min(1, {
@@ -26,7 +27,13 @@ const defaultValues: Partial<AccountFormValues> = {
   dataSharing: true,
 }
 
-const MarketplaceSwitch = ({ field, code, label }: { field: any; code: string; label: string }) => (
+interface MarketplaceSwitchProps {
+  field: ControllerRenderProps<AccountFormValues, 'marketplaces'>
+  code: string
+  label: string
+}
+
+const MarketplaceSwitch = ({ field, code, label }: MarketplaceSwitchProps) => (
   <FormItem className="flex flex-row items-center space-x-3 space-y-0">
     <FormControl>
       <Switch
@@ -42,7 +49,11 @@ const MarketplaceSwitch = ({ field, code, label }: { field: any; code: string; l
   </FormItem>
 );
 
-const TwoFactorAuthField = ({ field }: { field: any }) => (
+interface TwoFactorAuthFieldProps {
+  field: ControllerRenderProps<AccountFormValues, 'twoFactorAuth'>
+}
+
+const TwoFactorAuthField = ({ field }: TwoFactorAuthFieldProps) => (
   <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
     <div className="space-y-0.5">
       <FormLabel className="text-base">Two-factor Authentication</FormLabel>
@@ -54,7 +65,11 @@ const TwoFactorAuthField = ({ field }: { field: any }) => (
   </FormItem>
 );
 
-const DataSharingField = ({ field }: { field: any }) => (
+interface DataSharingFieldProps {
+  field: ControllerRenderProps<AccountFormValues, 'dataSharing'>
+}
+
+const DataSharingField = ({ field }: DataSharingFieldProps) => (
   <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
     <div className="space-y-0.5">
       <FormLabel className="text-base">Data Sharing</FormLabel>
@@ -75,15 +90,22 @@ export function AccountForm() {
     mode: "onChange",
   })
 
-  function onSubmit(data: AccountFormValues) {
+  async function onSubmit(data: AccountFormValues) {
     setIsLoading(true)
 
-    // Simulate API call
-    setTimeout(() => {
+    try {
+      // Simulate API call
+      await new Promise((resolve) => setTimeout(resolve, 1000));
       setIsLoading(false)
       toast.success("Account settings updated successfully!")
       console.log(data)
-    }, 1000)
+    } catch (error) {
+      setIsLoading(false)
+      const errorResponse = handleError(error);
+      toast.error(errorResponse.error.message, {
+        description: errorResponse.error.details ? JSON.stringify(errorResponse.error.details, null, 2) : undefined,
+      });
+    }
   }
 
   return (
