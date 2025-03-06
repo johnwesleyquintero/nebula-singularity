@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+import { NextResponse, type NextRequest } from 'next/server';
 import { cookies } from 'next/headers';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -21,11 +21,11 @@ const DEFAULT_CONFIG: CsrfConfig = {
   sameSite: 'strict',
 };
 
-export const csrfMiddleware = async (req: Request) => {
+export const csrfMiddleware = async (req: NextRequest) => {
   let parsedToken: CsrfToken | null = null;
 
   try {
-    const cookieStore = cookies();
+    const cookieStore = await cookies();
     const cookieValue = cookieStore.get('csrf-token')?.value;
     if (cookieValue) {
       parsedToken = JSON.parse(cookieValue);

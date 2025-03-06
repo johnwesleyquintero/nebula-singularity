@@ -10,30 +10,18 @@ on:
 jobs:
   sonarcloud:
     runs-on: ubuntu-latest
+    needs: build
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Set up JDK
-        uses: actions/setup-java@v3
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
         with:
-          java-version: '17'
-          distribution: 'temurin'
-
-      - name: Cache SonarQube packages
-        uses: actions/cache@v3
-        with:
-          path: ~/.sonar/cache
-          key: ${{ runner.os }}-sonar-${{ github.sha }}
-          restore-keys: ${{ runner.os }}-sonar
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Run Tests
-        run: npm test
+          node-version: '20'
+          cache: 'npm'
 
       - name: Verify SonarQube Secrets
         if: env.SONAR_HOST_URL == '' || env.SONAR_PROJECT_KEY == ''
@@ -41,11 +29,14 @@ jobs:
           echo 'Error: SONAR_HOST_URL or SONAR_PROJECT_KEY is not defined.'
           exit 1
 
-      - name: Build and analyze
+      - name: SonarQube Scan
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
           SONAR_PROJECT_KEY: ${{ secrets.SONAR_PROJECT_KEY }}
         run: |
-          npm run build
-          npx sonarqube-scanner -Dsonar.projectKey=$SONAR_PROJECT_KEY -Dsonar.host.url=$SONAR_HOST_URL
+          npm install -g sonarqube-scanner
+          npx sonarqube-scanner \
+            -Dsonar.projectKey=$SONAR_PROJECT_KEY \
+            -Dsonar.host.url=$SONAR_HOST_URL \
+            -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info

@@ -2,7 +2,7 @@ module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',
   transform: {
-    '^.+\.m?js$': 'babel-jest',
+    '^.+\\.m?js$': 'babel-jest',
   },
   moduleFileExtensions: ['js', 'mjs', 'ts'],
   testMatch: [
