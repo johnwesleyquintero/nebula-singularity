@@ -39,6 +39,10 @@ export const handleError = (error: unknown): ErrorResponse => {
     }
   };
 
+  // Log error for debugging
+  console.error('Error occurred:', error);
+
+  // Handle specific error types
   if (error instanceof AppError) {
     errorResponse = {
       success: false,
@@ -48,6 +52,31 @@ export const handleError = (error: unknown): ErrorResponse => {
         details: error.details
       }
     };
+  } else if (error instanceof ZodError) {
+    errorResponse = {
+      success: false,
+      error: {
+        message: 'Validation failed',
+        statusCode: 400,
+        details: error.errors
+      }
+    };
+  } else if (error instanceof Error) {
+    // Handle standard Error objects
+    errorResponse = {
+      success: false,
+      error: {
+        message: error.message || errorMessages.DEFAULT_ERROR,
+        statusCode: 500,
+        details: { name: error.name, stack: process.env.NODE_ENV === 'development' ? error.stack : undefined }
+      }
+    };
+  }
+
+  // Report error to Sentry if it's a server error
+  if (errorResponse.error.statusCode >= 500) {
+    Sentry.captureException(error);
+  }
   }
 
   if (error instanceof ZodError) {
