@@ -50,89 +50,68 @@ export const csrfMiddleware = async (req: NextRequest) => {
 
   // Skip CSRF check for excluded paths
   if (!req.nextUrl.pathname || isExcludedPath(req.nextUrl.pathname)) {
-    // Apply enhanced security headers
-  const response = NextResponse.next();
-  applySecurityHeaders(response);
-  return response;
+    const response = NextResponse.next();
+    applySecurityHeaders(response);
+    return response;
   }
 
   const cache = new Map<string, CsrfToken>();
-let parsedToken: CsrfToken | null = null;
+  let parsedToken: CsrfToken | null = null;
 
   try {
     const cookieStore = await cookies();
     const cookieValue = cookieStore.get('csrf-token')?.value;
-if (cookieValue && cache.has(cookieValue)) {
-  parsedToken = cache.get(cookieValue);
-} else {
-    if (cookieValue) {
-      parsedToken = JSON.parse(cookieValue);
-      if (!parsedToken || typeof parsedToken.value !== 'string' || typeof parsedToken.expires !== 'number') {
-        throw new Error('Invalid CSRF token format');
+    
+    if (cookieValue && cache.has(cookieValue)) {
+      parsedToken = cache.get(cookieValue);
+    } else if (cookieValue) {
+      try {
+        parsedToken = JSON.parse(cookieValue);
+        if (!parsedToken || typeof parsedToken.value !== 'string' || typeof parsedToken.expires !== 'number') {
+          throw new Error('Invalid CSRF token format');
+        }
+        cache.set(cookieValue, parsedToken);
+      } catch (parseError) {
+        console.error('Failed to parse CSRF token:', parseError);
+        parsedToken = null;
       }
     }
-  } catch (error) {
-    console.error('Failed to parse CSRF token:', error);
-    cache.set(cookieValue, parsedToken);
-parsedToken = null;
-  }
 
-  if (req.method === 'GET') {
-    const newToken: CsrfToken = {
-      value: uuidv4(),
-      expires: Date.now() + (DEFAULT_CONFIG.tokenExpiry || 0) * 1000,
-    };
+    if (req.method === 'GET') {
+      const newToken: CsrfToken = {
+        value: uuidv4(),
+        expires: Date.now() + (DEFAULT_CONFIG.tokenExpiry || 0) * 1000,
+      };
+
+      const response = NextResponse.next();
+      applySecurityHeaders(response);
+      
+      response.cookies.set('csrf-token', JSON.stringify(newToken), {
+        httpOnly: DEFAULT_CONFIG.httpOnly,
+        secure: DEFAULT_CONFIG.secure,
+        sameSite: DEFAULT_CONFIG.sameSite,
+        maxAge: DEFAULT_CONFIG.tokenExpiry,
+      });
+      return response;
+    }
+
+    const headerToken = req.headers.get('x-csrf-token');
+
+    if (!headerToken || !parsedToken || headerToken !== parsedToken.value || Date.now() > parsedToken.expires) {
+      return NextResponse.json(
+        { error: 'Invalid CSRF token', code: 'INVALID_CSRF_TOKEN', status: 403 },
+        { status: 403 }
+      );
+    }
 
     const response = NextResponse.next();
-    // Apply security headers using the centralized utility
     applySecurityHeaders(response);
-    
-    response.cookies.set('csrf-token', JSON.stringify(newToken), {
-      httpOnly: DEFAULT_CONFIG.httpOnly,
-      secure: DEFAULT_CONFIG.secure,
-      sameSite: DEFAULT_CONFIG.sameSite,
-      maxAge: DEFAULT_CONFIG.tokenExpiry,
-    });
     return response;
-  }
-
-  const headerToken = req.headers.get('x-csrf-token');
-
-  if (!parsedToken || !headerToken || typeof headerToken !== 'string' || headerToken.length !== 36) {
+  } catch (error) {
+    console.error('CSRF middleware error:', error);
     return NextResponse.json(
-      { 
-        error: 'CSRF token missing or invalid format',
-        code: 'CSRF_TOKEN_MISSING',
-        status: 403 
-      },
-      { status: 403 }
+      { error: 'Internal server error', code: 'INTERNAL_ERROR', status: 500 },
+      { status: 500 }
     );
   }
-
-  if (parsedToken.expires < Date.now()) {
-    return NextResponse.json(
-      { 
-        error: 'CSRF token expired',
-        code: 'CSRF_TOKEN_EXPIRED',
-        status: 403 
-      },
-      { status: 403 }
-    );
-  }
-
-  if (parsedToken.value !== headerToken || !parsedToken.value.match(/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i)) {
-    return NextResponse.json(
-      { 
-        error: 'Invalid CSRF token',
-        code: 'CSRF_TOKEN_INVALID',
-        status: 403 
-      },
-      { status: 403 }
-    );
-  }
-
-  // Apply enhanced security headers
-  const response = NextResponse.next();
-  applySecurityHeaders(response);
-  return response;
 };

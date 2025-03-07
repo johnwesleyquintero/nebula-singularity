@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import redis from '../../../lib/redis';
+import { prisma } from '../../../lib/db';
 import { getSession } from '../../../lib/auth';
-import logger from '../../../lib/logger';
+import { logger } from '../../../lib/errorHandling';
 import rateLimit from 'express-rate-limit';
 
 const limiter = rateLimit({

@@ -56,9 +56,9 @@ export const handleError = (error: unknown): ErrorResponse => {
     errorResponse = {
       success: false,
       error: {
-        message: 'Validation failed',
+        message: errorMessages.VALIDATION_ERROR,
         statusCode: 400,
-        details: error.errors
+        details: error.format() as unknown
       }
     };
   } else if (error instanceof Error) {
@@ -76,18 +76,6 @@ export const handleError = (error: unknown): ErrorResponse => {
   // Report error to Sentry if it's a server error
   if (errorResponse.error.statusCode >= 500) {
     Sentry.captureException(error);
-  }
-  }
-
-  if (error instanceof ZodError) {
-    errorResponse = {
-      success: false,
-      error: {
-        message: errorMessages.VALIDATION_ERROR,
-        statusCode: 400,
-        details: error.format() as unknown
-      }
-    };
   }
 
   // Log error to Sentry
