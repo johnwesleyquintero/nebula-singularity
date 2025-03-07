@@ -131,10 +131,11 @@ export const rateLimiter = rateLimit({
 });
 
 // Request validation middleware
-export const validateRequest = (schema: any) => {
+export const validateRequest = (schema: z.ZodSchema) => {
   return async (req: NextApiRequest, res: NextApiResponse, next: Function) => {
     try {
-      await schema.parseAsync(req.body);
+      const validatedData = await schema.parseAsync(req.body);
+      req.body = validatedData; // Replace raw body with validated data
       next();
     } catch (error) {
       if (error instanceof ZodError) {
