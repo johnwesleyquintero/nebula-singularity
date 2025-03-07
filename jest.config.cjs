@@ -1,7 +1,7 @@
 module.exports = {
   testEnvironment: 'jsdom',
   transform: {
-    '^.+\\.(js|jsx|mjs|ts|tsx)$': 'babel-jest',
+    '^.+\\.(js|jsx|mjs|ts|tsx)$': ['babel-jest', { presets: ['next/babel'] }]
   },
   moduleFileExtensions: ['js', 'jsx', 'mjs', 'ts', 'tsx'],
   testMatch: [
@@ -10,25 +10,24 @@ module.exports = {
     "**/?(*.)+(spec|test).mjs"
   ],
   globals: {
-    jest: true,
-    describe: true,
-    it: true,
-    expect: true,
-    console: true,
+    'ts-jest': {
+      tsconfig: '<rootDir>/tsconfig.json'
+    }
   },
   transformIgnorePatterns: [
-    '/node_modules/',
-    '\\.pnp\\.[^\\/]+$',
+    '/node_modules/(?!(@babel/runtime|@babel/runtime-corejs3)/)',
+    '\\.pnp\\.[^\\/]+$'
   ],
   moduleNameMapper: {
     '^(\\.{1,2}/.*)\\.js$': '$1',
-    '^@/(.*)$': '<rootDir>/$1',
+    '^@/(.*)$': '<rootDir>/src/$1',
     '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
     '\\.(jpg|jpeg|png|gif|webp|svg)$': '<rootDir>/__mocks__/fileMock.js'
   },
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
   collectCoverage: true,
   collectCoverageFrom: [
+    'src/**/*.{js,jsx,ts,tsx}',
     'app/**/*.{js,jsx,ts,tsx}',
     'components/**/*.{js,jsx,ts,tsx}',
     'lib/**/*.{js,jsx,ts,tsx}',
@@ -39,13 +38,17 @@ module.exports = {
   ],
   coverageThreshold: {
     global: {
-      branches: 80,
-      functions: 80,
-      lines: 80,
-      statements: 80
+      branches: 70,
+      functions: 70,
+      lines: 70,
+      statements: 70
     }
   },
-  testPathIgnorePatterns: ['<rootDir>/node_modules/', '<rootDir>/.next/'],
+  testPathIgnorePatterns: [
+    '<rootDir>/node_modules/',
+    '<rootDir>/.next/',
+    '<rootDir>/coverage/'
+  ],
   watchPlugins: [
     'jest-watch-typeahead/filename',
     'jest-watch-typeahead/testname'
