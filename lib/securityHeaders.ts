@@ -3,16 +3,16 @@ import { nonceService } from './nonceService';
 import { applyCorsHeaders } from './corsConfig';
 import { validateHeaders } from './headerValidation';
 
-export async function applySecurityHeaders(responses: Response | Response[]) {
+async function applySecurityHeaders(responses: Response | Response[]) {
   const responseArray = Array.isArray(responses) ? responses : [responses];
   
   for (const response of responseArray) {
     const nonce = await nonceService.generateNonce();
     
     const cspDirectives = [
-      "default-src 'self'",
-      "script-src 'self'",
-      "style-src 'self'",
+      `default-src 'self'`,
+      `script-src 'self' 'nonce-${nonce}' 'strict-dynamic'`,
+      `style-src 'self' 'nonce-${nonce}'`,
       "img-src 'self' data: https: blob:",
       "font-src 'self' https:",
       "connect-src 'self' https: wss:",
@@ -29,9 +29,7 @@ export async function applySecurityHeaders(responses: Response | Response[]) {
     
     response.headers.set('Content-Security-Policy', cspDirectives);
     response.headers.set('X-Nonce', nonce);
-    response.headers.set('X-Content-Type-Options', 'nosniff');
-    response.headers.set('X-Frame-Options', 'DENY');
-    response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
+
 
     // Environment-specific headers
     if (process.env.NODE_ENV === 'production') {

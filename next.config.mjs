@@ -41,10 +41,8 @@ const securityHeaders = [
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  experimental: {
-    appDir: true
-  },
   compress: true,
+  experimental: {}, // Remove deprecated appDir option
   poweredByHeader: false,
   eslint: {
     ignoreDuringBuilds: false,
@@ -72,9 +70,10 @@ const nextConfig = {
   env: {
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
     NEXT_PUBLIC_SENTRY_DSN: process.env.NEXT_PUBLIC_SENTRY_DSN,
-    NEXT_PUBLIC_ENABLE_SENTRY: process.env.NODE_ENV === 'production'
+    NEXT_PUBLIC_ENABLE_SENTRY: String(process.env.NODE_ENV === 'production')
   },
   webpack: (config, { dev, isServer }) => {
+    config.resolve.fallback = { fs: false, net: false };
     if (!dev) {
       config.optimization = {
         minimize: true,

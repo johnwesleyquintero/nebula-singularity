@@ -1,8 +1,6 @@
 import { ZodError } from 'zod';
-import * as Sentry from '@sentry/nextjs';
 import { createLogger, transports, format } from 'winston';
-import 'winston-daily-rotate-file';
-import rateLimit from 'express-rate-limit';
+
 import { NextApiRequest, NextApiResponse } from 'next';
 
 // Error metrics tracking
@@ -11,7 +9,9 @@ const errorMetrics = {
   errorsByType: new Map<string, number>(),
   errorsByStatusCode: new Map<number, number>(),
   lastErrorTimestamp: new Date(),
-  alertThreshold: 50, // Number of errors before triggering alert
+  alertThreshold: 50,
+  timeWindow: 5 * 60 * 1000
+}
   timeWindow: 5 * 60 * 1000, // 5 minutes in milliseconds
 };
 
@@ -102,8 +102,7 @@ export const logger = createLogger({
     format.json()
   ),
   transports: [
-    new transports.Console(),
-    // Remove DailyRotateFile transport
+    new transports.Console()
   ]
 });
 
@@ -134,10 +133,8 @@ export const validateRequest = (schema: z.ZodSchema) => {
 };
 
 import { ZodError } from 'zod';
-import * as Sentry from '@sentry/nextjs';
 import { createLogger, transports, format } from 'winston';
-import 'winston-daily-rotate-file';
-import rateLimit from 'express-rate-limit';
+
 import { NextApiRequest, NextApiResponse } from 'next';
 
 // Error metrics tracking
@@ -146,7 +143,9 @@ const errorMetrics = {
   errorsByType: new Map<string, number>(),
   errorsByStatusCode: new Map<number, number>(),
   lastErrorTimestamp: new Date(),
-  alertThreshold: 50, // Number of errors before triggering alert
+  alertThreshold: 50,
+  timeWindow: 5 * 60 * 1000
+}
   timeWindow: 5 * 60 * 1000, // 5 minutes in milliseconds
 };
 
@@ -176,10 +175,8 @@ export function catchAsyncErrors(fn: Function) {
 
 import { logger } from './errorHandling'
 import { ZodError } from 'zod';
-import * as Sentry from '@sentry/nextjs';
 import { createLogger, transports, format } from 'winston';
-import 'winston-daily-rotate-file';
-import rateLimit from 'express-rate-limit';
+
 import { NextApiRequest, NextApiResponse } from 'next';
 
 // Error metrics tracking
@@ -188,7 +185,9 @@ const errorMetrics = {
   errorsByType: new Map<string, number>(),
   errorsByStatusCode: new Map<number, number>(),
   lastErrorTimestamp: new Date(),
-  alertThreshold: 50, // Number of errors before triggering alert
+  alertThreshold: 50,
+  timeWindow: 5 * 60 * 1000
+}
   timeWindow: 5 * 60 * 1000, // 5 minutes in milliseconds
 };
 
