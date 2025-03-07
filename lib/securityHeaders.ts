@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server';
 import { nonceService } from './nonceService';
+import { applyCorsHeaders } from './corsConfig';
+import { validateHeaders } from './headerValidation';
 
 export const applySecurityHeaders = (responses: NextResponse | NextResponse[]): NextResponse | NextResponse[] => {
   const responseArray = Array.isArray(responses) ? responses : [responses];
@@ -40,6 +42,15 @@ export const applySecurityHeaders = (responses: NextResponse | NextResponse[]): 
       response.headers.set('Cross-Origin-Embedder-Policy', 'require-corp');
       response.headers.set('Cross-Origin-Opener-Policy', 'same-origin');
       response.headers.set('Cross-Origin-Resource-Policy', 'same-origin');
+    }
+
+    // Apply CORS headers after security headers
+    applyCorsHeaders(response);
+
+    // Validate headers after all security headers are set
+    const validation = validateHeaders(response);
+    if (!validation.isValid) {
+      console.error('Security header validation failed:', validation.errors);
     }
   });
 
