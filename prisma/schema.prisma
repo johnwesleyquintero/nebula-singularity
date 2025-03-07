@@ -1,21 +1,24 @@
 // This is your Prisma schema file
 
-// datasource block to configure your database connection
-
+// Configure your database connection
 datasource db {
-  provider = "sqlite"
-  url      = "file:./dev.db"
+  provider = "postgresql"
+  url      = env("POSTGRES_PRISMA_URL")
+  directUrl = env("POSTGRES_URL_NON_POOLING")
 }
 
-// generator block to generate the Prisma client
-
+// Configure the Prisma Client
 generator client {
   provider = "prisma-client-js"
 }
 
-// Sample model
+// User model
 model User {
-  id    Int     @id @default(autoincrement())
-  name  String  
-  email String  @unique
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
+
+// Add more models as needed for your application

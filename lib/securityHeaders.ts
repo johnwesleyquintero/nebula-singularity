@@ -1,12 +1,33 @@
 import { NextResponse } from 'next/server';
+import { nonceService } from './nonceService';
 
 export const applySecurityHeaders = (responses: NextResponse | NextResponse[]): NextResponse | NextResponse[] => {
   const responseArray = Array.isArray(responses) ? responses : [responses];
   
   responseArray.forEach(response => {
-    // Base security headers for all environments
-    const nonce = Buffer.from(crypto.getRandomValues(new Uint8Array(16))).toString('base64');
-    response.headers.set('Content-Security-Policy', `default-src 'self'; script-src 'self' 'nonce-${nonce}' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'nonce-${nonce}' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https:; font-src 'self' https:; frame-src 'self'; base-uri 'self'; form-action 'self';`);
+    // Generate a strong nonce using our NonceService
+    const nonce = nonceService.generateNonce();
+    
+    // Comprehensive CSP policy
+    const cspDirectives = [
+      "default-src 'self'",
+      `script-src 'self' 'nonce-${nonce}' 'strict-dynamic'",
+      `style-src 'self' 'nonce-${nonce}'",
+      "img-src 'self' data: https: blob:",
+      "font-src 'self' https:",
+      "connect-src 'self' https: wss:",
+      "media-src 'self' https:",
+      "object-src 'none'",
+      "frame-src 'self'",
+      "frame-ancestors 'none'",
+      "base-uri 'self'",
+      "form-action 'self'",
+      "manifest-src 'self'",
+      "upgrade-insecure-requests",
+      "block-all-mixed-content"
+    ].join('; ');
+    
+    response.headers.set('Content-Security-Policy', cspDirectives);
     response.headers.set('X-Nonce', nonce);
     response.headers.set('X-Content-Type-Options', 'nosniff');
     response.headers.set('X-Frame-Options', 'DENY');
