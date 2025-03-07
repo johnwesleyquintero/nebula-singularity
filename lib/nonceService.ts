@@ -23,9 +23,9 @@ class NonceService {
     return NonceService.instance;
   }
 
-  public generateNonce(): string {
+  public async generateNonce(): Promise<string> {
     const nonce = Buffer.from(crypto.getRandomValues(new Uint8Array(32))).toString('base64');
-    const hashedNonce = this.hashNonce(nonce);
+    const hashedNonce = await this.hashNonce(nonce);
     
     this.nonceStore.set(hashedNonce, {
       value: nonce,
@@ -35,8 +35,8 @@ class NonceService {
     return nonce;
   }
 
-  public validateNonce(nonce: string): boolean {
-    const hashedNonce = this.hashNonce(nonce);
+  public async validateNonce(nonce: string): Promise<boolean> {
+    const hashedNonce = await this.hashNonce(nonce);
     const record = this.nonceStore.get(hashedNonce);
 
     if (!record) return false;
@@ -50,7 +50,12 @@ class NonceService {
   }
 
   private hashNonce(nonce: string): string {
-    return createHash('sha256').update(nonce).digest('hex');
+    const encoder = new TextEncoder();
+    const data = encoder.encode(nonce);
+    return crypto.subtle.digest('SHA-256', data).then(buffer => {
+      const hashArray = Array.from(new Uint8Array(buffer));
+      return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    });
   }
 
   private startCleanupInterval(): void {

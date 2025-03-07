@@ -3,18 +3,16 @@ import { nonceService } from './nonceService';
 import { applyCorsHeaders } from './corsConfig';
 import { validateHeaders } from './headerValidation';
 
-export const applySecurityHeaders = (responses: NextResponse | NextResponse[]): NextResponse | NextResponse[] => {
+export async function applySecurityHeaders(responses: Response | Response[]) {
   const responseArray = Array.isArray(responses) ? responses : [responses];
   
-  responseArray.forEach(response => {
-    // Generate a strong nonce using our NonceService
-    const nonce = nonceService.generateNonce();
+  for (const response of responseArray) {
+    const nonce = await nonceService.generateNonce();
     
-    // Comprehensive CSP policy
     const cspDirectives = [
       "default-src 'self'",
-      `script-src 'self' 'nonce-${nonce}' 'strict-dynamic'",
-      `style-src 'self' 'nonce-${nonce}'",
+      "script-src 'self'",
+      "style-src 'self'",
       "img-src 'self' data: https: blob:",
       "font-src 'self' https:",
       "connect-src 'self' https: wss:",
@@ -48,11 +46,11 @@ export const applySecurityHeaders = (responses: NextResponse | NextResponse[]): 
     applyCorsHeaders(response);
 
     // Validate headers after all security headers are set
-    const validation = validateHeaders(response);
+    const validation = await validateHeaders(response);
     if (!validation.isValid) {
       console.error('Security header validation failed:', validation.errors);
     }
-  });
+}
 
   return responses;
 }

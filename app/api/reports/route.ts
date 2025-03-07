@@ -1,7 +1,7 @@
 import { NextResponse, NextRequest } from 'next/server';
 import { Ratelimit } from '@upstash/ratelimit';
 import { Redis } from '@upstash/redis';
-import { csrfMiddleware } from '@/middleware/csrf';
+import { csrfMiddleware } from '@/lib/middleware/csrf';
 import { handleError, withErrorHandling } from '@/lib/errorHandling';
 import { applySecurityHeaders } from '@/lib/securityHeaders';
 

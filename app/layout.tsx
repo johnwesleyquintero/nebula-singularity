@@ -1,5 +1,6 @@
+'use client';
 import * as React from "react"
-import type { Metadata } from "next"
+// Remove metadata export from here
 import { Inter } from "next/font/google"
 import { Toaster } from "sonner"
 import { initializeTheme } from './theme';
@@ -9,12 +10,6 @@ import { AuthProvider } from "@/components/auth-provider"
 import "./globals.css"
 
 const inter = Inter({ subsets: ["latin"] })
-
-export const metadata: Metadata = {
-  title: "Nebula-Suite | Analytics for Amazon Sellers",
-  description: "Comprehensive analytics and management tool for Amazon seller businesses",
-    generator: 'v0.dev'
-}
 
 export default function RootLayout({
   children,
