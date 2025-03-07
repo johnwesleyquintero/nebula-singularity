@@ -103,21 +103,7 @@ export const logger = createLogger({
   ),
   transports: [
     new transports.Console(),
-    new transports.DailyRotateFile({
-      filename: 'logs/error-%DATE%.log',
-      datePattern: 'YYYY-MM-DD',
-      level: 'error',
-      maxSize: '20m',
-      maxFiles: '14d',
-      zippedArchive: true
-    }),
-    new transports.DailyRotateFile({
-      filename: 'logs/combined-%DATE%.log',
-      datePattern: 'YYYY-MM-DD',
-      maxSize: '20m',
-      maxFiles: '14d',
-      zippedArchive: true
-    })
+    // Remove DailyRotateFile transport
   ]
 });
 
@@ -187,3 +173,47 @@ export function catchAsyncErrors(fn: Function) {
     }
   };
 }
+
+import { logger } from './errorHandling'
+import { ZodError } from 'zod';
+import * as Sentry from '@sentry/nextjs';
+import { createLogger, transports, format } from 'winston';
+import 'winston-daily-rotate-file';
+import rateLimit from 'express-rate-limit';
+import { NextApiRequest, NextApiResponse } from 'next';
+
+// Error metrics tracking
+const errorMetrics = {
+  totalErrors: 0,
+  errorsByType: new Map<string, number>(),
+  errorsByStatusCode: new Map<number, number>(),
+  lastErrorTimestamp: new Date(),
+  alertThreshold: 50, // Number of errors before triggering alert
+  timeWindow: 5 * 60 * 1000, // 5 minutes in milliseconds
+};
+
+// Alert configuration
+const alertConfig = {
+  enabled: true,
+  channels: ['email', 'slack'],
+  criticalStatusCodes: [500, 503],
+
+  // Handle other types of errors
+  const message = error instanceof Error ? error.message : 'An unknown error occurred';
+  return NextResponse.json(
+    { error: message },
+    { status: 500 }
+  );
+}
+
+export function catchAsyncErrors(fn: Function) {
+  return async function(...args: any[]) {
+    try {
+      return await fn(...args);
+    } catch (error) {
+      return handleApiError(error);
+    }
+  };
+}
+
+import { logger } from './errorHandling'

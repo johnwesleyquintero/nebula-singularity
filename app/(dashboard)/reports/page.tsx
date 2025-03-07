@@ -7,7 +7,7 @@ import { ReportsList } from "@/components/reports/reports-list"
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Metadata } from 'next';
-import { useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form'
 
 export const metadata: Metadata = {
   title: "Reports | Nebula-Suite",

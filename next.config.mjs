@@ -1,7 +1,5 @@
 import { fileURLToPath } from 'url';
 import path from 'path';
-// eslint-disable-next-line no-unused-vars
-import fs from 'fs';
 import { glob } from 'glob';
 import { PurgeCSSPlugin } from 'purgecss-webpack-plugin';
 import TerserPlugin from 'terser-webpack-plugin';
@@ -29,11 +27,23 @@ const securityHeaders = [
   {
     key: 'X-Content-Type-Options',
     value: 'nosniff'
+  },
+  {
+    key: 'Referrer-Policy',
+    value: 'strict-origin-when-cross-origin'
+  },
+  {
+    key: 'Permissions-Policy',
+    value: 'camera=(), microphone=(), geolocation=()'
   }
 ];
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  reactStrictMode: true,
+  experimental: {
+    appDir: true
+  },
   compress: true,
   poweredByHeader: false,
   eslint: {
@@ -43,7 +53,7 @@ const nextConfig = {
     ignoreBuildErrors: false,
   },
   images: {
-    unoptimized: false,
+    domains: ['nebula-saas.com'],
     remotePatterns: [
       {
         protocol: 'https',
@@ -55,35 +65,55 @@ const nextConfig = {
   },
   headers: async () => [
     {
-      source: '/(.*)',
+      source: '/:path*',
       headers: securityHeaders,
     },
   ],
-  publicRuntimeConfig: {
+  env: {
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
-    NEXT_PUBLIC_SENTRY_DSN: process.env.NEXT_PUBLIC_SENTRY_DSN
+    NEXT_PUBLIC_SENTRY_DSN: process.env.NEXT_PUBLIC_SENTRY_DSN,
+    NEXT_PUBLIC_ENABLE_SENTRY: process.env.NODE_ENV === 'production'
   },
   webpack: (config, { dev, isServer }) => {
-    // Set optimization options
-    config.optimization = {
-      minimize: !dev,
-      minimizer: [
-        new TerserPlugin({
-          parallel: true,
-          terserOptions: {
-            compress: {
-              warnings: false,
-              drop_console: !dev,
+    if (!dev) {
+      config.optimization = {
+        minimize: true,
+        minimizer: [
+          new TerserPlugin({
+            parallel: true,
+            terserOptions: {
+              compress: {
+                drop_console: true,
+                drop_debugger: true
+              },
+            },
+          })
+        ],
+        splitChunks: {
+          chunks: 'all',
+          minSize: 20000,
+          maxSize: 244000,
+          minChunks: 1,
+          maxAsyncRequests: 30,
+          maxInitialRequests: 30,
+          cacheGroups: {
+            defaultVendors: {
+              test: /[\\/]node_modules[\\/]/,
+              priority: -10,
+              reuseExistingChunk: true,
+            },
+            default: {
+              minChunks: 2,
+              priority: -20,
+              reuseExistingChunk: true,
             },
           },
-        })
-      ],
-      splitChunks: { chunks: 'all' },
-    };
+        },
+      };
+    }
 
-    // Add PurgeCSS in production server builds
     if (!dev && isServer) {
-      const purgePaths = glob.sync(`${path.join(__dirname, 'src/**/*.{js,ts,jsx,tsx}')}`);
+      const purgePaths = glob.sync(`${path.join(__dirname, '{src,app,components}/**/*.{js,ts,jsx,tsx}')}`);
       config.plugins.push(
         new PurgeCSSPlugin({
           paths: purgePaths,

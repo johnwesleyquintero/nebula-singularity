@@ -8,7 +8,7 @@ import { ModeToggle } from "@/components/mode-toggle"
 import { Input } from "@/components/ui/input";
 import { BarChart2, Lock, ShieldCheck, Menu } from 'lucide-react';
 import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
-import { NewsletterForm } from '@/components/landing/NewsletterForm';
+
 import dynamic from 'next/dynamic';
 
 // Lazy load components
@@ -29,7 +29,6 @@ const TestimonialsSection = dynamic(() => import('@/components/landing/Testimoni
 });
 
 const Footer = dynamic(() => import('@/components/landing/Footer').then(mod => ({ default: mod.Footer })));
-const NewsletterForm = dynamic(() => import('@/components/landing/NewsletterForm').then(mod => ({ default: mod.NewsletterForm })));
 
 export default function LandingPage() {
   const [isOpen, setIsOpen] = useState(false);
