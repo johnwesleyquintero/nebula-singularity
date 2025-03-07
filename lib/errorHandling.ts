@@ -1,5 +1,6 @@
 import { ZodError } from 'zod';
 import * as Sentry from '@sentry/nextjs';
+import { createLogger, transports, format } from 'winston';
 
 export class AppError extends Error {
   constructor(
@@ -95,5 +96,35 @@ export const withErrorHandling = async <T>(
       500,
       error
     );
+  }
+};
+
+export const logger = createLogger({
+  level: 'info',
+  format: format.combine(
+    format.timestamp(),
+    format.json()
+  ),
+  transports: [
+    new transports.Console(),
+    new transports.File({ filename: 'logs/error.log', level: 'error' }),
+    new transports.File({ filename: 'logs/combined.log' })
+  ]
+});
+
+export const logger = {
+  error: (message: string, error: Error) => {
+    console.error(message, error);
+    Sentry.captureException(error);
+  },
+  log: (message: string) => {
+    console.log(message);
+  },
+  info: (message: string) => {
+    console.log(`[INFO] ${message}`);
+  }
+};
+  info: (message: string) => {
+    console.log(`[INFO] ${message}`);
   }
 };

@@ -119,6 +119,30 @@ The UI/UX design is based on a well-defined design system to ensure consistency 
 
 ### 3.2. Component Design Guidelines
 
+1. **Accessibility Standards**:
+    * WCAG 2.1 AA compliance for all components
+    * ARIA labels and keyboard navigation support
+    * Contrast ratio minimum of 4.5:1 for text
+    * Screen reader testing protocols
+
+2. **Interaction Pattern Documentation**:
+    * Animation duration standards (100ms-300ms)
+    * Hover/focus state transition curves (ease-in-out)
+    * Error state visualization guidelines
+    * Loading state skeleton patterns
+
+3. **Dark Mode Architecture**:
+    * Theme synchronization across CSS variables
+    * Context-based theme provider
+    * Performance-optimized theme switching
+    * Contrast preservation strategies
+
+4. **Component Testing Protocols**:
+    * Visual regression testing setup
+    * Interaction testing with React Testing Library
+    * Accessibility audits using Axe
+    * Cross-browser compatibility checks
+
 1.  **Atomic Design Approach**:
     *   Atoms: Basic building blocks (buttons, inputs)
     *   Molecules: Simple component groups

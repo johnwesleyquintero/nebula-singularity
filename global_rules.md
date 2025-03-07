@@ -102,11 +102,43 @@
   - [Automation](#automation)
   - [Resources](#resources)
 
-## Version History
-- v1.0.0 (2025-03-06): Initial release
+## Version Control & Changelog
+
+### Versioning Strategy
+- Use Semantic Versioning (SemVer) MAJOR.MINOR.PATCH
+- Maintain a CHANGELOG.md following https://keepachangelog.com/
+
+### Enforcement Mechanisms
+1. Automated version bumping using `standard-version`
+2. Git hooks to validate commit messages
+3. CI/CD pipeline checks for:
+   - Version consistency between package.json and CHANGELOG.md
+   - Presence of associated Jira tickets in commit messages
+
+### Example Changelog Entry
+```markdown
+## [2.1.0] - 2025-04-15
+### Added
+- New API endpoint for user preferences
+- Dark mode toggle component
+
+### Changed
+- Updated authentication flow to support OAuth2.1
+- Migrated dashboard components to TypeScript
+
+### Fixed
+- Resolved session expiration race condition
+- Patched XSS vulnerability in rich text editor
+```
+
+## Architecture Integration
+- Aligns with [ARCHITECTURE.md](./ARCHITECTURE.md) sections:
+  - 3.2 Security Guidelines
+  - 4.1 CI/CD Pipeline Design
+  - 5.3 Documentation Standards
 
 ## Search Tags
-#code-quality #security #performance #maintainability #styling #git #tooling #deployment #collaboration
+#code-quality #security #performance #maintainability #styling #git #tooling #deployment #collaboration #compliance
 
 ## 1. Code Quality
 

@@ -1,11 +1,13 @@
 const js = require('@eslint/js');
 const ts = require('@typescript-eslint/eslint-plugin');
 const tsParser = require('@typescript-eslint/parser');
-const reactRecommended = require('eslint-plugin-react/configs/recommended.js');
+const reactRecommended = require('eslint-plugin-react/configs/recommended');
 const next = require('@next/eslint-plugin-next');
+const reactPlugin = require('eslint-plugin-react/configs/recommended');
 
 module.exports = [
   js.configs.recommended,
+  reactRecommended,
   {
     ignores: ['.next/**'],
   },
@@ -76,19 +78,6 @@ module.exports = [
     },
   },
   {
-    ...reactRecommended,
-    settings: {
-      react: {
-        version: '18.2.0',
-      },
-    },
-    rules: {
-      ...reactRecommended.rules,
-      'react/react-in-jsx-scope': 'off',
-      'react/prop-types': 'off',
-    },
-  },
-  {
     plugins: {
       '@next/next': next,
     },
@@ -97,4 +86,23 @@ module.exports = [
       ...next.configs['core-web-vitals'].rules,
     },
   },
+  {
+    files: ['**/*.ts', '**/*.tsx'],
+    plugins: {
+      react: require('eslint-plugin-react'),
+    },
+    rules: {
+      'react/jsx-uses-react': 'error',
+      'react/jsx-uses-vars': 'error',
+    },
+    languageOptions: {
+      parser: require('@typescript-eslint/parser'),
+      parserOptions: {
+        ecmaFeatures: {
+          jsx: true
+        },
+        sourceType: 'module'
+      }
+    }
+  }
 ];

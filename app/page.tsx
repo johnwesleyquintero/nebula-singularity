@@ -132,6 +132,23 @@ export default function LandingPage() {
         </div>
       </header>
       <main id="main-content" className="flex-1" role="main">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              "name": "Nebula-Suite",
+              "url": "https://nebula-suite.com",
+              "logo": "https://nebula-suite.com/android-chrome-192x192.png",
+              "sameAs": [
+                "https://twitter.com/nebula_suite",
+                "https://linkedin.com/company/nebula-suite"
+              ],
+              "description": "Comprehensive SaaS platform for Amazon sellers offering analytics, PPC optimization, and inventory management tools."
+            })
+          }}
+        />
         <Suspense fallback={<div className="h-[500px] w-full animate-pulse bg-muted" />}>
           <HeroSection />
         </Suspense>
@@ -200,7 +217,7 @@ export default function LandingPage() {
                 <Image src="/logos/brand3.svg" alt="Brand 3 logo" width={120} height={80} priority />
                 <Image src="/logos/brand4.svg" alt="Brand 4 logo" width={120} height={80} priority />
                 <Image src="/logos/brand5.svg" alt="Brand 5 logo" width={120} height={80} priority />
-                <Image src="/logos/brand6.svg" alt="Brand 6 logo" width={120} height={80} priority />
+                <Image src="/logos/enhanced-brand.svg" alt="Enhanced Security Certified" width={120} height={80} priority className="hover:scale-105 transition-transform" />
               </div>
             </div>
           </div>
@@ -227,3 +244,11 @@ export default function LandingPage() {
     </div>
   );
 }
+<Image
+  src="/dashboard-preview.svg"
+  alt="Product dashboard preview"
+  width={1200}
+  height={800}
+  loading="lazy"
+  className="rounded-lg border shadow-xl"
+/>
