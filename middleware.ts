@@ -7,19 +7,18 @@ import { sanitizationMiddleware } from './lib/middleware/sanitization';
 import { createClient } from '@supabase/supabase-js';
 
 export async function middleware(request: NextRequest) {
-  const sanitized = await sanitizationMiddleware(request);
-  const response = await csrfMiddleware(sanitized);
-
-  // Apply rate limiting first
-  // Enhanced rate limiting for authentication endpoints
-  // Apply rate limiting to all API routes except public endpoints
-if (response.nextUrl.pathname.startsWith('/api') && 
-    !response.nextUrl.pathname.match(/(\/api\/public|\/api\/docs)/)) {
-    const rateLimitResponse = applyRateLimiting(response);
+  // Apply rate limiting as first security layer
+  if (request.nextUrl.pathname.startsWith('/api') && 
+    !request.nextUrl.pathname.match(/(\/api\/public|\/api\/docs)/)) {
+    const rateLimitResponse = applyRateLimiting(request);
     if (rateLimitResponse) {
       return applySecurityHeaders(rateLimitResponse);
     }
   }
+
+  // Process security middleware in sequence
+  const sanitized = await sanitizationMiddleware(request);
+  const response = await csrfMiddleware(sanitized);
 
   // CSRF protection for non-GET requests
   if (request.method !== 'GET') {
@@ -54,7 +53,7 @@ if (response.nextUrl.pathname.startsWith('/api') &&
   if (supabaseToken && supabaseRefreshToken) {
     const { data: { user }, error } = await supabase.auth.getUser(supabaseToken);
     
-    if (!error && user && !user.email_confirmed_at && !pathname.startsWith('/auth/verify-email')) {
+    if (!error && user && !user.email_confirmed_at && !path.startsWith('/auth/verify-email')) {
       return NextResponse.redirect(new URL('/auth/verify-email', request.url));
     }
   }
@@ -62,18 +61,8 @@ if (response.nextUrl.pathname.startsWith('/api') &&
   // Continue with the request if not rate limited
   const response = NextResponse.next();
 
-  response.headers.set(
-    'Content-Security-Policy',
-    "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self';"
-  );
-  response.headers.set('X-Content-Type-Options', 'nosniff');
-  response.headers.set('X-Frame-Options', 'DENY');
-  response.headers.set('X-XSS-Protection', '1; mode=block');
-  response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
-  response.headers.set(
-    'Permissions-Policy',
-    'geolocation=(), microphone=(), camera=()'
-  );
+  // Security headers are now handled by applySecurityHeaders
+  applySecurityHeaders(response);
 
   return response;
 }

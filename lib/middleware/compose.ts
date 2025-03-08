@@ -1,34 +1,21 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-import { z } from 'zod';
-import { sanitizeRequest } from './sanitization';
+import type { NextMiddleware, MiddlewareResult } from 'next/server';
 
-type NextApiHandler = (req: NextApiRequest, res: NextApiResponse) => Promise<void>;
+type ComposedMiddleware = (req: NextRequest, res?: MiddlewareResult) => Promise<MiddlewareResult>;
 
-export function validateAndSanitize<T extends z.ZodType>(
-  schema: T,
-  handler: NextApiHandler
-): NextApiHandler {
-  return sanitizeRequest(async (req: NextApiRequest, res: NextApiResponse) => {
-    try {
-      // Validate the request body against the schema
-      if (req.body) {
-        await schema.parseAsync(req.body);
+export function compose(
+  ...middlewares: NextMiddleware[]
+): NextMiddleware {
+  return async function composedMiddleware(req: NextRequest, event) {
+    let result: MiddlewareResult | undefined;
+    
+    for (const middleware of middlewares) {
+      const currentResult = await middleware(req, event);
+      if (currentResult) {
+        result = currentResult;
+        if (currentResult instanceof Response) break;
       }
-      
-      // If validation passes, proceed to the handler
-      return handler(req, res);
-    } catch (error) {
-      if (error instanceof z.ZodError) {
-        return res.status(400).json({
-          error: 'Validation failed',
-          details: error.errors
-        });
-      }
-      
-      console.error('Validation error:', error);
-      return res.status(500).json({
-        error: 'Internal server error'
-      });
     }
-  });
+    
+    return result || NextResponse.next();
+  };
 }

@@ -16,11 +16,16 @@ interface CsrfToken {
 }
 
 const DEFAULT_CONFIG: CsrfConfig = {
-  tokenExpiry: parseInt(process.env.CSRF_TOKEN_EXPIRY || '3600'), // 1 hour default
+  tokenExpiry: parseInt(process.env.CSRF_TOKEN_EXPIRY || '3600'),
   httpOnly: process.env.CSRF_HTTP_ONLY === 'true',
   secure: process.env.NODE_ENV === 'production',
-  sameSite: process.env.CSRF_SAME_SITE as 'strict' | 'lax' | 'none' || 'strict',
+  sameSite: (process.env.CSRF_SAME_SITE as 'strict' | 'lax' | 'none') || 'lax',
 };
+
+const CSRF_SIGNING_KEY = process.env.CSRF_SIGNING_KEY;
+if (!CSRF_SIGNING_KEY) {
+  throw new Error('CSRF_SIGNING_KEY environment variable is required');
+}
 
 // Paths that don't require CSRF protection
 const EXCLUDED_PATHS = [
@@ -64,7 +69,7 @@ export const csrfMiddleware = async (req: NextRequest) => {
   const csrfToken = cookieStore.get('csrf_token');
   const requestToken = req.headers.get('X-CSRF-Token');
 
-  if (!csrfToken || !requestToken || csrfToken.value !== requestToken) {
+  if (!csrfToken || !requestToken || !validateTokenSignature(csrfToken.value) || csrfToken.value !== requestToken) {
     return NextResponse.json(
       { error: 'Invalid CSRF token', code: 'INVALID_CSRF_TOKEN', status: 403 },
       { status: 403 }
@@ -72,7 +77,7 @@ export const csrfMiddleware = async (req: NextRequest) => {
   }
 
   try {
-    const tokenData: CsrfToken = JSON.parse(csrfToken.value);
+    const tokenData = parseAndValidateToken(csrfToken.value);
     if (Date.now() > tokenData.expires) {
       return NextResponse.json(
         { error: 'CSRF token expired', code: 'EXPIRED_CSRF_TOKEN', status: 403 },
@@ -87,14 +92,16 @@ export const csrfMiddleware = async (req: NextRequest) => {
   }
 
   // Generate new CSRF token
-  const newToken: CsrfToken = {
-    value: uuidv4(),
-    expires: Date.now() + (DEFAULT_CONFIG.tokenExpiry || 3600) * 1000,
-  };
+  const rawToken = `${uuidv4()}:${Date.now() + (DEFAULT_CONFIG.tokenExpiry || 3600) * 1000}`;
+const signature = crypto.createHmac('sha256', CSRF_SIGNING_KEY).update(rawToken).digest('hex');
+const newToken: CsrfToken = {
+  value: `${rawToken}.${signature}`,
+  expires: Date.now() + (DEFAULT_CONFIG.tokenExpiry || 3600) * 1000,
+};
 
   // Set new CSRF token cookie with security options
   const response = NextResponse.next();
-  response.cookies.set('csrf_token', JSON.stringify(newToken), {
+  response.cookies.set('csrf_token', newToken.value, {
     httpOnly: DEFAULT_CONFIG.httpOnly,
     secure: DEFAULT_CONFIG.secure,
     sameSite: DEFAULT_CONFIG.sameSite,
