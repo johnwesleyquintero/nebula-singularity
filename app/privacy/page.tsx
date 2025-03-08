@@ -1,5 +1,6 @@
+import type { Metadata } from 'next'
 import React from 'react';
-import { Card } from '@/components/ui/card';
+import { Card } from '../../components/ui/card';
 
 export const metadata: Metadata = {
   title: 'Privacy Policy | Nebula Suite',

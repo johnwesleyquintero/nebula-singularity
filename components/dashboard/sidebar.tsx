@@ -1,7 +1,5 @@
-import React from 'react';
+import React, { KeyboardEvent } from 'react';
 "use client"
-
-import type React from "react"
 
 import { usePathname } from "next/navigation"
 import Link from "next/link"
@@ -182,4 +180,8 @@ export function DashboardSidebarWrapper({ children, user }: DashboardSidebarWrap
       </div>
     </SidebarProvider>
   )
+}
+
+const handleKeyDown = (e: KeyboardEvent<HTMLUListElement>) => {
+
 }

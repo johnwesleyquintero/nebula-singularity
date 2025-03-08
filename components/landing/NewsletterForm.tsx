@@ -1,5 +1,5 @@
-import React from 'react';
 'use client';
+import React from 'react';
 
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
@@ -10,8 +10,7 @@ import { toast } from 'sonner';
 export function NewsletterForm() {
   const [email, setEmail] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
-
+  
   const validateEmail = (email: string) => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return re.test(email);
@@ -19,10 +18,9 @@ export function NewsletterForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
-
+    
     if (!validateEmail(email)) {
-      setError('Please enter a valid email address');
+      toast.error('Please enter a valid email address');
       return;
     }
 
@@ -36,7 +34,7 @@ export function NewsletterForm() {
       // For now, we'll just show a success message
       toast.success('Thank you for subscribing to our newsletter!');
       setEmail('');
-    } catch (error) {
+    } catch (error: Error) {
       toast.error('Something went wrong. Please try again.');
     } finally {
       setIsLoading(false);
@@ -54,9 +52,9 @@ export function NewsletterForm() {
           required
           disabled={isLoading}
           aria-label="Email address"
-          className={error ? 'border-red-500' : ''}
+          
         />
-        {error && <p className="text-sm text-red-500">{error}</p>}
+        
       </div>
       <Button type="submit" className="w-full" disabled={isLoading}>
         {isLoading ? (

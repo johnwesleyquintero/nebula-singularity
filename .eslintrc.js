@@ -63,6 +63,9 @@ module.exports = {
     TextEncoder: 'readonly',
     crypto: 'readonly',
     console: 'readonly',
-    Response: 'readonly'
+    Response: 'readonly',
+    beforeAll: 'readonly',      // Add test globals
+    beforeEach: 'readonly',     // Add test globals
+    afterAll: 'readonly'        // Add test globals
   }
 };

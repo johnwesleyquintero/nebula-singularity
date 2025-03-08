@@ -1,6 +1,6 @@
 /* global process */
 /** @eslint-env browser, node */
-/* eslint-disable no-console */
+ 
 import NextAuth from 'next-auth'
 import type { NextAuthOptions, Session, User } from 'next-auth'
 import GoogleProvider from 'next-auth/providers/google'

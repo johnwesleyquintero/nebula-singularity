@@ -5,7 +5,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { ModeToggle } from "@/components/mode-toggle"
-import { Input } from "@/components/ui/input";
+import { NewsletterForm } from '@/components/landing/NewsletterForm';
 import { BarChart2, Lock, ShieldCheck, Menu } from 'lucide-react';
 import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
 
@@ -233,7 +233,7 @@ export default function LandingPage() {
                 </p>
               </div>
               <Suspense fallback={<div className="h-[100px] w-full max-w-md animate-pulse bg-muted" />}>
-                <NewsletterForm />
+                {<NewsletterForm />}
               </Suspense>
             </div>
           </div>

@@ -1,7 +1,5 @@
 import React from 'react';
-"use client"
-
-import type React from "react"
+"use client";
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
@@ -51,8 +49,8 @@ export default function RegisterPage() {
 
       toast.success("Registration successful! Please sign in.")
       router.push("/login")
-    } catch (error) {
-      toast.error("Something went wrong during registration")
+    } catch (error: any) {
+      toast.error("Something went wrong during registration: " + error.message)
     } finally {
       setIsLoading(false)
     }
@@ -164,3 +162,4 @@ export default function RegisterPage() {
   )
 }
 
+<RadioGroupItem value="consultant" id="consultant" />

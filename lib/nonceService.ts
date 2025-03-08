@@ -1,3 +1,4 @@
+/// <reference types="node" />
 import { createHash } from 'crypto';
 
 interface NonceRecord {
@@ -49,13 +50,12 @@ class NonceService {
     return isValid;
   }
 
-  private hashNonce(nonce: string): string {
+  private async hashNonce(nonce: string): Promise<string> {
     const encoder = new TextEncoder();
     const data = encoder.encode(nonce);
-    return crypto.subtle.digest('SHA-256', data).then(buffer => {
-      const hashArray = Array.from(new Uint8Array(buffer));
-      return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-    });
+    const buffer = await crypto.subtle.digest('SHA-256', data);
+    const hashArray = Array.from(new Uint8Array(buffer));
+    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
   }
 
   private startCleanupInterval(): void {

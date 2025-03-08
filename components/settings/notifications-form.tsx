@@ -1,5 +1,4 @@
-import React from 'react';
-"use client"
+'use client';
 
 import { useState } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"

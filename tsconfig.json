@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "es2015",
     "lib": [
       "dom",
       "dom.iterable",
@@ -29,7 +29,11 @@
         "name": "next"
       }
     ],
-    "types": ["node", "react", "jest"]
+    "types": [
+      "node",
+      "react",
+      "jest"
+    ]
   },
   "include": [
     "**/*.ts",
