@@ -133,16 +133,24 @@ export const signIn = async (
   password: string
 ): Promise<{ user: AuthUser | null; session: AuthSession | null; error: AuthError | null }> => {
   try {
-    // Check rate limiting
-    if (isRateLimited(email)) {
-      return {
-        user: null,
-        session: null,
-        error: { 
-          message: 'Too many failed login attempts. Please try again later.',
-          status: 429
-        }
-      };
+    // Check account lock status
+    const { data: existingUser } = await supabase
+      .from('users')
+      .select('failed_attempts, last_failed_at')
+      .eq('email', email)
+      .single();
+
+    if (existingUser?.failed_attempts >= 5) {
+      const lockDuration = 15 * 60 * 1000; // 15 minutes
+      const timeSinceLock = Date.now() - new Date(existingUser.last_failed_at).getTime();
+      
+      if (timeSinceLock < lockDuration) {
+        return {
+          user: null,
+          session: null,
+          error: { message: 'Account locked. Try again later.', status: 429 }
+        };
+      }
     }
 
     // Sign in with Supabase
@@ -152,6 +160,23 @@ export const signIn = async (
     });
 
     if (error) {
+      // Update failed attempts
+      await supabase
+        .from('users')
+        .update({
+          failed_attempts: (existingUser?.failed_attempts || 0) + 1,
+          last_failed_at: new Date().toISOString()
+        })
+        .eq('email', email);
+
+      if ((existingUser?.failed_attempts || 0) + 1 >= 5) {
+        return {
+          user: null,
+          session: null,
+          error: { message: 'Too many failed attempts. Account locked for 15 minutes.', status: 429 }
+        };
+      }
+
       return { 
         user: null, 
         session: null, 
@@ -195,8 +220,11 @@ export const signIn = async (
       expiresAt: data.session.expires_at
     };
 
-    // Reset auth attempts on successful login
-    authAttempts.delete(email);
+    // Reset failed attempts on success
+    await supabase
+      .from('users')
+      .update({ failed_attempts: 0 })
+      .eq('email', email);
 
     return { user: authUser, session: authSession, error: null };
   } catch (err: any) {

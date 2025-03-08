@@ -49,12 +49,21 @@ const AuthPage = () => {
     };
   }, [router, toast]);
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const validatePassword = (password: string) => {
+  const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+  return regex.test(password);
+};
+
+const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
 
     try {
       if (isSignUp) {
+        if (!validatePassword(password)) {
+          throw new Error('Password must contain at least 8 characters, one uppercase, one lowercase, one number and one special character');
+        }
+        
         const { user, error } = await authService.signUp(email, password);
         if (error) {
           throw new Error(error.message);
