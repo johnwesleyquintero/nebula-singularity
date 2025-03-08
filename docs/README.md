@@ -15,19 +15,19 @@ Nebula-Suite is a comprehensive Next.js 14 SaaS platform for Amazon sellers, emp
 ## Documentation Structure
 
 ### Architecture
-- [System Architecture Overview](./nebula-suite-architecture.md) - Detailed system architecture and design specifications
-- [Core Architecture](./ARCHITECTURE.md) - Core components and implementation details
+- [System Architecture Overview](./architecture/nebula-suite-architecture.md) - Detailed system architecture and design specifications
+- [Core Architecture](./architecture/ARCHITECTURE.md) - Core components and implementation details
 
 ### Development Guidelines
-- [Global Rules](./global_rules.md) - Comprehensive development guidelines and best practices
+- [Global Rules](./development/global_rules.md) - Comprehensive development guidelines and best practices
 
 ### Configuration
-- [Supabase Configuration](./Supabase-config.md) - Database and authentication setup
+- [Supabase Configuration](./development/supabase-config.md) - Database and authentication setup
 
 ### Code Reviews
-- [Authentication Code Review](./code_review_auth.md) - Authentication implementation review
-- [Comprehensive Auth Review](./comprehensive_code_review_auth.md) - Detailed authentication system review
-- [Enhancement Reviews](./code_review_enhancements.md) - System enhancement proposals and reviews
+- [Authentication Code Review](./reviews/code_review_auth.md) - Authentication implementation review
+- [Comprehensive Auth Review](./reviews/comprehensive_code_review_auth.md) - Detailed authentication system review
+- [Enhancement Reviews](./reviews/code_review_enhancements.md) - System enhancement proposals and reviews
 
 ## Key Components
 

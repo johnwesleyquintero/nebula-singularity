@@ -132,7 +132,7 @@
 ```
 
 ## Architecture Integration
-- Aligns with [ARCHITECTURE.md](./ARCHITECTURE.md) sections:
+- Aligns with [ARCHITECTURE.md](./architecture/ARCHITECTURE.md) sections:
   - 3.2 Security Guidelines
   - 4.1 CI/CD Pipeline Design
   - 5.3 Documentation Standards
