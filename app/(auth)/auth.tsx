@@ -1,10 +1,10 @@
 'use client';
 
 import React from 'react';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { useToast } from '../../components/ui/use-toast';
 import { Toaster } from '../../components/ui/toaster';
-import { supabase } from '../../lib/supabaseClient';
+import * as authService from '../../lib/auth-service';
 import { useState, useEffect } from 'react';
 
 const AuthPage = () => {
@@ -16,22 +16,38 @@ const AuthPage = () => {
   const { toast } = useToast();
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session) {
-        router.push('/dashboard');
+    const checkSession = async () => {
+      const { session, error } = await authService.getSession();
+      
+      if (session?.user) {
+        // Only redirect if the user's email is verified
+        if (session.user.email_verified) {
+          router.push('/dashboard');
+        } else {
+          toast({
+            title: 'Email verification required',
+            description: 'Please verify your email before accessing the dashboard.',
+            variant: 'destructive',
+          });
+        }
+      }
+    };
+    
+    checkSession();
+    
+    const subscription = authService.onAuthStateChange((session) => {
+      if (session?.user) {
+        // Only redirect if the user's email is verified
+        if (session.user.email_verified) {
+          router.push('/dashboard');
+        }
       }
     });
-
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_, session) => {
-      if (session) {
-        router.push('/dashboard');
-      }
-    });
-
+    
     return () => {
       subscription.unsubscribe();
     };
-  }, [router]);
+  }, [router, toast]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -39,31 +55,70 @@ const AuthPage = () => {
 
     try {
       if (isSignUp) {
-        const { data, error } = await supabase.auth.signUp({ email, password });
+        const { user, error } = await authService.signUp(email, password);
         if (error) {
           throw new Error(error.message);
         }
-        if (!data.user) {
+        if (!user) {
           throw new Error('Sign up failed');
         }
         toast({
           title: 'Sign up successful!',
           description: 'Please check your email to verify.',
         });
-        router.push('/dashboard');
+        // Don't redirect to dashboard until email is verified
       } else {
-        const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+        const { user, session, error } = await authService.signIn(email, password);
+        
         if (error) {
+          // Special handling for email verification error
+          if (error.status === 403 && error.message.includes('verify')) {
+            toast({
+              title: 'Email verification required',
+              description: error.message,
+              variant: 'destructive',
+            });
+            // Offer to resend verification email
+            const resendResult = await authService.sendVerificationEmail(email);
+            if (!resendResult.error) {
+              toast({
+                title: 'Verification email sent',
+                description: 'A new verification email has been sent to your email address.',
+              });
+            }
+            setIsLoading(false);
+            return;
+          }
+          
           throw new Error(error.message);
         }
-        if (!data.user) {
+        
+        if (!user || !session) {
           throw new Error('Sign in failed');
         }
-        toast({
-          title: 'Sign in successful!',
-          description: 'Welcome back!',
-        });
-        router.push('/dashboard');
+        
+        // Only redirect if email is verified
+        if (user.email_verified) {
+          toast({
+            title: 'Sign in successful!',
+            description: 'Welcome back!',
+          });
+          router.push('/dashboard');
+        } else {
+          toast({
+            title: 'Email verification required',
+            description: 'Please verify your email before accessing the dashboard.',
+            variant: 'destructive',
+          });
+          // Offer to resend verification email
+          const resendResult = await authService.sendVerificationEmail(email);
+          if (!resendResult.error) {
+            toast({
+              title: 'Verification email sent',
+              description: 'A new verification email has been sent to your email address.',
+            });
+          }
+        }
       }
     } catch (error: unknown) {
       const message = error instanceof Error ? error.message : 'Authentication failed';

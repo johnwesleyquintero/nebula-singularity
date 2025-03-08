@@ -27,6 +27,10 @@ export default async function DashboardLayout({
     redirect("/login")
   }
 
+  if (!session.user.email_verified) {
+    redirect("/auth/verify-email")
+  }
+
   return (
     <DashboardSidebarWrapper user={session.user}>
       <Header user={session.user} />
