@@ -7,7 +7,9 @@ import { createClient } from '@supabase/supabase-js';
 export async function middleware(request: NextRequest) {
   // Apply rate limiting first
   // Enhanced rate limiting for authentication endpoints
-  if (request.nextUrl.pathname.startsWith('/api/auth')) {
+  // Apply rate limiting to all API routes except public endpoints
+if (request.nextUrl.pathname.startsWith('/api') && 
+    !request.nextUrl.pathname.match(/(\/api\/public|\/api\/docs)/)) {
     const rateLimitResponse = applyRateLimiting(request);
     if (rateLimitResponse) {
       return applySecurityHeaders(rateLimitResponse);
@@ -41,6 +43,11 @@ export async function middleware(request: NextRequest) {
   if (isProtectedRoute && (!supabaseToken || !supabaseRefreshToken)) {
     const loginUrl = new URL('/login', request.url);
     return NextResponse.redirect(loginUrl);
+  }
+
+  // After session verification in middleware
+  if (session?.user && !session.user.email_verified && !pathname.startsWith('/auth/verify-email')) {
+    return NextResponse.redirect(new URL('/auth/verify-email', request.url));
   }
 
   // Continue with the request if not rate limited

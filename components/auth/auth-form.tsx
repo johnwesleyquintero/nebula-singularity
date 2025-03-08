@@ -9,7 +9,9 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { toast } from 'sonner';
-import * as authService from '@/lib/auth-service';
+import { signIn } from 'next-auth/react';
+import { authOptions } from '@/pages/api/auth/[...nextauth]';
+import { getServerSession } from 'next-auth';
 
 type AuthMode = 'signin' | 'signup';
 
@@ -99,14 +101,14 @@ export function AuthForm({
       if (mode === 'signup') {
         // Sign up
         const result = await signIn('credentials', {
-      redirect: false,
-      email: formData.email,
-      password: formData.password,
-      newUser: true,
-      name: formData.name,
-      role: formData.role,
-      callbackUrl: `${window.location.origin}/auth/verify-email`
-    });
+          redirect: false,
+          email: formData.email,
+          password: formData.password,
+          isSignUp: true,
+          name: formData.name,
+          role: formData.role,
+          callbackUrl: `${window.location.origin}/auth/verify-email`
+        });
     if (result?.error) {
       throw new Error(result.error);
     }
@@ -123,11 +125,11 @@ export function AuthForm({
       } else {
         // Sign in
         const result = await signIn('credentials', {
-      redirect: false,
-      email: formData.email,
-      password: formData.password,
-      callbackUrl: redirectUrl
-    });
+          redirect: false,
+          email: formData.email,
+          password: formData.password,
+          callbackUrl: redirectUrl
+        });
     if (result?.error) {
       throw new Error(result.error);
     }
