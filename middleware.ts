@@ -45,9 +45,13 @@ if (request.nextUrl.pathname.startsWith('/api') &&
     return NextResponse.redirect(loginUrl);
   }
 
-  // After session verification in middleware
-  if (session?.user && !session.user.email_verified && !pathname.startsWith('/auth/verify-email')) {
-    return NextResponse.redirect(new URL('/auth/verify-email', request.url));
+  // Validate session and email verification
+  if (supabaseToken && supabaseRefreshToken) {
+    const { data: { user }, error } = await supabase.auth.getUser(supabaseToken);
+    
+    if (!error && user && !user.email_confirmed_at && !pathname.startsWith('/auth/verify-email')) {
+      return NextResponse.redirect(new URL('/auth/verify-email', request.url));
+    }
   }
 
   // Continue with the request if not rate limited
