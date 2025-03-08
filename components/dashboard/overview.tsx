@@ -1,3 +1,4 @@
+import React from 'react';
 "use client"
 
 import { Line, LineChart, ResponsiveContainer, XAxis, YAxis } from "recharts"

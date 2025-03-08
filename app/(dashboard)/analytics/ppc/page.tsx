@@ -1,8 +1,9 @@
-import type { Metadata } from "next"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { PPCOverview } from "@/components/analytics/ppc-overview"
-import { PPCCampaigns } from "@/components/analytics/ppc-campaigns"
+import React from 'react';
+import type { Metadata } from 'next'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "components/ui/card"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "components/ui/tabs"
+import { PPCOverview } from "components/analytics/ppc-overview"
+import { PPCCampaigns } from "components/analytics/ppc-campaigns"
 
 export const metadata: Metadata = {
   title: "PPC Analytics | Nebula-Suite",
@@ -58,4 +59,3 @@ export default function PPCAnalyticsPage() {
     </div>
   )
 }
-

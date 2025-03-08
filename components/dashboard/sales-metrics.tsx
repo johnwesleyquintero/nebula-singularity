@@ -1,3 +1,4 @@
+import React from 'react';
 "use client"
 
 import { Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, XAxis, YAxis } from "recharts"

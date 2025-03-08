@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input"
 import { toast } from "sonner"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { handleError } from "@/lib/errorHandling"
+import React from 'react';
 
 const apiKeysFormSchema = z.object({
   clientId: z.string().min(1, {

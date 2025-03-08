@@ -69,7 +69,7 @@ export const sendEmailAlert = async (message: string): Promise<void> => {
   try {
     const mailOptions = {
       from: emailConfig.auth.user,
-      to: process.env.ALERT_EMAIL_RECIPIENTS,
+      to: process.env.ALERT_EMAIL_RECIPIENTS || 'admin@example.com',
       subject: alertTemplates.email.subject,
       html: alertTemplates.email.body(message)
     };

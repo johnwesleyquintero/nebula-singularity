@@ -10,6 +10,7 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, For
 import { Switch } from "@/components/ui/switch"
 import { toast } from "sonner"
 import { handleError } from "@/lib/errorHandling"
+import React from 'react';
 
 const accountFormSchema = z.object({
   marketplaces: z.array(z.string()).min(1, {

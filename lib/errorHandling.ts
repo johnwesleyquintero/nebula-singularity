@@ -1,7 +1,9 @@
-import { ZodError } from 'zod';
+import { ZodError, ZodSchema } from 'zod';
 import { createLogger, transports, format } from 'winston';
-
+import * as Sentry from '@sentry/nextjs';
 import { NextApiRequest, NextApiResponse } from 'next';
+import { rateLimit } from 'express-rate-limit';
+import { NextResponse } from 'next/server';
 
 // Error metrics tracking
 const errorMetrics = {
@@ -10,9 +12,7 @@ const errorMetrics = {
   errorsByStatusCode: new Map<number, number>(),
   lastErrorTimestamp: new Date(),
   alertThreshold: 50,
-  timeWindow: 5 * 60 * 1000
-}
-  timeWindow: 5 * 60 * 1000, // 5 minutes in milliseconds
+  timeWindow: 5 * 60 * 1000 // 5 minutes in milliseconds
 };
 
 // Alert configuration
@@ -124,7 +124,7 @@ export const validateRequest = (schema: z.ZodSchema) => {
       next();
     } catch (error) {
       if (error instanceof ZodError) {
-        res.status(400).json(handleError(error));
+        res.status(400).json(handleApiError(error));
       } else {
         next(error);
       }
@@ -132,30 +132,8 @@ export const validateRequest = (schema: z.ZodSchema) => {
   };
 };
 
-import { ZodError } from 'zod';
-import { createLogger, transports, format } from 'winston';
-
-import { NextApiRequest, NextApiResponse } from 'next';
-
-// Error metrics tracking
-const errorMetrics = {
-  totalErrors: 0,
-  errorsByType: new Map<string, number>(),
-  errorsByStatusCode: new Map<number, number>(),
-  lastErrorTimestamp: new Date(),
-  alertThreshold: 50,
-  timeWindow: 5 * 60 * 1000
-}
-  timeWindow: 5 * 60 * 1000, // 5 minutes in milliseconds
-};
-
-// Alert configuration
-const alertConfig = {
-  enabled: true,
-  channels: ['email', 'slack'],
-  criticalStatusCodes: [500, 503],
-
-  // Handle other types of errors
+// Handle API errors
+const handleApiError = (error: any) => {
   const message = error instanceof Error ? error.message : 'An unknown error occurred';
   return NextResponse.json(
     { error: message },
@@ -172,47 +150,3 @@ export function catchAsyncErrors(fn: Function) {
     }
   };
 }
-
-import { logger } from './errorHandling'
-import { ZodError } from 'zod';
-import { createLogger, transports, format } from 'winston';
-
-import { NextApiRequest, NextApiResponse } from 'next';
-
-// Error metrics tracking
-const errorMetrics = {
-  totalErrors: 0,
-  errorsByType: new Map<string, number>(),
-  errorsByStatusCode: new Map<number, number>(),
-  lastErrorTimestamp: new Date(),
-  alertThreshold: 50,
-  timeWindow: 5 * 60 * 1000
-}
-  timeWindow: 5 * 60 * 1000, // 5 minutes in milliseconds
-};
-
-// Alert configuration
-const alertConfig = {
-  enabled: true,
-  channels: ['email', 'slack'],
-  criticalStatusCodes: [500, 503],
-
-  // Handle other types of errors
-  const message = error instanceof Error ? error.message : 'An unknown error occurred';
-  return NextResponse.json(
-    { error: message },
-    { status: 500 }
-  );
-}
-
-export function catchAsyncErrors(fn: Function) {
-  return async function(...args: any[]) {
-    try {
-      return await fn(...args);
-    } catch (error) {
-      return handleApiError(error);
-    }
-  };
-}
-
-import { logger } from './errorHandling'

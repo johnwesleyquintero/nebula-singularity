@@ -1,3 +1,4 @@
+import React from 'react';
 "use client"
 
 import type React from "react"
@@ -38,7 +39,7 @@ export default function LoginPage() {
 
       router.push("/dashboard")
       toast.success("Logged in successfully")
-    } catch (error) {
+    } catch {
       toast.error("Something went wrong")
     } finally {
       setIsLoading(false)
@@ -72,7 +73,7 @@ export default function LoginPage() {
         <div className="relative z-20 mt-auto">
           <blockquote className="space-y-2">
             <p className="text-lg">
-              &ldquo;This suite has completely transformed how we handle our analytics and reporting. It's a game changer.&rdquo;
+              &ldquo;This suite has completely transformed how we handle our analytics and reporting. It&apos;s a game changer.&rdquo;
             </p>
             <footer className="text-sm">Sofia Davis</footer>
           </blockquote>
@@ -144,7 +145,7 @@ export default function LoginPage() {
                   href="/register"
                   className="hover:text-primary underline underline-offset-4"
                 >
-                  Don't have an account? Sign Up
+                  Don&apos;t have an account? Sign Up
                 </Link>
               </div>
             </CardFooter>

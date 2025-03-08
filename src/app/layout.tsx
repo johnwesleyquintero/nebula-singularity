@@ -1,3 +1,4 @@
+import React from 'react';
 import { securityHeaders } from './securityHeaders';
 
 export const metadata = {

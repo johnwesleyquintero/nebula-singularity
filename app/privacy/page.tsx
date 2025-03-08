@@ -1,4 +1,4 @@
-import { Metadata } from 'next';
+import React from 'react';
 import { Card } from '@/components/ui/card';
 
 export const metadata: Metadata = {

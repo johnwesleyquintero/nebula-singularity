@@ -8,11 +8,9 @@ export default function GlobalError({ error }) {
   Sentry.captureException(error);
 
   return (
-    <html>
-      <body>
-        <h2>Something went wrong!</h2>
-        <Error statusCode={500} title={error.message} />
-      </body>
-    </html>
+    <div className="error-page">
+      <h2>Something went wrong!</h2>
+      <Error statusCode={500} title={error.message} />
+    </div>
   );
 }

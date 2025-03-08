@@ -14,6 +14,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import React from 'react';
 
 type Report = {
   id: string
@@ -25,6 +26,17 @@ type Report = {
 }
 
 const ITEMS_PER_PAGE = 5
+const reports: Report[] = [
+  {
+    id: '1',
+    name: 'Monthly Sales Report',
+    type: 'sales',
+    format: 'pdf',
+    dateCreated: '2024-03-01',
+    size: '2.5MB'
+  },
+  // ... add more mock reports as needed
+];
 
 export function ReportsList() {
   const [searchQuery, setSearchQuery] = useState("")
@@ -36,7 +48,7 @@ export function ReportsList() {
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE
   const paginatedReports = filteredReports.slice(startIndex, startIndex + ITEMS_PER_PAGE)
 
-  const handleDownload = async (report: Report) => {
+  async function handleDownload(report: Report) {
     try {
       setIsLoading(true)
       // Simulate download delay
@@ -49,7 +61,7 @@ export function ReportsList() {
     }
   }
 
-  const handleDelete = async (report: Report) => {
+  async function handleDelete(report: Report) {
     try {
       setIsLoading(true)
       // Simulate delete delay
