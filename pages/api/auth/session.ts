@@ -25,10 +25,11 @@ export default async function handler(
   }
 
   const sessionId = req.cookies.sessionId;
-  if (!/^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/i.test(sessionId)) {
+  if (!/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(sessionId)) {
+    logger.warn('Invalid session ID format detected', { sessionId, ip: req.socket.remoteAddress });
     return res.status(400).json({
-      error: 'INVALID_SESSION_ID',
-      message: 'Malformed session ID format'
+      error: 'INVALID_REQUEST',
+      message: 'Invalid authentication credentials'
     });
   }
 
@@ -67,11 +68,11 @@ export default async function handler(
 
     // Cache the session in Redis with 5 minute TTL
     logger.debug(`Caching session in Redis: ${cacheKey}`);
-    await redis.setex(cacheKey, 300, JSON.stringify(session));
+    await redis.setex(cacheKey, 900, JSON.stringify(session)); // 15 minute TTL
 
     // Set cache headers for client-side caching
-    res.setHeader('Cache-Control', 'public, max-age=60, stale-while-revalidate=30');
-    res.setHeader('ETag', `W/"${Date.now()}"`);
+    res.setHeader('Cache-Control', 'public, max-age=300, stale-while-revalidate=150');
+    res.setHeader('ETag', `W/"${createContentHash(session)}"`);
 
     return res.status(200).json(session);
   } catch (error) {
@@ -79,6 +80,7 @@ export default async function handler(
     const errorResponse = {
   error: 'SERVER_ERROR',
   message: 'Failed to retrieve session',
+  code: 'SESSION_FETCH_FAILURE',
   ...(process.env.NODE_ENV === 'development' && { stack: error.stack })
 };
 

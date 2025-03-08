@@ -51,15 +51,20 @@ const nextConfig = {
     ignoreBuildErrors: false,
   },
   images: {
-    domains: ['nebula-saas.com'],
+    domains: ['nebula-saas.com', 'localhost'],
     remotePatterns: [
       {
         protocol: 'https',
         hostname: '*.nebula-saas.com',
-        port: '',
-        pathname: '/**',
       },
+      {
+        protocol: 'http',
+        hostname: 'localhost',
+        port: '3000',
+      }
     ],
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384]
   },
   headers: async () => [
     {
@@ -68,9 +73,11 @@ const nextConfig = {
     },
   ],
   env: {
+    NEXTAUTH_URL: process.env.NEXTAUTH_URL,
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
     NEXT_PUBLIC_SENTRY_DSN: process.env.NEXT_PUBLIC_SENTRY_DSN,
-    NEXT_PUBLIC_ENABLE_SENTRY: String(process.env.NODE_ENV === 'production')
+    NEXT_PUBLIC_ENABLE_SENTRY: String(process.env.NODE_ENV === 'production'),
+    NEXT_PUBLIC_IMAGE_DOMAIN: process.env.NEXT_PUBLIC_IMAGE_DOMAIN
   },
   webpack: (config, { dev, isServer }) => {
     config.resolve.fallback = { fs: false, net: false };

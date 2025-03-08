@@ -19,6 +19,22 @@ model User {
   email     String   @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  sessions  Session[]
+
+  @@index([email])
+  @@index([createdAt])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id])
+
+  @@index([sessionToken])
+  @@index([expires])
+  @@index([userId])
 }
 
 // Add more models as needed for your application
