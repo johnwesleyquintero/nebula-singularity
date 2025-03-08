@@ -1,6 +1,6 @@
 /* global process */
 /** @eslint-env browser, node */
- 
+/* eslint-disable no-console */
 import NextAuth from 'next-auth'
 import type { NextAuthOptions, Session, User } from 'next-auth'
 import GoogleProvider from 'next-auth/providers/google'
@@ -29,7 +29,7 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async session({ session, token, user }: { session: Session; token: any; user: User }) {
       console.time("Session callback");
-      console.log("Session callback called", { session, token, user });
+      logger.error('Session callback error', { error });
       console.timeEnd("Session callback");
       return session;
     }

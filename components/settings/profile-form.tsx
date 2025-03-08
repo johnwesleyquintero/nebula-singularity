@@ -13,6 +13,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { toast } from "sonner"
 import { handleError } from "@/lib/errorHandling"
 
+// Zod schema definition for profile data validation
 const profileFormSchema = z.object({
   name: z
     .string()
@@ -39,13 +40,15 @@ const defaultValues: Partial<ProfileFormValues> = {
 export function ProfileForm() {
   const [isLoading, setIsLoading] = useState(false)
 
-  const form = useForm<ProfileFormValues>({
+  // Initialize react-hook-form with Zod resolver and default values
+const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileFormSchema),
     defaultValues,
     mode: "onChange",
   })
 
-  async function onSubmit(data: ProfileFormValues) {
+  // Handle form submission with API integration
+async function onSubmit(data: ProfileFormValues) {
     setIsLoading(true)
 
     try {
@@ -68,8 +71,10 @@ export function ProfileForm() {
     }
   }
 
-  return (
-    <Form {...form}>
+  // Form UI structure with controlled fields
+return (
+    // Main form wrapper from Shadcn UI library
+<Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <FormField
           control={form.control}

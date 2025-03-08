@@ -53,7 +53,6 @@ export function ApiKeysForm() {
       setIsLoading(false)
       setHasKeys(true)
       toast.success("API keys saved successfully!")
-      console.log(data)
     } catch (error) {
       setIsLoading(false)
       const errorResponse = handleError(error);
