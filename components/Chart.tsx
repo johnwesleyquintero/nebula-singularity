@@ -34,5 +34,5 @@ interface ChartProps {
 }
 
 export function Chart({ data }: ChartProps) {
-  return <Line data={data} />;
+  return <LineChart className="w-full h-full" />;
 }

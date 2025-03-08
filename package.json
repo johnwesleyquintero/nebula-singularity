@@ -82,6 +82,7 @@
     "vaul": "^1.1.2",
     "winston": "^3.17.0",
     "winston-daily-rotate-file": "^5.0.0",
+    "xss": "^1.0.15",
     "zod": "^3.24.2"
   },
   "devDependencies": {

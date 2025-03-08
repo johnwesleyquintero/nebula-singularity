@@ -2,15 +2,20 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { applySecurityHeaders } from './lib/securityHeaders';
 import { applyRateLimiting } from './lib/rateLimiting';
+import { csrfMiddleware } from './lib/middleware/csrf';
+import { sanitizationMiddleware } from './lib/middleware/sanitization';
 import { createClient } from '@supabase/supabase-js';
 
 export async function middleware(request: NextRequest) {
+  const sanitized = await sanitizationMiddleware(request);
+  const response = await csrfMiddleware(sanitized);
+
   // Apply rate limiting first
   // Enhanced rate limiting for authentication endpoints
   // Apply rate limiting to all API routes except public endpoints
-if (request.nextUrl.pathname.startsWith('/api') && 
-    !request.nextUrl.pathname.match(/(\/api\/public|\/api\/docs)/)) {
-    const rateLimitResponse = applyRateLimiting(request);
+if (response.nextUrl.pathname.startsWith('/api') && 
+    !response.nextUrl.pathname.match(/(\/api\/public|\/api\/docs)/)) {
+    const rateLimitResponse = applyRateLimiting(response);
     if (rateLimitResponse) {
       return applySecurityHeaders(rateLimitResponse);
     }

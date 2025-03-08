@@ -1,49 +1,64 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-import createDOMPurify from 'dompurify';
-import { JSDOM } from 'jsdom';
+import { NextResponse, type NextRequest } from 'next/server';
+import xss from 'xss';
+import { isApiRoute } from '@/lib/utils';
 
-const window = new JSDOM('').window;
-const DOMPurify = createDOMPurify(window);
+export const sanitizationMiddleware = async (req: NextRequest) => {
+  if (!isApiRoute(req.nextUrl.pathname)) return NextResponse.next();
 
-type NextApiHandler = (req: NextApiRequest, res: NextApiResponse) => Promise<void>;
-
-export function sanitizeRequest(
-  handler: NextApiHandler
-): NextApiHandler {
-  return async (req: NextApiRequest, res: NextApiResponse) => {
-    try {
-      if (req.body) {
-        req.body = sanitizeData(req.body);
-      }
-      if (req.query) {
-        req.query = sanitizeData(req.query);
-      }
-      return handler(req, res);
-    } catch (error) {
-      console.error('Sanitization error:', error);
-      return res.status(400).json({
-        error: 'Invalid input data'
-      });
+  try {
+    const clonedReq = req.clone();
+    
+    // Sanitize URL parameters
+    const sanitizedQuery = new URLSearchParams();
+    for (const [key, value] of clonedReq.nextUrl.searchParams.entries()) {
+      sanitizedQuery.set(key, xss(value));
     }
-  };
-}
 
-function sanitizeData(data: any): any {
-  if (typeof data === 'string') {
-    return DOMPurify.sanitize(data.trim());
-  }
-  
-  if (Array.isArray(data)) {
-    return data.map(item => sanitizeData(item));
-  }
-  
-  if (typeof data === 'object' && data !== null) {
-    const sanitizedData: any = {};
-    for (const [key, value] of Object.entries(data)) {
-      sanitizedData[key] = sanitizeData(value);
+    // Sanitize headers
+    const headers = new Headers(clonedReq.headers);
+    headers.forEach((value, key) => {
+      headers.set(key, xss(value));
+    });
+
+    // Sanitize request body
+    let sanitizedBody = {};
+    if (clonedReq.body) {
+      const originalBody = await clonedReq.json();
+      sanitizedBody = JSON.parse(
+        xss(JSON.stringify(originalBody), {
+          whiteList: {}, 
+          stripIgnoreTag: true,
+          stripIgnoreTagBody: ['script']
+        })
+      );
     }
-    return sanitizedData;
+
+    // Create sanitized request
+    const newUrl = new URL(clonedReq.nextUrl);
+    newUrl.search = sanitizedQuery.toString();
+
+    return NextResponse.next({
+      request: new Request(newUrl, {
+        method: clonedReq.method,
+        headers: headers,
+        body: Object.keys(sanitizedBody).length > 0 
+          ? JSON.stringify(sanitizedBody) 
+          : clonedReq.body,
+        cache: clonedReq.cache,
+        credentials: clonedReq.credentials,
+        redirect: clonedReq.redirect
+      })
+    });
+  } catch (error) {
+    console.error('Sanitization error:', error);
+    return NextResponse.json(
+      { error: 'Invalid request content', code: 'INVALID_INPUT' },
+      { 
+        status: 400,
+        headers: {
+          'Content-Security-Policy': "default-src 'self'"
+        }
+      }
+    );
   }
-  
-  return data;
-}
+};
