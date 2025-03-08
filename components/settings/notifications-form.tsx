@@ -11,6 +11,7 @@ import { Switch } from "@/components/ui/switch"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { toast } from "sonner"
 import { handleError } from "@/lib/errorHandling"
+import * as React from 'react';
 
 const notificationsFormSchema = z.object({
   emailNotifications: z.boolean().default(true),

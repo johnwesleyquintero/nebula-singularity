@@ -3,7 +3,7 @@
 import React, { useEffect, useState, Suspense } from 'react';
 import Link from "next/link"
 import Image from "next/image"
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/Button"
 import { ModeToggle } from "@/components/mode-toggle"
 import { NewsletterForm } from '@/components/landing/NewsletterForm';
 import { BarChart2, Lock, ShieldCheck, Menu } from 'lucide-react';

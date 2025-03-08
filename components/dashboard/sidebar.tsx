@@ -15,7 +15,12 @@ import {
   HelpCircle,
   LogOut,
 } from "lucide-react"
-import { cn } from "@/lib/utils"
+import { clsx, type ClassValue } from "clsx"
+import { twMerge } from "tailwind-merge"
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs))
+}
 import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import {
@@ -180,8 +185,4 @@ export function DashboardSidebarWrapper({ children, user }: DashboardSidebarWrap
       </div>
     </SidebarProvider>
   )
-}
-
-const handleKeyDown = (e: KeyboardEvent<HTMLUListElement>) => {
-
 }

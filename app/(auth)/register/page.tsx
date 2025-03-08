@@ -1,11 +1,11 @@
-import React from 'react';
 "use client";
 
+import React from 'react';
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { Loader2 } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { Button } from "../../../components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
@@ -49,8 +49,8 @@ export default function RegisterPage() {
 
       toast.success("Registration successful! Please sign in.")
       router.push("/login")
-    } catch (error: any) {
-      toast.error("Something went wrong during registration: " + error.message)
+    } catch (error: unknown) {
+      toast.error("Something went wrong during registration: " + (error instanceof Error ? error.message : "Unknown error"))
     } finally {
       setIsLoading(false)
     }
@@ -161,5 +161,3 @@ export default function RegisterPage() {
     </div>
   )
 }
-
-<RadioGroupItem value="consultant" id="consultant" />

@@ -1,13 +1,14 @@
 'use client';
 
-import { FormEvent, useState, useEffect } from 'react';
+import React from 'react';
 import { useRouter } from 'next/router';
 import { useToast } from '../../components/ui/use-toast';
 import { Toaster } from '../../components/ui/toaster';
 import { supabase } from '../../lib/supabaseClient';
+import { useState, useEffect } from 'react';
 
 const AuthPage = () => {
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = React.useState('');
   const [password, setPassword] = useState('');
   const [isSignUp, setIsSignUp] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
@@ -32,7 +33,7 @@ const AuthPage = () => {
     };
   }, [router]);
 
-  const handleSubmit = async (e: FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
 
