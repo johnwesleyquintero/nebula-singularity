@@ -1,4 +1,13 @@
 import React, { useState } from 'react';
+import {
+  FormControl,
+  FormLabel,
+  FormItem,
+  FormDescription,
+  FormMessage,
+  FormField
+} from '../ui/form';
+import { Checkbox } from '../ui/checkbox';
 import { toast } from 'sonner';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
@@ -17,6 +26,11 @@ export interface ReportData {
     status?: string;
   };
   includeCharts: boolean;
+}
+
+export interface ReportTemplate {
+  id: string;
+  name: string;
 }
 
 interface ReportGeneratorProps {

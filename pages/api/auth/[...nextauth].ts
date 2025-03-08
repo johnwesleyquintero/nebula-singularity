@@ -1,10 +1,10 @@
 /* global process */
 /** @eslint-env browser, node */
 /* eslint-disable no-console */
-import NextAuth, { type NextAuthOptions } from 'next-auth'
+import NextAuth from 'next-auth'
+import type { NextAuthOptions, Session, User } from 'next-auth'
 import GoogleProvider from 'next-auth/providers/google'
 import GitHubProvider from 'next-auth/providers/github'
-import type { Session } from 'next-auth'
 
 const getEnvVar = (name: string): string => {
   const value = process.env[name]
@@ -27,13 +27,13 @@ export const authOptions: NextAuthOptions = {
   ],
   secret: getEnvVar('NEXTAUTH_SECRET'),
   callbacks: {
-    async session({ session, token, user }) {
+    async session({ session, token, user }: { session: Session; token: any; user: User }) {
       console.time("Session callback");
       console.log("Session callback called", { session, token, user });
-
-export default NextAuth(authOptions)
       console.timeEnd("Session callback");
       return session;
     }
-  }
-})
+  },
+}
+
+export default NextAuth(authOptions)

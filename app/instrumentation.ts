@@ -15,13 +15,15 @@ export function register() {
   }
 }
 
+import { NextApiRequest, NextApiResponse } from 'next';
+
 export function onRequestError({ 
   request, 
   response, 
   error 
 }: { 
-  request: any; 
-  response: any; 
+  request: NextApiRequest; 
+  response: NextApiResponse; 
   error: Error;
 }) {
   Sentry.withScope((scope) => {

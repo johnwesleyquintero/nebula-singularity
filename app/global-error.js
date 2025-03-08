@@ -1,16 +1,17 @@
-'use client'
+'use client';
 
-import * as Sentry from '@sentry/nextjs';
-import Error from 'next/error';
+import React from 'react';
 
-export default function GlobalError({ error }) {
-  // Capture the error with Sentry
-  Sentry.captureException(error);
-
+export default function GlobalError({
+  error,
+  reset,
+}) {
   return (
-    <div className="error-page">
-      <h2>Something went wrong!</h2>
-      <Error statusCode={500} title={error.message} />
-    </div>
+    <html>
+      <body>
+        <h2>Something went wrong!</h2>
+        <button onClick={() => reset()}>Try again</button>
+      </body>
+    </html>
   );
 }
