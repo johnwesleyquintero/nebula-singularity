@@ -33,6 +33,28 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+  code-quality:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run ESLint
+        run: npm run lint
+        continue-on-error: false
+
+      - name: Run Type Check
+        run: npm run type-check
+        continue-on-error: false
+
+      - name: Check Code Style
+        run: npm run format:check
+        continue-on-error: false
+
+      - name: Run SonarQube Analysis
+        uses: sonarsource/sonarqube-scan-action@master
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+
   security:
     needs: setup
     runs-on: ubuntu-latest
@@ -47,27 +69,34 @@ jobs:
           path: '.'
           format: 'HTML'
 
-      - name: Upload security report
+      - name: Run Snyk Security Scan
+        uses: snyk/actions/node@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
+      - name: Upload security reports
         uses: actions/upload-artifact@v4
         with:
-          name: security-report
+          name: security-reports
           path: reports
 
   test:
     needs: setup
     runs-on: ubuntu-latest
     steps:
-      - name: Run linting
-        run: npm run lint
-
-      - name: Run type checking
-        run: npm run type-check
-
       - name: Run tests with coverage
         run: npm run test:coverage
         env:
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+
+      - name: Check test coverage threshold
+        run: |
+          COVERAGE=$(cat coverage/coverage-summary.json | jq -r '.total.lines.pct')
+          if (( $(echo "$COVERAGE < 70" | bc -l) )); then
+            echo "Test coverage ($COVERAGE%) is below threshold (70%)"
+            exit 1
+          fi
 
       - name: Upload test coverage
         uses: actions/upload-artifact@v4
@@ -76,7 +105,7 @@ jobs:
           path: coverage
 
   build:
-    needs: [security, test]
+    needs: [code-quality, security, test]
     runs-on: ubuntu-latest
     steps:
       - name: Build application
@@ -85,32 +114,57 @@ jobs:
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
 
+      - name: Analyze bundle size
+        run: npm run analyze
+
       - name: Cache build output
         uses: actions/cache@v4
         with:
           path: .next
           key: build-${{ github.sha }}
 
-      - name: Upload build artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: build-output
-          path: |
-            .next/
-            public/
-            package.json
-            package-lock.json
-
   deploy-preview:
     if: github.event_name == 'pull_request'
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - name: Deploy to preview environment
-        run: echo "Deploy to preview environment"
+      - name: Deploy to preview
+        uses: amondnet/vercel-action@v20
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
 
-      - name: Run smoke tests
-        run: echo "Run smoke tests against preview environment"
+      - name: Run Lighthouse CI
+        uses: treosh/lighthouse-ci-action@v9
+        with:
+          urls: ${{ steps.deploy-preview.outputs.preview-url }}
+          uploadArtifacts: true
+          temporaryPublicStorage: true
+
+  notify:
+    needs: [deploy-preview]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Notify on failure
+        if: failure()
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_COLOR: '#FF0000'
+          SLACK_MESSAGE: 'PR checks failed! Please review the logs.'
+          SLACK_TITLE: PR Status
+
+      - name: Notify on success
+        if: success()
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_COLOR: '#00FF00'
+          SLACK_MESSAGE: 'PR checks passed successfully!'
+          SLACK_TITLE: PR Status
 
   deploy-production:
     if: github.ref == 'refs/heads/main'
