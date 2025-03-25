@@ -3,6 +3,13 @@ import { prisma } from '../../../lib/db';
 import { getSession } from '@/lib/auth'
 import { logger } from '../../../lib/errorHandling';
 import rateLimit from 'express-rate-limit';
+import { redis } from '../../../lib/db';
+import type { NextApiRequest, NextApiResponse } from 'next';
+import { prisma } from '../../../lib/db';
+import { getSession } from '@/lib/auth';
+import { logger } from '../../../lib/errorHandling';
+import rateLimit from 'express-rate-limit';
+import { redis } from '../../../lib/db';
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
@@ -64,7 +71,7 @@ export default async function handler(
 
     // Cache miss - fetch from database
     logger.info(`Fetching session from database: ${req.cookies.sessionId}`);
-    const session = await getSession(req.cookies.sessionId);
+    const session = await getSession();
     
     if (!session) {
       res.setHeader('Content-Type', 'application/json');
