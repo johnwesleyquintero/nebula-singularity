@@ -168,10 +168,6 @@ ChartTooltipContent.displayName = "ChartTooltipContent"
       return <div className={cn("font-medium", labelClassName)}>{value}</div>
     }, [label, labelFormatter, payload, hideLabel, labelClassName, config, labelKey])
 
-    if (!active || !payload?.length) {
-      return null
-    }
-
     const nestLabel = payload.length === 1 && indicator !== "dot"
 
     return (
