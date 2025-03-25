@@ -19,9 +19,9 @@ type KeywordData = {
   score: number
 }
 
-export function KeywordAnalyzer() {
-  import { dataProcessingUtils, stringUtils } from "@/lib/common-utils"
+import { dataProcessingUtils, stringUtils } from "@/lib/common-utils"
 
+export function KeywordAnalyzer() {
   const [isAnalyzing, setIsAnalyzing] = useState(false)
   const [productName, setProductName] = useState("")
   const [productDescription, setProductDescription] = useState("")

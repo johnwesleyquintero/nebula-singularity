@@ -58,8 +58,6 @@ function analyzeTitle(title: string, keywords: string[]): ScoreCategory {
   }
 
   if (keywords.length > 0) {
-    import { calculationUtils } from "@/lib/common-utils"
-
     const keywordsInTitle = keywords.filter((keyword) => title.toLowerCase().includes(keyword)).length
     const keywordPercentage = calculationUtils.calculatePercentage(keywordsInTitle, keywords.length)
 
@@ -408,4 +406,6 @@ export function ListingQualityChecker() {
     </div>
   )
 }
+
+import { calculationUtils } from "@/lib/common-utils"
 
