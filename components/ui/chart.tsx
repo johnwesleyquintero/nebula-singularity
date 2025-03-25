@@ -73,7 +73,7 @@ const ChartTooltipContent = React.forwardRef<HTMLDivElement, ChartTooltipContent
       </div>
     </div>
   )
-}
+}),
 
 const THEMES = { light: "", dark: ".dark" } as const
 
