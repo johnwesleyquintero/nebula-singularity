@@ -20,12 +20,23 @@ type KeywordData = {
 }
 
 export function KeywordAnalyzer() {
+  import { dataProcessingUtils, stringUtils } from "@/lib/common-utils"
+
   const [isAnalyzing, setIsAnalyzing] = useState(false)
   const [productName, setProductName] = useState("")
   const [productDescription, setProductDescription] = useState("")
   const [seedKeywords, setSeedKeywords] = useState("")
   const [analyzedKeywords, setAnalyzedKeywords] = useState<KeywordData[]>([])
   const [activeTab, setActiveTab] = useState("seed")
+
+  const processKeywords = (keywords: string) => {
+    const keywordList = keywords.split(/[,;\n]+/).map(k => k.trim()).filter(Boolean)
+    return dataProcessingUtils.deduplicateArray(keywordList)
+  }
+
+  const formatKeyword = (keyword: string) => {
+    return stringUtils.capitalizeFirstLetter(keyword)
+  }
 
   const analyzeKeywords = () => {
     setIsAnalyzing(true)

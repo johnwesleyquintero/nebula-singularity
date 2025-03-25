@@ -15,11 +15,13 @@ import { Loader2, AlertCircle, CheckCircle, Info } from "lucide-react"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { listingQualityConfig } from "./listing-quality-checker.config"
 
+import { commonValidationSchemas } from "@/lib/common-utils"
+
 const listingFormSchema = z.object({
-  title: z.string().min(1, "Title is required").max(200, "Title must be less than 200 characters"),
-  bulletPoints: z.string().min(1, "Bullet points are required"),
-  description: z.string().min(1, "Description is required"),
-  keywords: z.string().optional(),
+  title: commonValidationSchemas.title,
+  description: commonValidationSchemas.description,
+  bulletPoints: z.string(),
+  keywords: commonValidationSchemas.keywords
 })
 
 type ListingFormValues = z.infer<typeof listingFormSchema>
@@ -56,8 +58,10 @@ function analyzeTitle(title: string, keywords: string[]): ScoreCategory {
   }
 
   if (keywords.length > 0) {
+    import { calculationUtils } from "@/lib/common-utils"
+
     const keywordsInTitle = keywords.filter((keyword) => title.toLowerCase().includes(keyword)).length
-    const keywordPercentage = keywordsInTitle / keywords.length
+    const keywordPercentage = calculationUtils.calculatePercentage(keywordsInTitle, keywords.length)
 
     if (keywordPercentage > 0.7) {
       score.score += 10
