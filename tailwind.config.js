@@ -24,12 +24,20 @@ module.exports = {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         primary: {
-          DEFAULT: "hsl(var(--primary))",
+          DEFAULT: "var(--brandBlue)",
           foreground: "hsl(var(--primary-foreground))",
         },
         secondary: {
-          DEFAULT: "hsl(var(--secondary))",
+          DEFAULT: "var(--accentTeal)",
           foreground: "hsl(var(--secondary-foreground))",
+        },
+        error: {
+          DEFAULT: "var(--error)",
+          foreground: "hsl(var(--destructive-foreground))",
+        },
+        success: {
+          DEFAULT: "var(--success)",
+          foreground: "hsl(var(--success-foreground))",
         },
         accent: {
           DEFAULT: "hsl(var(--accent))",
