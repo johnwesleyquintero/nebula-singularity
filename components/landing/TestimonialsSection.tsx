@@ -12,7 +12,7 @@ export const TestimonialsSection = () => {
               Trusted by Amazon Sellers
             </h2>
             <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-              See what our customers have to say about Nebula-Suite.
+              See what our customers have to say about Nebula-Singularity.
             </p>
           </div>
         </div>
@@ -26,7 +26,7 @@ export const TestimonialsSection = () => {
               </div>
             </div>
             <p className="mt-4 text-muted-foreground">
-              "Nebula-Suite has transformed how I manage my Amazon business. The analytics are incredibly detailed
+              "Nebula-Singularity has transformed how I manage my Amazon business. The analytics are incredibly detailed
               and have helped me optimize my PPC campaigns."
             </p>
           </div>
@@ -39,13 +39,13 @@ export const TestimonialsSection = () => {
               </div>
             </div>
             <p className="mt-4 text-muted-foreground">
-              "As an agency managing multiple Amazon accounts, Nebula-Suite has been a game-changer. The reporting
+              "As an agency managing multiple Amazon accounts, Nebula-Singularity has been a game-changer. The reporting
               features save us hours of work each week."
             </p>
           </div>
           <div className="container mx-auto mt-12">
             <Image
-              src="/nebula-suite-dashboard.svg"
+              src="/Nebula-Singularity-dashboard.svg"
               alt="Nebula Suite Dashboard"
               width={1200}
               height={800}

@@ -66,18 +66,12 @@
   }
 }
 
-@font-face {
-  font-family: 'CustomFont';
-  src: url('/fonts/custom-font.woff2') format('woff2');
-  font-display: swap;
-}
-
 @layer base {
   * {
     @apply border-border;
   }
   body {
     @apply bg-background text-foreground;
-    font-family: 'CustomFont', Arial, sans-serif;
   }
 }
+

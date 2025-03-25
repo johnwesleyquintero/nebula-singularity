@@ -16,7 +16,7 @@ export const HeroSection = () => {
                 Transform Your Amazon Business
               </h1>
               <p className="max-w-[600px] text-muted-foreground md:text-xl">
-                Nebula-Suite provides comprehensive analytics and management tools to help Amazon sellers optimize their business and increase profitability.
+                Nebula-Singularity provides comprehensive analytics and management tools to help Amazon sellers optimize their business and increase profitability.
               </p>
             </div>
             <div className="flex flex-col gap-2 min-[400px]:flex-row">
@@ -36,7 +36,7 @@ export const HeroSection = () => {
           <div className="flex items-center justify-center">
             <div className="relative h-[350px] w-full md:h-[450px] lg:h-[500px] ">
               <Image
-                src="/nebula-suite-dashboard.svg"
+                src="/Nebula-Singularity-dashboard.svg"
                 alt="Dashboard Preview"
                 fill
                 className="rounded-lg object-contain"

@@ -1,4 +1,3 @@
-import React from 'react';
 "use client"
 
 import { Area, AreaChart, CartesianGrid, Legend, ResponsiveContainer, XAxis, YAxis } from "recharts"

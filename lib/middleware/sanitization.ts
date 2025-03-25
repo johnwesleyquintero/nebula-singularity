@@ -56,6 +56,7 @@ export const sanitizationMiddleware = async (req: NextRequest) => {
       { 
         status: 400,
         headers: {
+          'Content-Type': 'application/json',
           'Content-Security-Policy': "default-src 'self'"
         }
       }

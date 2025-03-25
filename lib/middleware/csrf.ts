@@ -72,7 +72,10 @@ export const csrfMiddleware = async (req: NextRequest) => {
   if (!csrfToken || !requestToken || !validateTokenSignature(csrfToken.value) || csrfToken.value !== requestToken) {
     return NextResponse.json(
       { error: 'Invalid CSRF token', code: 'INVALID_CSRF_TOKEN', status: 403 },
-      { status: 403 }
+      { 
+        status: 403,
+        headers: { 'Content-Type': 'application/json' }
+      }
     );
   }
 
@@ -81,7 +84,10 @@ export const csrfMiddleware = async (req: NextRequest) => {
     if (Date.now() > tokenData.expires) {
       return NextResponse.json(
         { error: 'CSRF token expired', code: 'EXPIRED_CSRF_TOKEN', status: 403 },
-        { status: 403 }
+        { 
+          status: 403,
+          headers: { 'Content-Type': 'application/json' }
+        }
       );
     }
   } catch (error) {

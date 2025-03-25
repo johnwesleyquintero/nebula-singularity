@@ -16,21 +16,29 @@ const getEnvVar = (name: string): string => {
 
 export const authOptions: NextAuthOptions = {
   providers: [
-    GoogleProvider({
-      clientId: getEnvVar('GOOGLE_CLIENT_ID'),
-      clientSecret: getEnvVar('GOOGLE_CLIENT_SECRET'),
-    }),
-    GitHubProvider({
-      clientId: getEnvVar('GITHUB_ID'),
-      clientSecret: getEnvVar('GITHUB_SECRET'),
-    }),
-  ],
+    process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET &&
+      GoogleProvider({
+        clientId: process.env.GOOGLE_CLIENT_ID,
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      }),
+    process.env.GITHUB_ID && process.env.GITHUB_SECRET &&
+      GitHubProvider({
+        clientId: process.env.GITHUB_ID,
+        clientSecret: process.env.GITHUB_SECRET,
+      }),
+  ].filter(Boolean),
   secret: getEnvVar('NEXTAUTH_SECRET'),
   callbacks: {
     async session({ session, token, user }: { session: Session; token: any; user: User }) {
       console.time("Session callback");
-      logger.error('Session callback error', { error });
-      console.timeEnd("Session callback");
+      try {
+        // Add session modification logic here
+      } catch (error) {
+        console.error('Session callback error:', error);
+        throw error;
+      } finally {
+        console.timeEnd("Session callback");
+      }
       return session;
     }
   },

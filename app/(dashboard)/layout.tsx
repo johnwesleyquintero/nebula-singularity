@@ -1,34 +1,19 @@
-import React from 'react';
 import type React from "react"
 import { redirect } from "next/navigation"
 import { getServerSession } from "next-auth"
-import authOptions from "@/pages/api/auth/[...nextauth].js"
+import { authOptions } from "@/app/api/auth/[...nextauth]/route"
 import { DashboardSidebarWrapper } from "@/components/dashboard/sidebar"
 import { Header } from "@/components/dashboard/header"
-
-interface User {
-  id: string;
-  name?: string | null;
-  // Add other user properties as needed
-}
-
-interface Session {
-  user?: User;
-}
 
 export default async function DashboardLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  const session: Session | null = await getServerSession(authOptions)
+  const session = await getServerSession(authOptions)
 
-  if (!session || !session.user) {
+  if (!session) {
     redirect("/login")
-  }
-
-  if (!session.user.email_verified) {
-    redirect("/auth/verify-email")
   }
 
   return (
@@ -38,3 +23,4 @@ export default async function DashboardLayout({
     </DashboardSidebarWrapper>
   )
 }
+

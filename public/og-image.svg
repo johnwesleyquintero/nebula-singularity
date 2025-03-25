@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" class="project-card">
+  <!-- Background Gradient -->
+  <defs>
+    <linearGradient id="backgroundGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1a365d" />
+      <stop offset="100%" stop-color="#0d1a2f" />
+    </linearGradient>
+    <radialGradient id="glowGradient" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#4FD1C5" stop-opacity="0.5" />
+      <stop offset="100%" stop-color="#3245ff" stop-opacity="0" />
+    </radialGradient>
+    <!-- Logo Gradient with Pulse Animation -->
+    <linearGradient id="mainGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3245ff">
+        <animate attributeName="stop-color" values="#3245ff; #bc52ee; #3245ff" dur="5s" repeatCount="indefinite" />
+      </stop>
+      <stop offset="100%" stop-color="#bc52ee">
+        <animate attributeName="stop-color" values="#bc52ee; #3245ff; #bc52ee" dur="5s" repeatCount="indefinite" />
+      </stop>
+    </linearGradient>
+    <filter id="shadow" x="-40%" y="-40%" width="200%" height="200%">
+      <feDropShadow dx="4" dy="4" stdDeviation="8" flood-color="rgba(0,0,0,0.5)" />
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#backgroundGradient)" rx="20" />
+  <circle cx="600" cy="315" r="400" fill="url(#glowGradient)" opacity="0.7" />
+
+  <!-- Logo -->
+  <g transform="translate(60, 120) scale(6)">
+    <path fill="url(#mainGradient)" d="M20 5L35 35H5L20 5Z" class="logo-mark" filter="url(#shadow)" />
+    <path fill="none" stroke="#fff" stroke-width="2" d="M25 15l10 15-15-10-10 15" class="dynamic-line">
+      <animate attributeName="stroke-dasharray" values="0, 100; 100, 0" dur="2s" repeatCount="indefinite" />
+    </path>
+  </g>
+
+  <!-- Title -->
+  <text id="bannerTitle" x="350" y="200" font-family="'Lato', sans-serif" font-size="50" fill="#ffffff" font-weight="600">
+    Nebula-Singularity
+    <animate attributeName="fill" values="#ffffff; #4FD1C5; #ffffff" dur="3s" repeatCount="indefinite" />
+  </text>
+
+  <!-- Description -->
+  <text id="bannerDesc" x="350" y="270" font-family="'Lato', sans-serif" font-size="32" fill="#f5f5f5" width="800">
+    A modern, comprehensive Next.js 14 SaaS platform.
+  </text>
+
+  <!-- Tags with Hover Animation -->
+  <g class="tag" transform="translate(350, 350)">
+    <rect x="0" y="0" width="100" height="40" fill="#4FD1C5" rx="10" />
+    <text x="50" y="25" font-family="'Lato', sans-serif" font-size="18" fill="#1a365d" text-anchor="middle">Next.js</text>
+  </g>
+  <g class="tag" transform="translate(470, 350)">
+    <rect x="0" y="0" width="110" height="40" fill="#4FD1C5" rx="10" />
+    <text x="55" y="25" font-family="'Lato', sans-serif" font-size="18" fill="#1a365d" text-anchor="middle">TypeScript</text>
+  </g>
+  <g class="tag" transform="translate(600, 350)">
+    <rect x="0" y="0" width="70" height="40" fill="#4FD1C5" rx="10" />
+    <text x="35" y="25" font-family="'Lato', sans-serif" font-size="18" fill="#1a365d" text-anchor="middle">React</text>
+  </g>
+  <g class="tag" transform="translate(690, 350)">
+    <rect x="0" y="0" width="120" height="40" fill="#4FD1C5" rx="10" />
+    <text x="60" y="25" font-family="'Lato', sans-serif" font-size="18" fill="#1a365d" text-anchor="middle">Tailwind</text>
+  </g>
+
+  <!-- Live URL -->
+  <text x="350" y="450" font-family="'Lato', sans-serif" font-size="28" fill="#ffffff">
+    Live: <tspan fill="#4FD1C5">nebula-singularity.vercel.app</tspan>
+  </text>
+
+  <!-- GitHub URL -->
+  <text x="350" y="490" font-family="'Lato', sans-serif" font-size="28" fill="#ffffff">
+    GitHub: <tspan fill="#4FD1C5">github.com/johnwesleyquintero/nebula-singularity</tspan>
+  </text>
+
+  <!-- Styles -->
+  <style>
+    .logo-mark {
+      transition: transform 0.3s ease, filter 0.3s ease;
+    }
+    .logo-mark:hover {
+      transform: scale(1.15);
+      filter: brightness(1.3);
+    }
+    .tag:hover rect {
+      fill: #3245ff;
+      transition: fill 0.3s ease;
+    }
+    .tag:hover text {
+      fill: #ffffff;
+      transition: fill 0.3s ease;
+    }
+  </style>
+</svg>

@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
@@ -9,9 +9,9 @@ import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { toast } from "sonner"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { handleError } from "@/lib/errorHandling"
-import React from 'react';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card"
+import { useSession } from "next-auth/react"
+import { supabase } from "@/lib/supabase"
 
 const apiKeysFormSchema = z.object({
   clientId: z.string().min(1, {
@@ -37,6 +37,7 @@ export function ApiKeysForm() {
   const [isLoading, setIsLoading] = useState(false)
   const [showSecrets, setShowSecrets] = useState(false)
   const [hasKeys, setHasKeys] = useState(false)
+  const { data: session } = useSession()
 
   const form = useForm<ApiKeysFormValues>({
     resolver: zodResolver(apiKeysFormSchema),
@@ -44,21 +45,57 @@ export function ApiKeysForm() {
     mode: "onChange",
   })
 
+  useEffect(() => {
+    async function checkForKeys() {
+      if (session?.user?.id) {
+        const { data, error } = await supabase
+          .from("amazon_credentials")
+          .select("*")
+          .eq("user_id", session.user.id)
+          .single()
+
+        if (data && !error) {
+          setHasKeys(true)
+          // Optionally pre-fill the form with existing data
+          form.reset({
+            clientId: data.client_id,
+            clientSecret: data.client_secret,
+            refreshToken: data.refresh_token,
+          })
+        }
+      }
+    }
+
+    checkForKeys()
+  }, [session, form.reset]) // Added form.reset to dependencies
+
   async function onSubmit(data: ApiKeysFormValues) {
     setIsLoading(true)
 
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      setIsLoading(false)
+      const { error } = await supabase.from("amazon_credentials").upsert([
+        {
+          user_id: session?.user?.id,
+          client_id: data.clientId,
+          client_secret: data.clientSecret,
+          refresh_token: data.refreshToken,
+          updated_at: new Date().toISOString(),
+        },
+      ])
+
+      if (error) {
+        toast.error(error.message)
+        setIsLoading(false)
+        return
+      }
+
       setHasKeys(true)
       toast.success("API keys saved successfully!")
-    } catch (error) {
       setIsLoading(false)
-      const errorResponse = handleError(error);
-      toast.error(errorResponse.error.message, {
-        description: errorResponse.error.details ? JSON.stringify(errorResponse.error.details, null, 2) : undefined,
-      });
+    } catch (error) {
+      console.error(error)
+      toast.error("Failed to save API keys")
+      setIsLoading(false)
     }
   }
 
@@ -220,3 +257,4 @@ export function ApiKeysForm() {
     </div>
   )
 }
+

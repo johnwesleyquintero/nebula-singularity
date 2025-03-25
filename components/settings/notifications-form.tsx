@@ -1,4 +1,4 @@
-'use client';
+"use client"
 
 import { useState } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -10,8 +10,6 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, For
 import { Switch } from "@/components/ui/switch"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { toast } from "sonner"
-import { handleError } from "@/lib/errorHandling"
-import * as React from 'react';
 
 const notificationsFormSchema = z.object({
   emailNotifications: z.boolean().default(true),
@@ -40,27 +38,15 @@ export function NotificationsForm() {
     mode: "onChange",
   })
 
-  async function onSubmit(data: NotificationsFormValues) {
+  function onSubmit(data: NotificationsFormValues) {
     setIsLoading(true)
 
-    try {
-      // Make actual API call to update notification preferences
-      await fetch('/api/settings/notifications', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data)
-      });
+    // Simulate API call
+    setTimeout(() => {
       setIsLoading(false)
       toast.success("Notification preferences updated successfully!")
-    } catch (error) {
-      setIsLoading(false)
-      const errorResponse = handleError(error);
-      toast.error(errorResponse.error.message, {
-        description: errorResponse.error.details ? JSON.stringify(errorResponse.error.details, null, 2) : undefined,
-      });
-    }
+      console.log(data)
+    }, 1000)
   }
 
   return (
@@ -166,3 +152,4 @@ export function NotificationsForm() {
     </Form>
   )
 }
+

@@ -28,7 +28,7 @@ const slackClient = new WebClient(slackConfig.token);
 // Alert templates
 const alertTemplates = {
   email: {
-    subject: '[ALERT] Error Notification from Next-Nebula-SaaS',
+    subject: '[ALERT] Error Notification from Nebula-Singularity',
     body: (message: string) => `
       <h2>Alert Notification</h2>
       <p><strong>Message:</strong> ${message}</p>

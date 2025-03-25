@@ -1,5 +1,6 @@
-import React, { KeyboardEvent } from 'react';
 "use client"
+
+import type React from "react"
 
 import { usePathname } from "next/navigation"
 import Link from "next/link"
@@ -14,13 +15,9 @@ import {
   Users,
   HelpCircle,
   LogOut,
+  PenToolIcon as Tool,
 } from "lucide-react"
-import { clsx, type ClassValue } from "clsx"
-import { twMerge } from "tailwind-merge"
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
-}
+import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import {
@@ -45,70 +42,10 @@ interface SidebarNavProps extends React.HTMLAttributes<HTMLDivElement> {
   }
 }
 
-interface User {
-  name?: string | null
-  email?: string | null
-  role?: string | null
-}
+export function DashboardSidebar({ user, className, ...props }: SidebarNavProps) {
+  const pathname = usePathname()
 
-interface DashboardSidebarWrapperProps {
-  children: React.ReactNode
-  user: User
-}
-
-interface SidebarRoute {
-  title: string;
-  href: string;
-  icon: React.ComponentType;
-  variant: string;
-  role?: UserRole;
-}
-
-type UserRole = 'admin' | 'user';
-
-const SidebarHeaderComponent = () => (
-  <SidebarHeader className="flex h-14 items-center border-b px-4">
-    <Link href="/dashboard" className="flex items-center gap-2">
-      <div className="relative h-6 w-6">
-        <Image src="/android-chrome-192x192.png" alt="Nebula-Suite Logo" fill priority className="rounded-md object-contain" />
-      </div>
-      <span className="text-lg font-semibold">Nebula-Suite</span>
-    </Link>
-    <SidebarTrigger className="ml-auto h-8 w-8 lg:hidden" />
-  </SidebarHeader>
-);
-
-const SidebarFooterComponent = () => (
-  <SidebarFooter>
-    <SidebarSeparator />
-    <div className="p-4">
-      <Button variant="outline" className="w-full justify-start" onClick={() => signOut({ callbackUrl: "/login" })}>
-        <LogOut className="mr-2 h-4 w-4" />
-        Log out
-      </Button>
-    </div>
-  </SidebarFooter>
-);
-
-const renderRoute = (route: SidebarRoute, pathname: string, userRole?: UserRole) => {
-  if (route.role === 'admin' && userRole !== 'admin') return null;
-
-  return (
-    <SidebarMenuItem key={route.href}>
-      <SidebarMenuButton asChild isActive={pathname === route.href} tooltip={route.title}>
-        <Link href={route.href}>
-          <route.icon className="h-5 w-5" />
-          <span>{route.title}</span>
-        </Link>
-      </SidebarMenuButton>
-    </SidebarMenuItem>
-  );
-};
-
-const DashboardSidebar = ({ user, className, ...props }: SidebarNavProps) => {
-  const pathname = usePathname();
-
-  const routes: SidebarRoute[] = [
+  const routes = [
     {
       title: "Dashboard",
       href: "/dashboard",
@@ -131,6 +68,12 @@ const DashboardSidebar = ({ user, className, ...props }: SidebarNavProps) => {
       title: "Reports",
       href: "/reports",
       icon: FileText,
+      variant: "default",
+    },
+    {
+      title: "Tools",
+      href: "/tools",
+      icon: Tool,
       variant: "default",
     },
     {
@@ -163,20 +106,52 @@ const DashboardSidebar = ({ user, className, ...props }: SidebarNavProps) => {
 
   return (
     <Sidebar className={cn("border-r", className)} {...props}>
-      <SidebarHeaderComponent />
+      <SidebarHeader className="flex h-14 items-center border-b px-4">
+        <Link href="/dashboard" className="flex items-center gap-2">
+          <div className="relative h-6 w-6">
+            <Image src="/logo.svg" alt="Nebula-Singularity Logo" fill priority className="rounded-md object-contain" />
+          </div>
+          <span className="text-lg font-semibold">Nebula-Singularity</span>
+        </Link>
+        <SidebarTrigger className="ml-auto h-8 w-8 lg:hidden" />
+      </SidebarHeader>
       <SidebarContent>
         <ScrollArea className="h-[calc(100vh-8rem)]">
           <SidebarMenu>
-            {routes.map((route) => renderRoute(route, pathname, user?.role as UserRole))}
+            {routes.map((route) => {
+              // Skip routes that require admin role if user is not admin
+              if (route.role === "admin" && user?.role !== "admin") {
+                return null
+              }
+
+              return (
+                <SidebarMenuItem key={route.href}>
+                  <SidebarMenuButton asChild isActive={pathname === route.href} tooltip={route.title}>
+                    <Link href={route.href}>
+                      <route.icon className="h-5 w-5" />
+                      <span>{route.title}</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              )
+            })}
           </SidebarMenu>
         </ScrollArea>
       </SidebarContent>
-      <SidebarFooterComponent />
+      <SidebarFooter>
+        <SidebarSeparator />
+        <div className="p-4">
+          <Button variant="outline" className="w-full justify-start" onClick={() => signOut({ callbackUrl: "/login" })}>
+            <LogOut className="mr-2 h-4 w-4" />
+            Log out
+          </Button>
+        </div>
+      </SidebarFooter>
     </Sidebar>
   )
 }
 
-export function DashboardSidebarWrapper({ children, user }: DashboardSidebarWrapperProps) {
+export function DashboardSidebarWrapper({ children, user }: { children: React.ReactNode; user: any }) {
   return (
     <SidebarProvider>
       <div className="grid min-h-screen w-full lg:grid-cols-[280px_1fr]">
@@ -186,3 +161,4 @@ export function DashboardSidebarWrapper({ children, user }: DashboardSidebarWrap
     </SidebarProvider>
   )
 }
+

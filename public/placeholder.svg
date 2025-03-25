@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" class="project-card">
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1a1c2e" />
+      <stop offset="100%" stop-color="#0d1117" />
+    </linearGradient>
+    <linearGradient id="accentGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3b82f6" />
+      <stop offset="100%" stop-color="#2563eb" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="400" fill="url(#bgGradient)" rx="12" />
+  
+  <!-- Main Content Container -->
+  <g transform="translate(40, 40)">
+    <!-- Header -->
+    <g>
+      <rect x="0" y="0" width="720" height="60" rx="8" fill="#ffffff10" />
+      <text x="20" y="38" font-family="system-ui, -apple-system, sans-serif" font-size="24" fill="#ffffff" font-weight="600">
+        Image Not Available
+      </text>
+    </g>
+
+    <!-- Placeholder Content -->
+    <g transform="translate(0, 80)">
+      <!-- Placeholder Icon -->
+      <circle cx="30" cy="30" r="24" fill="url(#accentGradient)" />
+      <text x="30" y="42" font-family="system-ui, -apple-system, sans-serif" font-size="32" fill="#ffffff" text-anchor="middle" font-weight="bold">?</text>
+      
+      <!-- Placeholder Message -->
+      <text x="70" y="38" font-family="system-ui, -apple-system, sans-serif" font-size="16" fill="#94a3b8">
+        This image is not available yet. It will be added soon!
+      </text>
+    </g>
+
+    <!-- Footer -->
+    <g transform="translate(0, 280)">
+      <rect x="0" y="0" width="720" height="40" rx="8" fill="#ffffff10" />
+      <text x="20" y="26" font-family="system-ui, -apple-system, sans-serif" font-size="14" fill="#64748b">
+        Check back later for updates.
+      </text>
+    </g>
+  </g>
+</svg>

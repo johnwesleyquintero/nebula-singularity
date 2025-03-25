@@ -9,7 +9,14 @@ const limiter = rateLimit({
   max: 100, // Limit each IP to 100 requests per windowMs
   standardHeaders: true,
   legacyHeaders: false,
-  message: 'Too many requests from this IP, please try again after 15 minutes'
+  handler: (req, res) => {
+    res.setHeader('Content-Type', 'application/json');
+    res.status(429).json({
+      error: 'RATE_LIMIT_EXCEEDED',
+      message: 'Too many requests from this IP, please try again after 15 minutes',
+      code: 'RATE_LIMIT_ERROR'
+    });
+  }
 });
 
 export default async function handler(
@@ -60,10 +67,12 @@ export default async function handler(
     const session = await getSession(req.cookies.sessionId);
     
     if (!session) {
-      return res.status(401).json({ 
-        error: 'SESSION_NOT_FOUND',
-        message: 'No valid session found'
-      });
+      res.setHeader('Content-Type', 'application/json');
+return res.status(401).json({ 
+  error: 'SESSION_NOT_FOUND',
+  message: 'No valid session found',
+  code: 'AUTHENTICATION_ERROR'
+});
     }
 
     // Cache the session in Redis with 5 minute TTL
@@ -84,6 +93,7 @@ export default async function handler(
   ...(process.env.NODE_ENV === 'development' && { stack: error.stack })
 };
 
+res.setHeader('Content-Type', 'application/json');
 return res.status(500).json(errorResponse);
   }
 }

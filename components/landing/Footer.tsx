@@ -8,10 +8,10 @@ export const Footer = () => {
         <div className="flex flex-col items-center justify-center space-y-4 text-center">
           <div className="space-y-2 ">
             <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
-              Nebula-Suite
+              Nebula-Singularity
             </h2>
             <p className="max-w-[600px] text-muted-foreground md:text-xl">
-              &copy; 2023 Nebula-Suite. All rights reserved.
+              &copy; 2023 Nebula-Singularity. All rights reserved.
             </p>
           </div>
           <div className="flex w-full max-w-sm items-center space-x-2">

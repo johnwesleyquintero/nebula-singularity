@@ -1,4 +1,3 @@
-import React from 'react';
 "use client"
 
 import { useState } from "react"
@@ -11,9 +10,9 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, For
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { toast } from "sonner"
-import { handleError } from "@/lib/errorHandling"
+import { useSession } from "next-auth/react"
+import { supabase } from "@/lib/supabase"
 
-// Zod schema definition for profile data validation
 const profileFormSchema = z.object({
   name: z
     .string()
@@ -39,42 +38,46 @@ const defaultValues: Partial<ProfileFormValues> = {
 
 export function ProfileForm() {
   const [isLoading, setIsLoading] = useState(false)
+  const { data: session } = useSession()
 
-  // Initialize react-hook-form with Zod resolver and default values
-const form = useForm<ProfileFormValues>({
+  const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileFormSchema),
     defaultValues,
     mode: "onChange",
   })
 
-  // Handle form submission with API integration
-async function onSubmit(data: ProfileFormValues) {
+  async function onSubmit(data: ProfileFormValues) {
     setIsLoading(true)
 
     try {
-      // Make actual API call to update profile settings
-      await fetch('/api/settings/profile', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data)
-      });
-      setIsLoading(false)
+      const { error } = await supabase
+        .from("users")
+        .update({
+          name: data.name,
+          email: data.email,
+          bio: data.bio,
+          company: data.company,
+          updated_at: new Date().toISOString(),
+        })
+        .eq("id", session?.user?.id)
+
+      if (error) {
+        toast.error(error.message)
+        setIsLoading(false)
+        return
+      }
+
       toast.success("Profile updated successfully!")
-    } catch (error) {
       setIsLoading(false)
-      const errorResponse = handleError(error);
-      toast.error(errorResponse.error.message, {
-        description: errorResponse.error.details ? JSON.stringify(errorResponse.error.details, null, 2) : undefined,
-      });
+    } catch (error) {
+      console.error(error)
+      toast.error("Failed to update profile")
+      setIsLoading(false)
     }
   }
 
-  // Form UI structure with controlled fields
-return (
-    // Main form wrapper from Shadcn UI library
-<Form {...form}>
+  return (
+    <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <FormField
           control={form.control}
@@ -146,3 +149,4 @@ return (
     </Form>
   )
 }
+

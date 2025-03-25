@@ -1,8 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Download, FileSpreadsheet, FileText, MoreHorizontal, Search, Loader2 } from "lucide-react"
-import { toast } from "sonner"
+import { Download, FileSpreadsheet, FileText, MoreHorizontal, Search } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
@@ -14,7 +13,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import React from 'react';
 
 type Report = {
   id: string
@@ -25,54 +23,53 @@ type Report = {
   size: string
 }
 
-const ITEMS_PER_PAGE = 5
 const reports: Report[] = [
   {
-    id: '1',
-    name: 'Monthly Sales Report',
-    type: 'sales',
-    format: 'pdf',
-    dateCreated: '2024-03-01',
-    size: '2.5MB'
+    id: "1",
+    name: "Monthly Sales Report - June 2023",
+    type: "sales",
+    format: "csv",
+    dateCreated: "2023-07-01",
+    size: "1.2 MB",
   },
-  // ... add more mock reports as needed
-];
+  {
+    id: "2",
+    name: "Inventory Status Report",
+    type: "inventory",
+    format: "csv",
+    dateCreated: "2023-06-28",
+    size: "850 KB",
+  },
+  {
+    id: "3",
+    name: "PPC Performance Q2 2023",
+    type: "ppc",
+    format: "pdf",
+    dateCreated: "2023-06-30",
+    size: "2.4 MB",
+  },
+  {
+    id: "4",
+    name: "Custom Product Analysis",
+    type: "custom",
+    format: "csv",
+    dateCreated: "2023-06-25",
+    size: "1.8 MB",
+  },
+  {
+    id: "5",
+    name: "Weekly Sales Summary",
+    type: "sales",
+    format: "csv",
+    dateCreated: "2023-06-24",
+    size: "720 KB",
+  },
+]
 
 export function ReportsList() {
   const [searchQuery, setSearchQuery] = useState("")
-  const [currentPage, setCurrentPage] = useState(1)
-  const [isLoading, setIsLoading] = useState(false)
 
   const filteredReports = reports.filter((report) => report.name.toLowerCase().includes(searchQuery.toLowerCase()))
-  const totalPages = Math.ceil(filteredReports.length / ITEMS_PER_PAGE)
-  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE
-  const paginatedReports = filteredReports.slice(startIndex, startIndex + ITEMS_PER_PAGE)
-
-  async function handleDownload(report: Report) {
-    try {
-      setIsLoading(true)
-      // Simulate download delay
-      await new Promise(resolve => setTimeout(resolve, 1000))
-      toast.success(`Downloaded ${report.name}`)
-    } catch (error) {
-      toast.error('Failed to download report')
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
-  async function handleDelete(report: Report) {
-    try {
-      setIsLoading(true)
-      // Simulate delete delay
-      await new Promise(resolve => setTimeout(resolve, 1000))
-      toast.success(`Deleted ${report.name}`)
-    } catch (error) {
-      toast.error('Failed to delete report')
-    } finally {
-      setIsLoading(false)
-    }
-  }
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString)
@@ -100,16 +97,13 @@ export function ReportsList() {
 
   return (
     <div className="w-full">
-      <div className="flex items-center justify-between py-4">
+      <div className="flex items-center py-4">
         <div className="relative w-full max-w-sm">
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
             placeholder="Search reports..."
             value={searchQuery}
-            onChange={(e) => {
-              setSearchQuery(e.target.value)
-              setCurrentPage(1)
-            }}
+            onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full appearance-none pl-8"
           />
         </div>
@@ -127,8 +121,8 @@ export function ReportsList() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {paginatedReports.length > 0 ? (
-              paginatedReports.map((report) => (
+            {filteredReports.length > 0 ? (
+              filteredReports.map((report) => (
                 <TableRow key={report.id}>
                   <TableCell className="font-medium">
                     <div className="flex items-center gap-2">
@@ -142,22 +136,13 @@ export function ReportsList() {
                   <TableCell>{report.size}</TableCell>
                   <TableCell>
                     <div className="flex items-center justify-end gap-2">
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => handleDownload(report)}
-                        disabled={isLoading}
-                      >
-                        {isLoading ? (
-                          <Loader2 className="h-4 w-4 animate-spin" />
-                        ) : (
-                          <Download className="h-4 w-4" />
-                        )}
+                      <Button variant="ghost" size="icon">
+                        <Download className="h-4 w-4" />
                         <span className="sr-only">Download</span>
                       </Button>
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" size="icon" disabled={isLoading}>
+                          <Button variant="ghost" size="icon">
                             <MoreHorizontal className="h-4 w-4" />
                             <span className="sr-only">More options</span>
                           </Button>
@@ -167,12 +152,7 @@ export function ReportsList() {
                           <DropdownMenuItem>View details</DropdownMenuItem>
                           <DropdownMenuItem>Share report</DropdownMenuItem>
                           <DropdownMenuSeparator />
-                          <DropdownMenuItem
-                            className="text-destructive"
-                            onClick={() => handleDelete(report)}
-                          >
-                            Delete report
-                          </DropdownMenuItem>
+                          <DropdownMenuItem className="text-destructive">Delete report</DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
                     </div>
@@ -189,31 +169,6 @@ export function ReportsList() {
           </TableBody>
         </Table>
       </div>
-      {totalPages > 1 && (
-        <div className="flex items-center justify-between space-x-2 py-4">
-          <div className="text-sm text-muted-foreground">
-            Page {currentPage} of {totalPages}
-          </div>
-          <div className="space-x-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-              disabled={currentPage === 1 || isLoading}
-            >
-              Previous
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
-              disabled={currentPage === totalPages || isLoading}
-            >
-              Next
-            </Button>
-          </div>
-        </div>
-      )}
     </div>
   )
 }

@@ -19,8 +19,6 @@ yarn-error.log*
 # env files
 .env*
 .env.local
-.env.development
-.env.production
 
 # vercel
 .vercel
@@ -28,9 +26,3 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-
-# windsurf rules
-.windsurfrules
-
-# Environment variables
-.env

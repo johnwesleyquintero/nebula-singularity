@@ -1,4 +1,3 @@
-import React from 'react';
 "use client"
 
 import type React from "react"
