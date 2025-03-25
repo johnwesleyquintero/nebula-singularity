@@ -1,6 +1,6 @@
 # Nebula-Singularity: Amazon Seller Analytics Platform
 
-![Project Banner](public/nebula-singularity-preview.svg)
+![Project Banner](public/og-image-preview.svg)
 
 ## 🚀 Features
 - Real-time Amazon Seller Analytics
