@@ -85,7 +85,7 @@ export default function LandingPage() {
               <div className="flex items-center justify-center">
                 <div className="relative h-[350px] w-full md:h-[450px] lg:h-[500px]">
                   <Image
-                    src="/dashboard-preview.png"
+                    src="/dashboard-preview.svg"
                     alt="Dashboard Preview"
                     fill
                     className="rounded-lg object-contain"

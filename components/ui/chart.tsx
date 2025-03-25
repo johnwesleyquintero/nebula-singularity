@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { ChartContainer as RechartsChartContainer, ChartTooltip, Legend as RechartsPrimitiveLegend } from "recharts"
+import { ResponsiveContainer, Tooltip, Legend as RechartsPrimitiveLegend } from "recharts"
 
 import { cn } from "@/lib/utils"
 
@@ -49,13 +49,15 @@ interface ChartTooltipContentProps {
   label?: string
 }
 
-export function ChartTooltipContent({ active, payload, label }: ChartTooltipContentProps) {
+export const ChartTooltip = Tooltip
+
+const ChartTooltipContent = React.forwardRef<HTMLDivElement, ChartTooltipContentProps>(({ active, payload, label }, ref) => {
   if (!active || !payload?.length) {
     return null
   }
 
   return (
-    <div className="rounded-lg border bg-background p-2 shadow-sm">
+    <div ref={ref} className="rounded-lg border bg-background p-2 shadow-sm">
       <div className="grid grid-cols-2 gap-2">
         <div className="flex flex-col">
           <span className="text-[0.70rem] uppercase text-muted-foreground">{label}</span>
@@ -102,7 +104,7 @@ const ChartContainerOld = React.forwardRef<
   HTMLDivElement,
   React.ComponentProps<"div"> & {
     config: ChartConfigOld
-    children: React.ComponentProps<typeof RechartsChartContainer>["children"]
+    children: React.ReactNode
   }
 >(({ id, className, children, config, ...props }, ref) => {
   const uniqueId = React.useId()
@@ -120,7 +122,7 @@ const ChartContainerOld = React.forwardRef<
         {...props}
       >
         <ChartStyle id={chartId} config={config} />
-        <RechartsChartContainer>{children}</RechartsChartContainer>
+        <ResponsiveContainer>{children}</ResponsiveContainer>
       </div>
     </ChartContext.Provider>
   )
@@ -372,5 +374,5 @@ function getPayloadConfigFromPayload(config: ChartConfigOld, payload: unknown, k
   return configLabelKey in config ? config[configLabelKey] : config[key as keyof typeof config]
 }
 
-export { ChartTooltip, ChartLegend, ChartLegendContent, ChartStyle }
+export { ChartContainer, ChartTooltip, ChartTooltipContent, ChartLegend, ChartLegendContent, ChartStyle }
 
