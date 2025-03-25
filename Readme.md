@@ -54,7 +54,7 @@ graph TD
 ## 📦 Quick Start
 
 ```bash
-git clone https://github.com/your-org/SellSmart-Pro.git
+git clone https://github.com/johnwesleyquintero/SellSmart-Pro.git
 cd SellSmart-Pro
 pnpm install
 cp .env.example .env.local
