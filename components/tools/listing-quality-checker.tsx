@@ -13,6 +13,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Progress } from "@/components/ui/progress"
 import { Loader2, AlertCircle, CheckCircle, Info } from "lucide-react"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { listingQualityConfig } from "./listing-quality-checker.config"
 
 const listingFormSchema = z.object({
   title: z.string().min(1, "Title is required").max(200, "Title must be less than 200 characters"),
@@ -23,16 +24,160 @@ const listingFormSchema = z.object({
 
 type ListingFormValues = z.infer<typeof listingFormSchema>
 
-type ScoreCategory = {
+interface ScoreCategory {
   name: string
   score: number
   maxScore: number
   feedback: string[]
 }
 
-type ListingAnalysis = {
+interface ListingAnalysis {
   overallScore: number
   categories: ScoreCategory[]
+}
+
+function analyzeTitle(title: string, keywords: string[]): ScoreCategory {
+  const config = listingQualityConfig.title
+  const score = {
+    name: config.name,
+    score: 0,
+    maxScore: config.maxScore,
+    feedback: [],
+  }
+
+  if (title.length < config.thresholds.good) {
+    score.feedback.push(config.feedbackMessages.poor)
+  } else if (title.length > config.thresholds.excellent) {
+    score.score += 15
+    score.feedback.push(config.feedbackMessages.excellent)
+  } else {
+    score.score += 10
+    score.feedback.push(config.feedbackMessages.good)
+  }
+
+  if (keywords.length > 0) {
+    const keywordsInTitle = keywords.filter((keyword) => title.toLowerCase().includes(keyword)).length
+    const keywordPercentage = keywordsInTitle / keywords.length
+
+    if (keywordPercentage > 0.7) {
+      score.score += 10
+      score.feedback.push("Excellent keyword usage in title.")
+    } else if (keywordPercentage > 0.3) {
+      score.score += 5
+      score.feedback.push("Good keyword usage, but could include more target keywords.")
+    } else {
+      score.feedback.push("Poor keyword usage. Include more target keywords in your title.")
+    }
+  }
+
+  return score
+}
+
+function analyzeBulletPoints(bulletPoints: string[], keywords: string[]): ScoreCategory {
+  const config = listingQualityConfig.bulletPoints
+  const score = {
+    name: config.name,
+    score: 0,
+    maxScore: config.maxScore,
+    feedback: [],
+  }
+
+  if (bulletPoints.length >= 5) {
+    score.score += 10
+    score.feedback.push("Good use of all available bullet points.")
+  } else {
+    score.feedback.push(`Only using ${bulletPoints.length}/5 bullet points. Add more for better listing quality.`)
+  }
+
+  const avgBulletLength = bulletPoints.reduce((sum, bullet) => sum + bullet.length, 0) / (bulletPoints.length || 1)
+
+  if (avgBulletLength > config.thresholds.excellent) {
+    score.score += 15
+    score.feedback.push(config.feedbackMessages.excellent)
+  } else if (avgBulletLength > config.thresholds.good) {
+    score.score += 10
+    score.feedback.push(config.feedbackMessages.good)
+  } else {
+    score.feedback.push(config.feedbackMessages.poor)
+  }
+
+  return score
+}
+
+function analyzeDescription(description: string): ScoreCategory {
+  const config = listingQualityConfig.description
+  const score = {
+    name: config.name,
+    score: 0,
+    maxScore: config.maxScore,
+    feedback: [],
+  }
+
+  if (description.length > config.thresholds.excellent) {
+    score.score += 15
+    score.feedback.push(config.feedbackMessages.excellent)
+  } else if (description.length > config.thresholds.good) {
+    score.score += 10
+    score.feedback.push(config.feedbackMessages.good)
+  } else {
+    score.feedback.push(config.feedbackMessages.poor)
+  }
+
+  if (description.includes("\n\n") || description.includes("<p>")) {
+    score.score += 5
+    score.feedback.push("Good use of formatting in description for readability.")
+  } else {
+    score.feedback.push("Improve formatting with paragraphs for better readability.")
+  }
+
+  if (description.toLowerCase().includes("brand") || description.toLowerCase().includes("warranty")) {
+    score.score += 5
+    score.feedback.push("Good mention of brand and/or warranty information.")
+  } else {
+    score.feedback.push("Consider adding brand and warranty information to build trust.")
+  }
+
+  return score
+}
+
+function analyzeKeywords(keywords: string[], bulletPoints: string, description: string): ScoreCategory {
+  const config = listingQualityConfig.keywords
+  const score = {
+    name: config.name,
+    score: 0,
+    maxScore: config.maxScore,
+    feedback: [],
+  }
+
+  if (keywords.length > config.thresholds.excellent) {
+    score.score += 10
+    score.feedback.push("Good number of target keywords identified.")
+  } else if (keywords.length > config.thresholds.good) {
+    score.score += 5
+    score.feedback.push("Acceptable number of keywords, but could identify more.")
+  } else {
+    score.feedback.push("Too few target keywords. Identify more relevant search terms.")
+  }
+
+  if (keywords.length > 0) {
+    const keywordsInBullets = keywords.filter((keyword) => bulletPoints.toLowerCase().includes(keyword)).length
+    const keywordsInDescription = keywords.filter((keyword) => description.toLowerCase().includes(keyword)).length
+
+    const bulletKeywordPercentage = keywordsInBullets / keywords.length
+    const descKeywordPercentage = keywordsInDescription / keywords.length
+
+    if (bulletKeywordPercentage > 0.6 && descKeywordPercentage > 0.6) {
+      score.score += 15
+      score.feedback.push(config.feedbackMessages.excellent)
+    } else if (bulletKeywordPercentage > 0.3 && descKeywordPercentage > 0.3) {
+      score.score += 10
+      score.feedback.push(config.feedbackMessages.good)
+    } else {
+      score.feedback.push(config.feedbackMessages.poor)
+    }
+  }
+
+  return score
 }
 
 export function ListingQualityChecker() {
@@ -54,163 +199,19 @@ export function ListingQualityChecker() {
 
     // Simulate API call with timeout
     setTimeout(() => {
-      // Title analysis
-      const titleLength = values.title.length
-      const titleWords = values.title.split(/\s+/).filter((w) => w.trim()).length
-
-      const titleScore = {
-        name: "Title",
-        score: 0,
-        maxScore: 25,
-        feedback: [],
-      }
-
-      // Check title length
-      if (titleLength < 80) {
-        titleScore.feedback.push("Title is too short. Amazon allows up to 200 characters.")
-      } else if (titleLength > 150) {
-        titleScore.score += 15
-        titleScore.feedback.push("Good title length, using most of the available space.")
-      } else {
-        titleScore.score += 10
-        titleScore.feedback.push("Acceptable title length, but could use more characters.")
-      }
-
-      // Check keyword usage in title
       const keywordList = values.keywords
         ? values.keywords
             .toLowerCase()
             .split(/[,\n]+/)
             .map((k) => k.trim())
         : []
-      let keywordsInTitle = 0
 
-      if (keywordList.length > 0) {
-        keywordsInTitle = keywordList.filter((keyword) => values.title.toLowerCase().includes(keyword)).length
-
-        const keywordPercentage = keywordsInTitle / keywordList.length
-
-        if (keywordPercentage > 0.7) {
-          titleScore.score += 10
-          titleScore.feedback.push("Excellent keyword usage in title.")
-        } else if (keywordPercentage > 0.3) {
-          titleScore.score += 5
-          titleScore.feedback.push("Good keyword usage, but could include more target keywords.")
-        } else {
-          titleScore.feedback.push("Poor keyword usage. Include more target keywords in your title.")
-        }
-      }
-
-      // Bullet points analysis
       const bulletPoints = values.bulletPoints.split(/\n+/).filter((b) => b.trim())
-      const bulletScore = {
-        name: "Bullet Points",
-        score: 0,
-        maxScore: 25,
-        feedback: [],
-      }
 
-      // Check number of bullet points
-      if (bulletPoints.length >= 5) {
-        bulletScore.score += 10
-        bulletScore.feedback.push("Good use of all available bullet points.")
-      } else {
-        bulletScore.feedback.push(
-          `Only using ${bulletPoints.length}/5 bullet points. Add more for better listing quality.`,
-        )
-      }
-
-      // Check bullet point length
-      const avgBulletLength = bulletPoints.reduce((sum, bullet) => sum + bullet.length, 0) / (bulletPoints.length || 1)
-
-      if (avgBulletLength > 150) {
-        bulletScore.score += 15
-        bulletScore.feedback.push("Detailed bullet points with good information density.")
-      } else if (avgBulletLength > 80) {
-        bulletScore.score += 10
-        bulletScore.feedback.push("Acceptable bullet point length, but could be more detailed.")
-      } else {
-        bulletScore.feedback.push("Bullet points are too short. Add more details about features and benefits.")
-      }
-
-      // Description analysis
-      const descriptionLength = values.description.length
-      const descriptionScore = {
-        name: "Description",
-        score: 0,
-        maxScore: 25,
-        feedback: [],
-      }
-
-      // Check description length
-      if (descriptionLength > 1000) {
-        descriptionScore.score += 15
-        descriptionScore.feedback.push("Excellent description length with detailed information.")
-      } else if (descriptionLength > 500) {
-        descriptionScore.score += 10
-        descriptionScore.feedback.push("Good description length, but could be more detailed.")
-      } else {
-        descriptionScore.feedback.push("Description is too short. Add more details about your product.")
-      }
-
-      // Check for formatting in description
-      if (values.description.includes("\n\n") || values.description.includes("<p>")) {
-        descriptionScore.score += 5
-        descriptionScore.feedback.push("Good use of formatting in description for readability.")
-      } else {
-        descriptionScore.feedback.push("Improve formatting with paragraphs for better readability.")
-      }
-
-      // Check for brand mentions
-      if (values.description.toLowerCase().includes("brand") || values.description.toLowerCase().includes("warranty")) {
-        descriptionScore.score += 5
-        descriptionScore.feedback.push("Good mention of brand and/or warranty information.")
-      } else {
-        descriptionScore.feedback.push("Consider adding brand and warranty information to build trust.")
-      }
-
-      // Keywords analysis
-      const keywordScore = {
-        name: "Keywords",
-        score: 0,
-        maxScore: 25,
-        feedback: [],
-      }
-
-      if (keywordList.length > 10) {
-        keywordScore.score += 10
-        keywordScore.feedback.push("Good number of target keywords identified.")
-      } else if (keywordList.length > 5) {
-        keywordScore.score += 5
-        keywordScore.feedback.push("Acceptable number of keywords, but could identify more.")
-      } else {
-        keywordScore.feedback.push("Too few target keywords. Identify more relevant search terms.")
-      }
-
-      // Check keyword distribution
-      let keywordsInBullets = 0
-      let keywordsInDescription = 0
-
-      if (keywordList.length > 0) {
-        keywordsInBullets = keywordList.filter((keyword) => values.bulletPoints.toLowerCase().includes(keyword)).length
-
-        keywordsInDescription = keywordList.filter((keyword) =>
-          values.description.toLowerCase().includes(keyword),
-        ).length
-
-        const bulletKeywordPercentage = keywordsInBullets / keywordList.length
-        const descKeywordPercentage = keywordsInDescription / keywordList.length
-
-        if (bulletKeywordPercentage > 0.6 && descKeywordPercentage > 0.6) {
-          keywordScore.score += 15
-          keywordScore.feedback.push("Excellent keyword distribution across listing elements.")
-        } else if (bulletKeywordPercentage > 0.3 && descKeywordPercentage > 0.3) {
-          keywordScore.score += 10
-          keywordScore.feedback.push("Good keyword distribution, but could be improved.")
-        } else {
-          keywordScore.feedback.push("Poor keyword distribution. Ensure keywords appear in all listing elements.")
-        }
-      }
+      const titleScore = analyzeTitle(values.title, keywordList)
+      const bulletScore = analyzeBulletPoints(bulletPoints, keywordList)
+      const descriptionScore = analyzeDescription(values.description)
+      const keywordScore = analyzeKeywords(keywordList, values.bulletPoints, values.description)
 
       // Calculate overall score
       const categories = [titleScore, bulletScore, descriptionScore, keywordScore]
@@ -336,11 +337,11 @@ export function ListingQualityChecker() {
                   <div className="text-4xl font-bold">{analysis.overallScore}%</div>
                   <Progress value={analysis.overallScore} className="w-full" />
                   <p className="text-sm text-muted-foreground">
-                    {analysis.overallScore >= 80
-                      ? "Excellent listing quality"
-                      : analysis.overallScore >= 60
-                        ? "Good listing quality with room for improvement"
-                        : "Listing needs significant improvement"}
+                    {analysis.overallScore >= listingQualityConfig.overallScoreThresholds.excellent
+                      ? listingQualityConfig.overallFeedback.excellent
+                      : analysis.overallScore >= listingQualityConfig.overallScoreThresholds.good
+                        ? listingQualityConfig.overallFeedback.good
+                        : listingQualityConfig.overallFeedback.poor}
                   </p>
                 </div>
               </CardContent>
