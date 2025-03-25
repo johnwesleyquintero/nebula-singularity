@@ -86,7 +86,7 @@ export function ProfileForm() {
             <FormItem>
               <FormLabel>Name</FormLabel>
               <FormControl>
-                <Input placeholder="Your name" {...field} />
+                <Input placeholder="Your name" {...field} id="name" autoComplete="name" />
               </FormControl>
               <FormDescription>This is your public display name.</FormDescription>
               <FormMessage />
@@ -100,7 +100,7 @@ export function ProfileForm() {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input placeholder="Your email address" {...field} />
+                <Input placeholder="Your email address" {...field} id="email" autoComplete="email" />
               </FormControl>
               <FormDescription>This is the email address associated with your account.</FormDescription>
               <FormMessage />
@@ -114,7 +114,7 @@ export function ProfileForm() {
             <FormItem>
               <FormLabel>Company</FormLabel>
               <FormControl>
-                <Input placeholder="Your company name" {...field} />
+                <Input placeholder="Your company name" {...field} id="company" autoComplete="organization" />
               </FormControl>
               <FormDescription>Your company or business name.</FormDescription>
               <FormMessage />
@@ -128,7 +128,7 @@ export function ProfileForm() {
             <FormItem>
               <FormLabel>Bio</FormLabel>
               <FormControl>
-                <Textarea placeholder="Tell us a little bit about yourself" className="resize-none" {...field} />
+                <Textarea placeholder="Tell us a little bit about yourself" className="resize-none" {...field} id="bio" autoComplete="off" />
               </FormControl>
               <FormDescription>Brief description for your profile. Max 160 characters.</FormDescription>
               <FormMessage />
