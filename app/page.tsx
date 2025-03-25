@@ -11,9 +11,9 @@ export default function LandingPage() {
         <div className="container flex h-14 items-center justify-between">
           <Link href="/" className="flex items-center space-x-2">
             <div className="relative h-8 w-8">
-              <Image src="/logo.svg" alt="SellSmart Pro Logo" fill priority className="rounded-md object-contain" />
+              <Image src="/logo.svg" alt="SellSmart-Pro Logo" fill priority className="rounded-md object-contain" />
             </div>
-            <span className="font-bold">SellSmart Pro</span>
+            <span className="font-bold">SellSmart-Pro</span>
           </Link>
           <nav className="hidden md:flex items-center gap-6">
             <Link
@@ -64,7 +64,7 @@ export default function LandingPage() {
                     Powerful Analytics for Amazon Sellers
                   </h1>
                   <p className="max-w-[600px] text-muted-foreground md:text-xl">
-                    SellSmart Pro provides comprehensive analytics and management tools to help Amazon sellers optimize
+                    SellSmart-Pro provides comprehensive analytics and management tools to help Amazon sellers optimize
                     their business and increase profitability.
                   </p>
                 </div>
@@ -104,7 +104,7 @@ export default function LandingPage() {
                   Everything You Need to Succeed
                 </h2>
                 <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-                  SellSmart Pro provides a comprehensive set of tools to help Amazon sellers optimize their business and
+                  SellSmart-Pro provides a comprehensive set of tools to help Amazon sellers optimize their business and
                   increase profitability.
                 </p>
               </div>
@@ -273,7 +273,7 @@ export default function LandingPage() {
                   Trusted by Amazon Sellers
                 </h2>
                 <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-                  See what our customers have to say about SellSmart Pro.
+                  See what our customers have to say about SellSmart-Pro.
                 </p>
               </div>
             </div>
@@ -287,7 +287,7 @@ export default function LandingPage() {
                   </div>
                 </div>
                 <p className="mt-4 text-muted-foreground">
-                  "SellSmart Pro has transformed how I manage my Amazon business. The analytics are incredibly detailed
+                  "SellSmart-Pro has transformed how I manage my Amazon business. The analytics are incredibly detailed
                   and have helped me optimize my PPC campaigns."
                 </p>
               </div>
@@ -300,7 +300,7 @@ export default function LandingPage() {
                   </div>
                 </div>
                 <p className="mt-4 text-muted-foreground">
-                  "As an agency managing multiple Amazon accounts, SellSmart Pro has been a game-changer. The reporting
+                  "As an agency managing multiple Amazon accounts, SellSmart-Pro has been a game-changer. The reporting
                   features save us hours of work each week."
                 </p>
               </div>
@@ -313,7 +313,7 @@ export default function LandingPage() {
                   </div>
                 </div>
                 <p className="mt-4 text-muted-foreground">
-                  "The insights I've gained from SellSmart Pro have helped me grow my private label business by 40% in
+                  "The insights I've gained from SellSmart-Pro have helped me grow my private label business by 40% in
                   just six months. Worth every penny!"
                 </p>
               </div>
@@ -329,15 +329,15 @@ export default function LandingPage() {
                   Frequently Asked Questions
                 </h2>
                 <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-                  Find answers to common questions about SellSmart Pro.
+                  Find answers to common questions about SellSmart-Pro.
                 </p>
               </div>
             </div>
             <div className="mx-auto grid max-w-5xl grid-cols-1 gap-6 py-12 md:grid-cols-2">
               <div className="rounded-lg border p-6">
-                <h3 className="text-xl font-bold">How does SellSmart Pro connect to my Amazon account?</h3>
+                <h3 className="text-xl font-bold">How does SellSmart-Pro connect to my Amazon account?</h3>
                 <p className="mt-2 text-muted-foreground">
-                  SellSmart Pro connects to your Amazon account using the Amazon Selling Partner API. You'll need to
+                  SellSmart-Pro connects to your Amazon account using the Amazon Selling Partner API. You'll need to
                   provide API credentials, which are securely stored and encrypted.
                 </p>
               </div>
@@ -372,7 +372,7 @@ export default function LandingPage() {
                   Ready to Optimize Your Amazon Business?
                 </h2>
                 <p className="max-w-[900px] md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-                  Join thousands of Amazon sellers who are growing their business with SellSmart Pro.
+                  Join thousands of Amazon sellers who are growing their business with SellSmart-Pro.
                 </p>
               </div>
               <div className="flex flex-col gap-2 min-[400px]:flex-row">
@@ -395,7 +395,7 @@ export default function LandingPage() {
       <footer className="border-t py-6 md:py-0">
         <div className="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
           <p className="text-center text-sm leading-loose text-muted-foreground md:text-left">
-            &copy; {new Date().getFullYear()} SellSmart Pro. All rights reserved.
+            &copy; {new Date().getFullYear()} SellSmart-Pro. All rights reserved.
           </p>
           <div className="flex items-center gap-4">
             <Link href="/terms" className="text-sm text-muted-foreground hover:underline">

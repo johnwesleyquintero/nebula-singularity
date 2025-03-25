@@ -13,7 +13,7 @@ export const authOptions = {
         params: {
           redirect_uri: process.env.NODE_ENV === 'development'
             ? 'http://localhost:3000/api/auth/callback/google'
-            : 'https://SellSmart Pro.vercel.app/api/auth/callback/google'
+            : 'https://SellSmart-Pro.vercel.app/api/auth/callback/google'
         }
       }
     }),
