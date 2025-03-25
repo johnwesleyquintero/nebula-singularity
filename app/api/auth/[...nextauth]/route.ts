@@ -95,7 +95,20 @@ export const authOptions = {
   },
 }
 
-const handler = NextAuth(authOptions)
+async function handler(req: Request, ctx: { params: { nextauth: string[] } }) {
+  try {
+    return await NextAuth(authOptions)(req, ctx)
+  } catch (error) {
+    console.error('Auth API Error:', error)
+    return new Response(JSON.stringify({
+      error: 'Authentication failed',
+      message: error instanceof Error ? error.message : 'Unknown error'
+    }), {
+      status: 500,
+      headers: {'Content-Type': 'application/json'}
+    })
+  }
+}
 
 export { handler as GET, handler as POST }
 
