@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { ResponsiveContainer, Tooltip, Legend as RechartsPrimitiveLegend } from "recharts"
+import { ResponsiveContainer, Tooltip as RechartsTooltip, Legend as RechartsPrimitiveLegend } from "recharts"
 
 import { cn } from "@/lib/utils"
 
@@ -75,7 +75,7 @@ export const ChartContainer = React.forwardRef<
   )
 })
 
-export const ChartTooltip = Tooltip
+export const ChartTooltip = RechartsTooltip
 
 export const ChartTooltipContent = React.forwardRef<
   HTMLDivElement,
