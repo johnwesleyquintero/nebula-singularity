@@ -88,7 +88,8 @@ export function ToolsGrid() {
 
   return (
     <>
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <ScrollArea className="h-[calc(100vh-180px)] w-full">
+<div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {tools.map((tool) => (
           <Card key={tool.id} className="flex flex-col">
             <CardHeader>
@@ -96,8 +97,10 @@ export function ToolsGrid() {
                 <div className="rounded-full bg-primary/10 p-2">
                   <tool.icon className="h-5 w-5 text-primary" />
                 </div>
+</ScrollArea>
                 <CardTitle className="text-xl">{tool.title}</CardTitle>
               </div>
+</ScrollArea>
               <CardDescription>{tool.description}</CardDescription>
             </CardHeader>
             <CardFooter className="mt-auto pt-4">
@@ -108,6 +111,7 @@ export function ToolsGrid() {
           </Card>
         ))}
       </div>
+</ScrollArea>
 
       <Dialog open={!!selectedTool} onOpenChange={(open) => !open && closeTool()}>
         {selectedToolData && (
@@ -120,6 +124,7 @@ export function ToolsGrid() {
               <DialogDescription>{selectedToolData.description}</DialogDescription>
             </DialogHeader>
             <div className="mt-4">{selectedTool && <selectedToolData.component />}</div>
+</ScrollArea>
           </DialogContent>
         )}
       </Dialog>
