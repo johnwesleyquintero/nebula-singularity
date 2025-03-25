@@ -51,11 +51,24 @@ module.exports = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        // Custom colors based on the design spec
-        "deep-blue": "#1E3A8A",
-        "slate-gray": "#475569",
-        "vibrant-teal": "#14B8A6",
-        "neutral-bg": "#F8FAFC",
+        brand: {
+          300: "#748BFF",
+          400: "#506DFF",
+          500: "#2D5BFF",
+          600: "#0039FF",
+          700: "#002ED4"
+        },
+        accent: {
+          300: "#4DFFDC",
+          400: "#1AFFD2",
+          500: "#00E6C0",
+          600: "#00C9A7",
+          700: "#009D82"
+        },
+        success: "#00CC88",
+        error: "#FF4D4D",
+        surface: "#2D3250",
+        neutral: "#1A1D26",
       },
       borderRadius: {
         lg: "var(--radius)",
