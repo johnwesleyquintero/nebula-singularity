@@ -1,4 +1,4 @@
-# Nebula-Singularity: Amazon Seller Analytics Platform
+# SellSmart Pro: Amazon Seller Analytics Platform
 
 ![Project Banner](public/og-image.svg)
 
@@ -27,8 +27,8 @@ graph TD
 
 ## 🛠 Quick Start
 ```bash
-git clone https://github.com/your-org/nebula-singularity.git
-cd nebula-singularity
+git clone https://github.com/your-org/SellSmart Pro.git
+cd SellSmart Pro
 pnpm install
 cp .env.example .env.local
 pnpm dev

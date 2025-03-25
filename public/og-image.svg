@@ -37,7 +37,7 @@
 
   <!-- Title -->
   <text id="bannerTitle" x="350" y="200" font-family="'Lato', sans-serif" font-size="50" fill="#ffffff" font-weight="600">
-    Nebula-Singularity
+    SellSmart Pro
     <animate attributeName="fill" values="#ffffff; #4FD1C5; #ffffff" dur="3s" repeatCount="indefinite" />
   </text>
 
@@ -66,12 +66,12 @@
 
   <!-- Live URL -->
   <text x="350" y="450" font-family="'Lato', sans-serif" font-size="28" fill="#ffffff">
-    Live: <tspan fill="#4FD1C5">nebula-singularity.vercel.app</tspan>
+    Live: <tspan fill="#4FD1C5">SellSmart Pro.vercel.app</tspan>
   </text>
 
   <!-- GitHub URL -->
   <text x="350" y="490" font-family="'Lato', sans-serif" font-size="28" fill="#ffffff">
-    GitHub: <tspan fill="#4FD1C5">github.com/johnwesleyquintero/nebula-singularity</tspan>
+    GitHub: <tspan fill="#4FD1C5">github.com/johnwesleyquintero/SellSmart Pro</tspan>
   </text>
 
   <!-- Styles -->
