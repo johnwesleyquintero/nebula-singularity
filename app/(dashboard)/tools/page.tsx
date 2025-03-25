@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 import { ToolsGrid } from "@/components/tools/tools-grid"
 
 export const metadata: Metadata = {
-  title: "Free Tools | Nebula-Singularity",
+  title: "Free Tools | Nebula-Suite",
   description: "Interactive tools to help Amazon sellers optimize their business",
 }
 

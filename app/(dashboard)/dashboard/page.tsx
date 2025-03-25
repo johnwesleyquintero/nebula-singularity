@@ -6,7 +6,7 @@ import { RecentSales } from "@/components/dashboard/recent-sales"
 import { SalesMetrics } from "@/components/dashboard/sales-metrics"
 
 export const metadata: Metadata = {
-  title: "Dashboard | Nebula-Singularity",
+  title: "Dashboard | Nebula-Suite",
   description: "Analytics dashboard for Amazon sellers",
 }
 

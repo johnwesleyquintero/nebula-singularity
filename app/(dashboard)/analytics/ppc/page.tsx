@@ -5,7 +5,7 @@ import { PPCOverview } from "@/components/analytics/ppc-overview"
 import { PPCCampaigns } from "@/components/analytics/ppc-campaigns"
 
 export const metadata: Metadata = {
-  title: "PPC Analytics | Nebula-Singularity",
+  title: "PPC Analytics | Nebula-Suite",
   description: "Pay-Per-Click performance tracking for Amazon sellers",
 }
 
