@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { ScrollArea } from "@/components/ui/scroll-area"
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
 import { Calculator, Search, CheckSquare, BarChart2, FileText, Filter, PieChart, TrendingUp } from "lucide-react"
@@ -89,29 +90,27 @@ export function ToolsGrid() {
   return (
     <>
       <ScrollArea className="h-[calc(100vh-180px)] w-full">
-<div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {tools.map((tool) => (
-          <Card key={tool.id} className="flex flex-col">
-            <CardHeader>
-              <div className="flex items-center gap-2">
-                <div className="rounded-full bg-primary/10 p-2">
-                  <tool.icon className="h-5 w-5 text-primary" />
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          {tools.map((tool) => (
+            <Card key={tool.id} className="flex flex-col">
+              <CardHeader>
+                <div className="flex items-center gap-2">
+                  <div className="rounded-full bg-primary/10 p-2">
+                    <tool.icon className="h-5 w-5 text-primary" />
+                  </div>
+                  <CardTitle className="text-xl">{tool.title}</CardTitle>
                 </div>
-</ScrollArea>
-                <CardTitle className="text-xl">{tool.title}</CardTitle>
-              </div>
-</ScrollArea>
-              <CardDescription>{tool.description}</CardDescription>
-            </CardHeader>
-            <CardFooter className="mt-auto pt-4">
-              <Button onClick={() => openTool(tool.id)} className="w-full">
-                Open Tool
-              </Button>
-            </CardFooter>
-          </Card>
-        ))}
-      </div>
-</ScrollArea>
+                <CardDescription>{tool.description}</CardDescription>
+              </CardHeader>
+              <CardFooter className="mt-auto pt-4">
+                <Button onClick={() => openTool(tool.id)} className="w-full">
+                  Open Tool
+                </Button>
+              </CardFooter>
+            </Card>
+          ))}
+        </div>
+      </ScrollArea>
 
       <Dialog open={!!selectedTool} onOpenChange={(open) => !open && closeTool()}>
         {selectedToolData && (
@@ -124,7 +123,6 @@ export function ToolsGrid() {
               <DialogDescription>{selectedToolData.description}</DialogDescription>
             </DialogHeader>
             <div className="mt-4">{selectedTool && <selectedToolData.component />}</div>
-</ScrollArea>
           </DialogContent>
         )}
       </Dialog>
