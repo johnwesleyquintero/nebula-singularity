@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer utilities {
+  .bg-neutral-700\/50 {
+    background-color: rgb(64 64 64 / 0.5);
+  }
+}
+
 @layer base {
   :root {
     --background: 230 17% 12%;
