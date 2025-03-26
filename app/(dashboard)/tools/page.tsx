@@ -30,5 +30,6 @@ export default function ToolsPage() {
       </div>
       <ToolsGrid searchQuery={searchQuery} selectedCategory={selectedCategory} />
     </div>
+  )
 }
 
