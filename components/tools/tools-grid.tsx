@@ -15,6 +15,11 @@ import { KeywordDeduplicator } from "@/components/tools/keyword-deduplicator"
 import { ACOSCalculator } from "@/components/tools/acos-calculator"
 import { SalesEstimator } from "@/components/tools/sales-estimator"
 
+type ToolsGridProps = {
+  searchQuery: string
+  selectedCategory: string
+}
+
 const tools = [
   {
     id: "fba-calculator",
@@ -22,6 +27,7 @@ const tools = [
     description: "Calculate the profitability of your FBA products",
     icon: Calculator,
     component: FBACalculator,
+    category: "pricing",
   },
   {
     id: "keyword-analyzer",
@@ -29,6 +35,7 @@ const tools = [
     description: "Discover and analyze relevant keywords for your products",
     icon: Search,
     component: KeywordAnalyzer,
+    category: "keywords",
   },
   {
     id: "listing-quality-checker",
@@ -36,6 +43,7 @@ const tools = [
     description: "Evaluate the quality and optimization of your product listings",
     icon: CheckSquare,
     component: ListingQualityChecker,
+    category: "listings",
   },
   {
     id: "ppc-campaign-auditor",
@@ -43,6 +51,7 @@ const tools = [
     description: "Analyze the performance of your PPC advertising campaigns",
     icon: BarChart2,
     component: PPCCampaignAuditor,
+    category: "analytics",
   },
   {
     id: "description-editor",
@@ -50,6 +59,7 @@ const tools = [
     description: "Create optimized product descriptions for your listings",
     icon: FileText,
     component: DescriptionEditor,
+    category: "listings",
   },
   {
     id: "keyword-deduplicator",
@@ -57,6 +67,7 @@ const tools = [
     description: "Remove duplicate keywords from your keyword lists",
     icon: Filter,
     component: KeywordDeduplicator,
+    category: "keywords",
   },
   {
     id: "acos-calculator",
@@ -64,6 +75,7 @@ const tools = [
     description: "Calculate your Advertising Cost of Sales (ACoS)",
     icon: PieChart,
     component: ACOSCalculator,
+    category: "pricing",
   },
   {
     id: "sales-estimator",
@@ -71,10 +83,11 @@ const tools = [
     description: "Estimate potential sales figures for your products",
     icon: TrendingUp,
     component: SalesEstimator,
+    category: "analytics",
   },
 ]
 
-export function ToolsGrid() {
+export function ToolsGrid({ searchQuery, selectedCategory }: ToolsGridProps) {
   const [selectedTool, setSelectedTool] = useState<string | null>(null)
 
   const openTool = (toolId: string) => {
@@ -85,20 +98,27 @@ export function ToolsGrid() {
     setSelectedTool(null)
   }
 
+  const filteredTools = tools.filter((tool) => {
+    const matchesSearch = tool.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      tool.description.toLowerCase().includes(searchQuery.toLowerCase())
+    const matchesCategory = selectedCategory === "all" || tool.category === selectedCategory
+    return matchesSearch && matchesCategory
+  })
+
   const selectedToolData = tools.find((tool) => tool.id === selectedTool)
 
   return (
     <>
       <ScrollArea className="h-[calc(100vh-180px)] w-full">
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {tools.map((tool) => (
-            <Card key={tool.id} className="flex flex-col">
+          {filteredTools.map((tool) => (
+            <Card key={tool.id} className="flex flex-col" role="article" aria-labelledby={`tool-title-${tool.id}`}>
               <CardHeader>
                 <div className="flex items-center gap-2">
                   <div className="rounded-full bg-primary/10 p-2">
                     <tool.icon className="h-5 w-5 text-primary" />
                   </div>
-                  <CardTitle className="text-xl">{tool.title}</CardTitle>
+                  <CardTitle id={`tool-title-${tool.id}`} className="text-xl">{tool.title}</CardTitle>
                 </div>
                 <CardDescription>{tool.description}</CardDescription>
               </CardHeader>

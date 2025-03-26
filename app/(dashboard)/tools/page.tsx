@@ -1,5 +1,9 @@
+"use client"
+
+import { useState } from "react"
 import type { Metadata } from "next"
 import { ToolsGrid } from "@/components/tools/tools-grid"
+import { ToolsSearch } from "@/components/tools/tools-search"
 
 export const metadata: Metadata = {
   title: "Seller Tools | SellSmart-Pro",
@@ -7,16 +11,24 @@ export const metadata: Metadata = {
 }
 
 export default function ToolsPage() {
+  const [searchQuery, setSearchQuery] = useState("")
+  const [selectedCategory, setSelectedCategory] = useState("all")
+
   return (
-    <div className="flex flex-col gap-4">
-      <div className="flex items-center justify-between">
+    <div className="flex flex-col gap-6">
+      <div className="flex flex-col gap-4">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Seller Tools</h1>
           <p className="text-muted-foreground">Interactive tools to help you optimize your Amazon business</p>
         </div>
+        <ToolsSearch
+          searchQuery={searchQuery}
+          onSearchChange={setSearchQuery}
+          selectedCategory={selectedCategory}
+          onCategoryChange={setSelectedCategory}
+        />
       </div>
-      <ToolsGrid />
+      <ToolsGrid searchQuery={searchQuery} selectedCategory={selectedCategory} />
     </div>
-  )
 }
 
