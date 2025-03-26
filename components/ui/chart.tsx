@@ -5,7 +5,7 @@ import { ResponsiveContainer, Tooltip as RechartsTooltip, Legend as RechartsPrim
 
 import { cn } from "@/lib/utils"
 
-export type ChartConfig = {
+type ChartConfig = {
   [k in string]: {
     label?: React.ReactNode
     icon?: React.ComponentType
@@ -29,7 +29,7 @@ function useChart() {
   return context
 }
 
-export const ChartContainer = React.forwardRef<
+const ChartContainer = React.forwardRef<
   HTMLDivElement,
   React.ComponentProps<"div"> & {
     config: ChartConfig
@@ -74,11 +74,12 @@ export const ChartContainer = React.forwardRef<
     </ChartContext.Provider>
   )
 })
+ChartContainer.displayName = "ChartContainer"
 
-export const ChartTooltip = RechartsTooltip
+const ChartTooltip = RechartsTooltip
 ChartTooltip.displayName = "ChartTooltip"
 
-export const ChartTooltipContent = React.forwardRef<
+const ChartTooltipContent = React.forwardRef<
   HTMLDivElement,
   React.ComponentProps<typeof ChartTooltip> &
     React.ComponentProps<"div"> & {
@@ -220,8 +221,8 @@ function getPayloadConfigFromPayload(config: ChartConfig, payload: unknown, key:
     configLabelKey = payloadPayload[key as keyof typeof payloadPayload] as string
   }
 
-  return configLabelKey in config ? config[configLabelKey] : config[key as keyof typeof config]
+  return configLabelKey in config ? config[configLabelKey] : config[key]
 }
 
-export { ChartContainer, ChartTooltip, ChartTooltipContent, ChartLegend, ChartLegendContent }
+export { ChartTooltip, ChartTooltipContent, ChartLegend, ChartLegendContent }
 
