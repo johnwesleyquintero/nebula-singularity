@@ -34,6 +34,7 @@ const nextConfig = {
     turbo: {
       rules: {
         '*.svg': ['@svgr/webpack'],
+        '*.mdx': ['@mdx-js/loader'],
       },
     },
   },
