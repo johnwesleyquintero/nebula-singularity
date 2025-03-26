@@ -1,9 +1,14 @@
 import type { Metadata } from "next"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Overview } from "@/components/dashboard/overview"
-import { RecentSales } from "@/components/dashboard/recent-sales"
-import { SalesMetrics } from "@/components/dashboard/sales-metrics"
+import dynamic from 'next/dynamic'
+import { Suspense } from 'react'
+
+const Overview = dynamic(() => import('@/components/dashboard/overview'))
+const RecentSales = dynamic(() => import('@/components/dashboard/recent-sales'))
+const SalesMetrics = dynamic(() => import('@/components/dashboard/sales-metrics'), {
+  ssr: false
+})
 
 export const metadata: Metadata = {
   title: "Dashboard | SellSmart-Pro",

@@ -12,7 +12,7 @@ export async function POST(req: NextRequest) {
     })
 
     if (authError) {
-      return NextResponse.json({ error: authError.message }, { status: 400 })
+      throw new ValidationError({ marketplaces: ["At least one marketplace must be selected"] });
     }
 
     if (!authData.user) {
@@ -33,7 +33,7 @@ export async function POST(req: NextRequest) {
       // Clean up the auth user if profile creation fails
       await supabase.auth.admin.deleteUser(authData.user.id)
 
-      return NextResponse.json({ error: profileError.message }, { status: 400 })
+      throw new DatabaseError("Failed to create user account");
     }
 
     return NextResponse.json({ success: true, message: "User registered successfully" }, { status: 201 })
