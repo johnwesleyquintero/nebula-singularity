@@ -8,7 +8,7 @@
     "approve-builds": "pnpm build",
     "start": "next start",
     "lint": "next lint",
-    "preinstall": "if [ \"$npm_execpath\" != \"$(which pnpm)\" ]; then echo \"Please use pnpm instead of npm or yarn.\" && exit 1; fi"
+    "preinstall": "node -e \"if (process.env.npm_execpath.indexOf('pnpm') === -1) { console.error('Use pnpm to install dependencies'); process.exit(1); }\""
   },
   "dependencies": {
     "@auth/core": "0.38.0",
