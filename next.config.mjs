@@ -47,15 +47,29 @@ if (nextConfig.swcMinify !== undefined) {
   delete nextConfig.swcMinify;
 }
 
-function mergeConfig(nextConfig, userConfig)
+function mergeConfig(nextConfig, userConfig) {
+  return {
+    ...nextConfig,
+    ...userConfig,
+    experimental: {
+      ...nextConfig.experimental,
+      ...userConfig?.experimental
+    },
+    images: {
+      ...nextConfig.images,
+      ...userConfig?.images
+    }
+  };
+}
 
 // Remove deprecated swcMinify option
 if (nextConfig.swcMinify !== undefined) {
   delete nextConfig.swcMinify;
-} {
-  if (!userConfig) {
-    return
-  }
+}
+
+// Legacy configuration merge
+if (userConfig) {
+  
 
   for (const key in userConfig) {
     if (

@@ -1,8 +1,12 @@
 "use client"
 
 import { Input } from "@/components/ui/input"
-import { Select } from "@/components/ui/select"
 import { Label } from "@/components/ui/label"
+import { Select } from "@/components/ui/select"
+
+export function ToolsSearch({ searchQuery, onSearchChange, selectedCategory, onCategoryChange }: ToolsSearchProps) {
+  // ... existing component implementation ...
+}
 
 type ToolsSearchProps = {
   searchQuery: string

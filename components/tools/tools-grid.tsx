@@ -1,21 +1,25 @@
 "use client"
 
-import { useState } from "react"
-import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { Button } from "@/components/ui/button"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
-import { Calculator, Search, CheckSquare, BarChart2, FileText, Filter, PieChart, TrendingUp } from "lucide-react"
+import { ACOSCalculator } from "@/components/tools/acos-calculator"
+import { DescriptionEditor } from "@/components/tools/description-editor"
 import { FBACalculator } from "@/components/tools/fba-calculator"
 import { KeywordAnalyzer } from "@/components/tools/keyword-analyzer"
+import { KeywordDeduplicator } from "@/components/tools/keyword-deduplicator"
 import { ListingQualityChecker } from "@/components/tools/listing-quality-checker"
 import { PPCCampaignAuditor } from "@/components/tools/ppc-campaign-auditor"
-import { DescriptionEditor } from "@/components/tools/description-editor"
-import { KeywordDeduplicator } from "@/components/tools/keyword-deduplicator"
-import { ACOSCalculator } from "@/components/tools/acos-calculator"
 import { SalesEstimator } from "@/components/tools/sales-estimator"
+import { Button } from "@/components/ui/button"
+import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { ScrollArea } from "@/components/ui/scroll-area"
+import { BarChart2, Calculator, CheckSquare, FileText, Filter, PieChart, Search, TrendingUp } from "lucide-react"
+import { useState } from "react"
 
-type ToolsGridProps = {
+export function ToolsGrid({ searchQuery, selectedCategory }: ToolsGridProps) {
+  // ... existing component implementation ...
+}
+
+export type ToolsGridProps = {
   searchQuery: string
   selectedCategory: string
 }
