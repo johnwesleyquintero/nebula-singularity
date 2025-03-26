@@ -41,7 +41,17 @@ const nextConfig = {
 
 mergeConfig(nextConfig, userConfig)
 
-function mergeConfig(nextConfig, userConfig) {
+// Remove deprecated swcMinify option
+if (nextConfig.swcMinify !== undefined) {
+  delete nextConfig.swcMinify;
+}
+
+function mergeConfig(nextConfig, userConfig)
+
+// Remove deprecated swcMinify option
+if (nextConfig.swcMinify !== undefined) {
+  delete nextConfig.swcMinify;
+} {
   if (!userConfig) {
     return
   }
