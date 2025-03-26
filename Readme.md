@@ -70,6 +70,10 @@ SellSmart-Pro is an innovative Amazon Seller Analytics Platform designed to empo
 
 ## 📦 Quick Start
 
+## Package Management
+
+This project uses pnpm for package management. Please ensure you have pnpm installed before proceeding with any development tasks.
+
 ```bash
 git clone https://github.com/johnwesleyquintero/SellSmart-Pro.git
 cd SellSmart-Pro

@@ -1,5 +1,13 @@
 # ▲ Design Guidelines
 
+***Let's use pnpm for consistency across our projects.***
+
+## Overview
+This document outlines the design guidelines for the application.
+
+## Scope
+The scope of the application is to create a visually appealing and user-friendly website.
+
 ## Core Principles
 - **Consistency**: Maintain a consistent visual style throughout the application
 - **Readability**: Ensure that the codebase is easy to read and understand

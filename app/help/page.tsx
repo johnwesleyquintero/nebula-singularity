@@ -4,6 +4,10 @@ export default function HelpPage() {
       <div className="w-full max-w-2xl space-y-6">
         <h1 className="text-3xl font-bold tracking-tight">Help & Support</h1>
         
+        <div className="bg-blue-500 text-white p-4 rounded-lg shadow-md mb-6">
+          <h2 className="text-2xl font-bold">Start Your 14-Day Free Trial!</h2>
+          <p>No credit card required. Explore all features and pricing options.</p>
+        </div>
         <div className="space-y-4">
           <div className="rounded-lg border bg-card p-6 shadow-sm">
             <h2 className="text-xl font-semibold mb-4">Frequently Asked Questions</h2>

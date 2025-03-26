@@ -1,8 +1,8 @@
-import Link from "next/link"
-import Image from "next/image"
-import { ArrowRight, BarChart2, CheckCircle, Lock, ShieldCheck } from "lucide-react"
-import { Button } from "@/components/ui/button"
 import { ModeToggle } from "@/components/mode-toggle"
+import { Button } from "@/components/ui/button"
+import { ArrowRight, BarChart2, CheckCircle, Lock, ShieldCheck } from "lucide-react"
+import Image from "next/image"
+import Link from "next/link"
 
 export default function LandingPage() {
   return (
@@ -379,10 +379,7 @@ export default function LandingPage() {
               </div>
               <div className="flex flex-col gap-2 min-[400px]:flex-row">
                 <Link href="/register">
-                  <Button size="lg" variant="secondary" className="bg-white text-deep-blue hover:bg-white/90">
-                    Start Your Free Trial
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </Button>
+                  <Button size="lg" variant="secondary" className="bg-white text-deep-blue hover:bg-white/90 border-2 border-deep-blue">Start Your Free Trial<ArrowRight className="ml-2 h-4 w-4" /></Button>
                 </Link>
                 <Link href="#pricing">
                   <Button size="lg" variant="secondary" className="border-white text-white hover:bg-white/10">
@@ -415,4 +412,10 @@ export default function LandingPage() {
     </div>
   )
 }
+return (
+    <div style={{ backgroundColor: '#f0f4f8', padding: '20px', textAlign: 'center', borderBottom: '2px solid #06b6d4' }}>
+      <h2 style={{ color: '#059669', fontSize: '1.5rem', fontWeight: 'bold' }}>Start Your 14-Day Free Trial Now!</h2>
+      <p style={{ color: '#64748b', fontSize: '1rem' }}>Explore our pricing options and discover the benefits of SellSmart-Pro.</p>
+    </div>
+  );
 

@@ -57,7 +57,7 @@ GOOGLE_CLIENT_SECRET=your_google_secret
 ## ⚡ Performance Testing
 ```bash
 # Install load testing tools
-npm install -g k6
+pnpm add -g k6
 
 # Run authentication load test
 k6 run scripts/load-test-auth.js

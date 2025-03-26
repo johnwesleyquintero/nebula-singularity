@@ -19,3 +19,7 @@
 3. Open a Pull Request against the main branch
 
 Please adhere to the [GitHub Flow](https://guides.github.com/introduction/flow/) and maintain a respectful, collaborative environment.
+
+## Package Management
+
+This project uses pnpm for package management. Please ensure you have pnpm installed before proceeding with any development tasks.
