@@ -3,10 +3,12 @@ import { Button } from "@/components/ui/button"
 import { ArrowRight, BarChart2, CheckCircle, Lock, ShieldCheck } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
+import { Header } from "@/components/ui/header" // Adjust the path as necessary
 
 export default function LandingPage() {
   return (
     <div className="flex min-h-screen flex-col">
+      {/* Header component should be defined or imported */}
       <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container flex h-14 items-center justify-between">
           <Link href="/" className="flex items-center space-x-2">

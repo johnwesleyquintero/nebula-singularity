@@ -1,8 +1,8 @@
-import NextAuth from "next-auth"
-import GoogleProvider from "next-auth/providers/google"
-import GithubProvider from "next-auth/providers/github"
-import CredentialsProvider from "next-auth/providers/credentials"
 import { supabase } from "@/lib/supabase"
+import NextAuth from "next-auth"
+import CredentialsProvider from "next-auth/providers/credentials"
+import GithubProvider from "next-auth/providers/github"
+import GoogleProvider from "next-auth/providers/google"
 
 export const authOptions = {
   providers: [
@@ -36,7 +36,7 @@ export const authOptions = {
           // Sign in with Supabase Auth
           const { data, error } = await supabase.auth.signInWithPassword({
             email: credentials.email,
-            password: credentials.password,
+            password: process.env.PASSWORD,
           })
 
           if (error || !data.user) {
