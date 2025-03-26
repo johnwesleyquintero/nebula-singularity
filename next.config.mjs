@@ -40,7 +40,7 @@ const nextConfig = {
   },
 }
 
-mergeConfig(nextConfig, userConfig)
+mergeConfig(nextConfig, userConfig);
 
 // Remove deprecated swcMinify option
 if (nextConfig.swcMinify !== undefined) {
@@ -62,10 +62,6 @@ function mergeConfig(nextConfig, userConfig) {
   };
 }
 
-// Remove deprecated swcMinify option
-if (nextConfig.swcMinify !== undefined) {
-  delete nextConfig.swcMinify;
-}
 
 // Legacy configuration merge
 if (userConfig) {
