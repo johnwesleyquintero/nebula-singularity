@@ -6,9 +6,7 @@ import { Suspense } from 'react'
 
 const Overview = dynamic(() => import('@/components/dashboard/overview'))
 const RecentSales = dynamic(() => import('@/components/dashboard/recent-sales'))
-const SalesMetrics = dynamic(() => import('@/components/dashboard/sales-metrics'), {
-  ssr: false
-})
+import SalesMetricsClient from '@/components/dashboard/sales-metrics-client'
 
 export const metadata: Metadata = {
   title: "Dashboard | SellSmart-Pro",
@@ -144,7 +142,7 @@ export default function DashboardPage() {
               <CardDescription>Detailed breakdown of your sales performance.</CardDescription>
             </CardHeader>
             <CardContent className="pl-2">
-              <SalesMetrics />
+              <SalesMetricsClient />
             </CardContent>
           </Card>
         </TabsContent>
