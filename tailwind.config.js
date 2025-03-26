@@ -18,19 +18,6 @@ module.exports = {
     },
     extend: {
       colors: {
-        neutral: {
-          50: "rgb(250 250 250)",
-          100: "rgb(245 245 245)",
-          200: "rgb(229 229 229)",
-          300: "rgb(212 212 212)",
-          400: "rgb(163 163 163)",
-          500: "rgb(115 115 115)",
-          600: "rgb(82 82 82)",
-          700: "rgb(64 64 64)",
-          800: "rgb(38 38 38)",
-          900: "rgb(23 23 23)",
-          950: "rgb(10 10 10)"
-        },
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
@@ -65,23 +52,35 @@ module.exports = {
           foreground: "hsl(var(--card-foreground))",
         },
         brand: {
-          300: "#748BFF",
-          400: "#506DFF",
-          500: "#2D5BFF",
-          600: "#0039FF",
-          700: "#002ED4"
+          300: "hsl(var(--brand-300))",
+          400: "hsl(var(--brand-400))",
+          500: "hsl(var(--brand-500))",
+          600: "hsl(var(--brand-600))",
+          700: "hsl(var(--brand-700))"
         },
         accent: {
-          300: "#4DFFDC",
-          400: "#1AFFD2",
-          500: "#00E6C0",
-          600: "#00C9A7",
-          700: "#009D82"
+          300: "hsl(var(--accent-300))",
+          400: "hsl(var(--accent-400))",
+          500: "hsl(var(--accent-500))",
+          600: "hsl(var(--accent-600))",
+          700: "hsl(var(--accent-700))"
         },
-        success: "#00CC88",
-        error: "#FF4D4D",
-        surface: "#2D3250",
-        neutral: "#1A1D26",
+        success: "hsl(var(--success))",
+        error: "hsl(var(--error))",
+        surface: "hsl(var(--surface))",
+        neutral: {
+          50: "hsl(var(--neutral-50))",
+          100: "hsl(var(--neutral-100))",
+          200: "hsl(var(--neutral-200))",
+          300: "hsl(var(--neutral-300))",
+          400: "hsl(var(--neutral-400))",
+          500: "hsl(var(--neutral-500))",
+          600: "hsl(var(--neutral-600))",
+          700: "hsl(var(--neutral-700))",
+          800: "hsl(var(--neutral-800))",
+          900: "hsl(var(--neutral-900))",
+          950: "hsl(var(--neutral-950))"
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
