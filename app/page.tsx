@@ -88,6 +88,8 @@ export default function LandingPage() {
                     src="/dashboard-preview.svg"
                     alt="Dashboard Preview"
                     fill
+                    priority
+                    fetchPriority="high"
                     className="rounded-lg object-contain"
                   />
                 </div>
@@ -112,7 +114,7 @@ export default function LandingPage() {
             <div className="mx-auto grid max-w-5xl grid-cols-1 gap-6 py-12 md:grid-cols-2 lg:grid-cols-3">
               <div className="flex flex-col items-center space-y-2 rounded-lg border p-6">
                 <div className="rounded-full bg-vibrant-teal p-2 text-white">
-                  <BarChart2 className="h-6 w-6" />
+                  <BarChart2 className="h-6 w-6" aria-hidden="true" />
                 </div>
                 <h3 className="text-xl font-bold">Advanced Analytics</h3>
                 <p className="text-center text-muted-foreground">
@@ -121,7 +123,7 @@ export default function LandingPage() {
               </div>
               <div className="flex flex-col items-center space-y-2 rounded-lg border p-6">
                 <div className="rounded-full bg-vibrant-teal p-2 text-white">
-                  <Lock className="h-6 w-6" />
+                  <Lock className="h-6 w-6" aria-hidden="true" />
                 </div>
                 <h3 className="text-xl font-bold">Secure Integration</h3>
                 <p className="text-center text-muted-foreground">
@@ -130,7 +132,7 @@ export default function LandingPage() {
               </div>
               <div className="flex flex-col items-center space-y-2 rounded-lg border p-6">
                 <div className="rounded-full bg-vibrant-teal p-2 text-white">
-                  <ShieldCheck className="h-6 w-6" />
+                  <ShieldCheck className="h-6 w-6" aria-hidden="true" />
                 </div>
                 <h3 className="text-xl font-bold">PPC Optimization</h3>
                 <p className="text-center text-muted-foreground">
@@ -165,19 +167,19 @@ export default function LandingPage() {
                 </div>
                 <ul className="mt-6 space-y-3">
                   <li className="flex items-center">
-                    <CheckCircle className="mr-2 h-4 w-4 text-vibrant-teal" />
+                    <CheckCircle className="mr-2 h-4 w-4 text-vibrant-teal" aria-hidden="true" />
                     <span>Basic analytics</span>
                   </li>
                   <li className="flex items-center">
-                    <CheckCircle className="mr-2 h-4 w-4 text-vibrant-teal" />
+                    <CheckCircle className="mr-2 h-4 w-4 text-vibrant-teal" aria-hidden="true" />
                     <span>1 marketplace</span>
                   </li>
                   <li className="flex items-center">
-                    <CheckCircle className="mr-2 h-4 w-4 text-vibrant-teal" />
+                    <CheckCircle className="mr-2 h-4 w-4 text-vibrant-teal" aria-hidden="true" />
                     <span>30-day data history</span>
                   </li>
                   <li className="flex items-center">
-                    <CheckCircle className="mr-2 h-4 w-4 text-vibrant-teal" />
+                    <CheckCircle className="mr-2 h-4 w-4 text-vibrant-teal" aria-hidden="true" />
                     <span>Email support</span>
                   </li>
                 </ul>
