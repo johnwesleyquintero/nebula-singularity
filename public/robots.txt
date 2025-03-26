@@ -1,0 +1,21 @@
+# Allow all web crawlers
+User-agent: *
+Allow: /
+
+# Block specific directories (if needed)
+Disallow: /private/
+Disallow: /admin/
+Disallow: /api/
+
+# Crawl-delay directive for rate limiting
+Crawl-delay: 10
+
+# Sitemap location
+Sitemap: https://sellsmart-pro.vercel.app/sitemap.xml
+
+# Additional sitemaps (if you have multiple)
+# Sitemap: https://sellsmart-pro.vercel.app/products-sitemap.xml
+# Sitemap: https://sellsmart-pro.vercel.app/blog-sitemap.xml
+
+# Host directive
+Host: https://sellsmart-pro.vercel.app

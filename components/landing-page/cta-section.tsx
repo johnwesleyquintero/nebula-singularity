@@ -18,7 +18,7 @@ export function CTASection() {
             <Button
               asChild
               size="lg"
-              className="text-lg bg-background text-primary hover:bg-background/90"
+              className="text-lg bg-white text-primary hover:bg-white/90 shadow-sm"
             >
               <Link href="/register">Start Free Trial</Link>
             </Button>
@@ -26,7 +26,7 @@ export function CTASection() {
               asChild
               variant="outline"
               size="lg"
-              className="text-lg border-primary-foreground text-primary-foreground hover:bg-primary-foreground/10"
+              className="text-lg bg-transparent border-white text-white hover:bg-white/20"
             >
               <Link href="/help">Learn More</Link>
             </Button>
