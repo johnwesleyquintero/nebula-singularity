@@ -1,14 +1,8 @@
 "use client"
 
 import { useState } from "react"
-import type { Metadata } from "next"
 import { ToolsGrid } from "@/components/tools/tools-grid"
 import { ToolsSearch } from "@/components/tools/tools-search"
-
-export const metadata: Metadata = {
-  title: "Seller Tools | SellSmart-Pro",
-  description: "Interactive tools to help Amazon sellers optimize their business",
-}
 
 export default function ToolsPage() {
   const [searchQuery, setSearchQuery] = useState("")

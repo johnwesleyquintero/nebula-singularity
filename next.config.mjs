@@ -32,8 +32,8 @@ const nextConfig = {
     optimizeCss: true,
     optimizePackageImports: ['@radix-ui/react-*', 'lucide-react'],
     turbo: {
-      loaders: {
-        '.svg': ['@svgr/webpack'],
+      rules: {
+        '*.svg': ['@svgr/webpack'],
       },
     },
   },
