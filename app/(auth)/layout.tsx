@@ -14,9 +14,9 @@ export default function AuthLayout({
         <div className="container flex h-14 items-center justify-between">
           <Link href="/" className="flex items-center space-x-2">
             <div className="relative h-8 w-8">
-              <Image src="/logo.svg" alt="Nebula-Suite Logo" fill priority className="rounded-md object-contain" />
+              <Image src="/logo.svg" alt="SellSmart-Pro Logo" fill priority className="rounded-md object-contain" />
             </div>
-            <span className="font-bold">Nebula-Suite</span>
+            <span className="font-bold">SellSmart-Pro</span>
           </Link>
           <ModeToggle />
         </div>
@@ -25,7 +25,7 @@ export default function AuthLayout({
       <footer className="border-t py-6 md:py-0">
         <div className="container flex flex-col items-center justify-between gap-4 md:h-14 md:flex-row">
           <p className="text-center text-sm leading-loose text-muted-foreground md:text-left">
-            &copy; {new Date().getFullYear()} Nebula-Suite. All rights reserved.
+            &copy; {new Date().getFullYear()} SellSmart-Pro. All rights reserved.
           </p>
         </div>
       </footer>

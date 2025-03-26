@@ -9,7 +9,7 @@ import "./globals.css"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Nebula-Suite | Analytics for Amazon Sellers",
+  title: "SellSmart-Pro | Analytics for Amazon Sellers",
   description: "Comprehensive analytics and management tool for Amazon seller businesses",
     generator: 'v0.dev'
 }

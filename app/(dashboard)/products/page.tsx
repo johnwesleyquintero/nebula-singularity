@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 import { ProductsTable } from "@/components/products/products-table"
 
 export const metadata: Metadata = {
-  title: "Products | Nebula-Suite",
+  title: "Products | SellSmart-Pro",
   description: "Product management and insights for Amazon sellers",
 }
 

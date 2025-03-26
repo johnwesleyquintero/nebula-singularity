@@ -31,7 +31,7 @@ export default function HelpPage() {
             <div className="space-y-2">
               <div>
                 <h3 className="font-medium">Email Support</h3>
-                <p className="text-muted-foreground text-sm">support@nebula-suite.com</p>
+                <p className="text-muted-foreground text-sm">support@sellsmart-pro.com</p>
               </div>
               <div>
                 <h3 className="font-medium">Live Chat</h3>

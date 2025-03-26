@@ -6,7 +6,7 @@ import { NotificationsForm } from "@/components/settings/notifications-form"
 import { ApiKeysForm } from "@/components/settings/api-keys-form"
 
 export const metadata: Metadata = {
-  title: "Settings | Nebula-Suite",
+  title: "Settings | SellSmart-Pro",
   description: "User and account management for Amazon sellers",
 }
 

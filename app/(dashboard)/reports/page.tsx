@@ -5,7 +5,7 @@ import { ReportsList } from "@/components/reports/reports-list"
 import { ReportGenerator } from "@/components/reports/report-generator"
 
 export const metadata: Metadata = {
-  title: "Reports | Nebula-Suite",
+  title: "Reports | SellSmart-Pro",
   description: "Data export and custom reporting for Amazon sellers",
 }
 
