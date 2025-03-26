@@ -32,7 +32,7 @@
 </div>
 
 <div style="background: linear-gradient(135deg, rgba(5, 150, 105, 0.05) 0%, rgba(6, 182, 212, 0.05) 100%); padding: 2rem; border-radius: 16px; margin: 3rem 0; border: 1px solid rgba(5, 150, 105, 0.1); box-shadow: 0 1px 3px rgba(5, 150, 105, 0.04);">
-<h2 style="color: #059669; margin-bottom: 1rem;">Project Overview</h2>
+<h2 style="color: #059669; margin-bottom: 1rem;">▲ Project Overview</h2>
 
 SellSmart-Pro is an innovative Amazon Seller Analytics Platform designed to empower sellers with real-time insights into their sales performance. With a focus on user-centric design and cutting-edge technology, SellSmart-Pro provides a comprehensive suite of features to help sellers make informed decisions and optimize their marketing strategies.
 
