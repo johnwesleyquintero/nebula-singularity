@@ -1,80 +1,33 @@
 "use client"
 
-import { useState } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
-import { Loader2 } from "lucide-react"
-import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import { toast } from "sonner"
-import { useSession } from "next-auth/react"
-import { supabase } from "@/lib/supabase"
+import { LoadingButton } from "@/components/ui/loading-button"
+import { useFormSubmit } from "@/hooks/use-form-submit"
+import { useSupabase } from "@/hooks/use-supabase"
 
-const profileFormSchema = z.object({
-  name: z
-    .string()
-    .min(2, {
-      message: "Name must be at least 2 characters.",
-    })
-    .max(30, {
-      message: "Name must not be longer than 30 characters.",
-    }),
-  email: z.string().min(1, { message: "This field is required." }).email("This is not a valid email."),
-  bio: z.string().max(160).optional(),
-  company: z.string().max(50).optional(),
-})
-
-type ProfileFormValues = z.infer<typeof profileFormSchema>
-
-const defaultValues: Partial<ProfileFormValues> = {
-  name: "John Doe",
-  email: "john.doe@example.com",
-  bio: "Amazon seller specializing in home goods and kitchen products.",
-  company: "Home Essentials LLC",
-}
+import { profileFormSchema, type ProfileFormValues, profileFormDefaults } from "@/config/forms"
 
 export function ProfileForm() {
-  const [isLoading, setIsLoading] = useState(false)
-  const { data: session } = useSession()
+  const { isLoading, handleSubmit } = useFormSubmit({
+    successMessage: "Profile updated successfully!",
+    errorMessage: "Failed to update profile"
+  })
+  const { updateRecord } = useSupabase({ tableName: "users" })
 
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileFormSchema),
-    defaultValues,
+    defaultValues: profileFormDefaults,
     mode: "onChange",
   })
 
-  async function onSubmit(data: ProfileFormValues) {
-    setIsLoading(true)
-
-    try {
-      const { error } = await supabase
-        .from("users")
-        .update({
-          name: data.name,
-          email: data.email,
-          bio: data.bio,
-          company: data.company,
-          updated_at: new Date().toISOString(),
-        })
-        .eq("id", session?.user?.id)
-
-      if (error) {
-        toast.error(error.message)
-        setIsLoading(false)
-        return
-      }
-
-      toast.success("Profile updated successfully!")
-      setIsLoading(false)
-    } catch (error) {
-      console.error(error)
-      toast.error("Failed to update profile")
-      setIsLoading(false)
-    }
-  }
+  const onSubmit = handleSubmit(async (data: ProfileFormValues) => {
+    await updateRecord(data)
+  })
 
   return (
     <Form {...form}>
@@ -135,16 +88,9 @@ export function ProfileForm() {
             </FormItem>
           )}
         />
-        <Button type="submit" disabled={isLoading}>
-          {isLoading ? (
-            <>
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              Updating...
-            </>
-          ) : (
-            "Update profile"
-          )}
-        </Button>
+        <LoadingButton type="submit" isLoading={isLoading}>
+          Update profile
+        </LoadingButton>
       </form>
     </Form>
   )

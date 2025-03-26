@@ -46,7 +46,7 @@
     "class-variance-authority": "0.7.1",
     "clsx": "2.1.1",
     "cmdk": "1.1.1",
-    "critters": "^0.0.25",
+    "critters": "0.0.25",
     "date-fns": "4.1.0",
     "embla-carousel-react": "8.5.2",
     "input-otp": "1.4.1",
@@ -62,7 +62,7 @@
     "react-hook-form": "7.54.2",
     "react-resizable-panels": "2.1.7",
     "recharts": "2.15.1",
-    "sharp": "^0.33.5",
+    "sharp": "0.33.5",
     "sonner": "1.4.0",
     "tailwind-merge": "2.2.1",
     "vaul": "1.1.2",
@@ -71,8 +71,8 @@
   "pnpm": {
     "overrides": {
       "sonner": "1.4.0",
-      "react": "19.0.0",
-      "react-dom": "19.0.0",
+      "react": "18.2.0",
+      "react-dom": "18.2.0",
       "@auth/core": "0.38.0",
       "vaul": "1.1.2",
       "next-auth": "4.24.11",
@@ -85,11 +85,11 @@
   },
   "devDependencies": {
     "@tailwindcss/nesting": "0.0.0-insiders.565cd3e",
-    "@tailwindcss/postcss": "^4.0.16",
+    "@tailwindcss/postcss": "4.0.16",
     "autoprefixer": "10.4.17",
-    "postcss": "^8.4.31",
-    "postcss-import": "^16.1.0",
+    "postcss": "8.4.31",
+    "postcss-import": "16.1.0",
     "tailwindcss": "3.4.1",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "1.0.7"
   }
 }
