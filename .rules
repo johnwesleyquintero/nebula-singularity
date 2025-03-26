@@ -1,0 +1,45 @@
+# Design Guidelines
+
+## Core Principles
+- **Consistency**: Maintain a consistent visual style throughout the application
+- **Readability**: Ensure that the codebase is easy to read and understand
+- **Modularity**: Break down complex components into smaller, reusable parts
+
+## Design Requirements
+### Visual Design
+- Create visually stunning and unique interfaces
+- Implement modern design principles
+- Add thoughtful animations
+- Design intuitive user experiences
+- Ensure responsive layouts
+
+### Technical Stack
+- Use built-in tools:
+    - Next.js
+    - JSX syntax
+    - Tailwind CSS classes
+    - React hooks
+    - Lucide React icons
+    - Only add external packages when essential
+
+### Assets & Resources
+#### Icons
+- Use Lucide React icons for:
+  - Logos
+  - UI elements
+- Maintain visual consistency
+
+#### Images
+- Source: Unsplash (verified URLs only)
+- Implementation:
+  - Use proper image tags
+  - Include loading states
+  - Add fallbacks
+  - Optimize for web performance
+
+### Quality Standards
+- Production-ready features
+- Proper error handling
+- Accessibility compliance
+- Performance optimization
+- Cross-browser compatibility
