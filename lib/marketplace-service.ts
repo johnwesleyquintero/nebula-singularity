@@ -1,7 +1,7 @@
-import { BSR_TIERS, CATEGORY_MULTIPLIERS } from '@/config/marketplace'
-import { cacheService } from './cache-service'
 import { marketplaceAPI } from './marketplace-api'
 import { validationService } from './validation-service'
+import { cacheService } from './cache-service'
+import { CATEGORY_MULTIPLIERS, BSR_TIERS } from '@/config/marketplace'
 
 class MarketplaceService {
   private static instance: MarketplaceService
