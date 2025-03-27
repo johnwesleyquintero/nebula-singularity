@@ -11,6 +11,8 @@ import { Textarea } from "@/components/ui/textarea"
 import { Loader2 } from "lucide-react"
 import { useState } from "react"
 
+import { CSVUpload } from "./csv-upload"
+
 const calculateRelevance = (keyword: string, productName: string, description: string) => {
   const keywordWords = keyword.split(/\s+/)
   const nameWords = productName.toLowerCase().split(/\s+/)
@@ -52,6 +54,7 @@ export function KeywordAnalyzer() {
   const [seedKeywords, setSeedKeywords] = useState("")
   const [analyzedKeywords, setAnalyzedKeywords] = useState<KeywordData[]>([])
   const [activeTab, setActiveTab] = useState("seed")
+  const [csvData, setCsvData] = useState<string[][]>([])  // Add state for CSV data
 
   const processKeywords = (keywords: string) => {
     const keywordList = keywords.split(/[,;\n]+/).map(k => k.trim()).filter(Boolean)
@@ -226,16 +229,6 @@ export function KeywordAnalyzer() {
               />
             </div>
           </div>
-          </TabsContent>
-          <TabsContent value="csv" className="space-y-4">
-            <CSVUpload
-              onDataProcessed={(data) => {
-                setCsvData(data)
-                const keywords = data.slice(1).map(row => row[0]).filter(Boolean)
-                setSeedKeywords(keywords.join('\n'))
-              }}
-            />
-          </TabsContent>
           <Button onClick={analyzeKeywords} disabled={isAnalyzing || !productName.trim() || !productDescription.trim()}>
             {isAnalyzing ? (
               <>
@@ -244,6 +237,25 @@ export function KeywordAnalyzer() {
               </>
             ) : (
               "Generate & Analyze Keywords"
+            )}
+          </Button>
+        </TabsContent>
+        <TabsContent value="csv" className="space-y-4">
+          <CSVUpload
+            onDataProcessed={(data) => {
+              setCsvData(data);
+              const keywords = data.slice(1).map(row => row[0]).filter(Boolean);
+              setSeedKeywords(keywords.join('\n'));
+            }}
+          />
+          <Button onClick={analyzeKeywords} disabled={isAnalyzing}>
+            {isAnalyzing ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Analyzing...
+              </>
+            ) : (
+              "Analyze Keywords"
             )}
           </Button>
         </TabsContent>
