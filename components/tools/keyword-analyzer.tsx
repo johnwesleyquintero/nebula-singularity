@@ -1,15 +1,15 @@
 "use client"
 
-import { useState } from "react"
+import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Textarea } from "@/components/ui/textarea"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Badge } from "@/components/ui/badge"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Textarea } from "@/components/ui/textarea"
 import { Loader2 } from "lucide-react"
+import { useState } from "react"
 
 type KeywordData = {
   keyword: string
@@ -111,9 +111,10 @@ export function KeywordAnalyzer() {
   return (
     <div className="space-y-6">
       <Tabs defaultValue="seed" onValueChange={setActiveTab}>
-        <TabsList>
+        <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="seed">Seed Keywords</TabsTrigger>
           <TabsTrigger value="product">Product Analysis</TabsTrigger>
+          <TabsTrigger value="csv">Import CSV</TabsTrigger>
         </TabsList>
         <TabsContent value="seed" className="space-y-4">
           <div className="space-y-2">
@@ -162,6 +163,16 @@ export function KeywordAnalyzer() {
               />
             </div>
           </div>
+          </TabsContent>
+          <TabsContent value="csv" className="space-y-4">
+            <CSVUpload
+              onDataProcessed={(data) => {
+                setCsvData(data)
+                const keywords = data.slice(1).map(row => row[0]).filter(Boolean)
+                setSeedKeywords(keywords.join('\n'))
+              }}
+            />
+          </TabsContent>
           <Button onClick={analyzeKeywords} disabled={isAnalyzing || !productName.trim() || !productDescription.trim()}>
             {isAnalyzing ? (
               <>
