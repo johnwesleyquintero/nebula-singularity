@@ -89,3 +89,51 @@ const tools = [
   },
 ]
 
+export function ToolsGrid({ searchQuery, selectedCategory }: ToolsGridProps) {
+  const [selectedTool, setSelectedTool] = useState<string | null>(null)
+
+  const filteredTools = tools.filter((tool) => {
+    const matchesSearch = tool.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      tool.description.toLowerCase().includes(searchQuery.toLowerCase())
+    const matchesCategory = selectedCategory === "all" || tool.category === selectedCategory
+    return matchesSearch && matchesCategory
+  })
+
+  const selectedToolData = tools.find((tool) => tool.id === selectedTool)
+
+  return (
+    <>
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        {filteredTools.map((tool) => (
+          <Card key={tool.id} className="flex flex-col">
+            <CardHeader>
+              <div className="flex items-center gap-2">
+                <tool.icon className="h-5 w-5" />
+                <CardTitle>{tool.title}</CardTitle>
+              </div>
+              <CardDescription>{tool.description}</CardDescription>
+            </CardHeader>
+            <CardFooter className="mt-auto">
+              <Button onClick={() => setSelectedTool(tool.id)} className="w-full">
+                Open Tool
+              </Button>
+            </CardFooter>
+          </Card>
+        ))}
+      </div>
+
+      <Dialog open={!!selectedTool} onOpenChange={() => setSelectedTool(null)}>
+        <DialogContent className="max-w-4xl">
+          <DialogHeader>
+            <DialogTitle>{selectedToolData?.title}</DialogTitle>
+            <DialogDescription>{selectedToolData?.description}</DialogDescription>
+          </DialogHeader>
+          <ScrollArea className="max-h-[80vh]">
+            {selectedToolData?.component && <selectedToolData.component />}
+          </ScrollArea>
+        </DialogContent>
+      </Dialog>
+    </>
+  )
+}
+
