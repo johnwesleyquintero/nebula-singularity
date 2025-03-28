@@ -1,13 +1,19 @@
-import type { Metadata } from "next"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { ReportsList } from "@/components/reports/reports-list"
-import { ReportGenerator } from "@/components/reports/report-generator"
+import type { Metadata } from "next";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ReportsList } from "@/components/reports/reports-list";
+import { ReportGenerator } from "@/components/reports/report-generator";
 
 export const metadata: Metadata = {
   title: "Reports | SellSmart-Pro",
   description: "Data export and custom reporting for Amazon sellers",
-}
+};
 
 export default function ReportsPage() {
   return (
@@ -25,7 +31,9 @@ export default function ReportsPage() {
           <Card>
             <CardHeader>
               <CardTitle>Saved Reports</CardTitle>
-              <CardDescription>Access and download your previously generated reports.</CardDescription>
+              <CardDescription>
+                Access and download your previously generated reports.
+              </CardDescription>
             </CardHeader>
             <CardContent>
               <ReportsList />
@@ -36,7 +44,9 @@ export default function ReportsPage() {
           <Card>
             <CardHeader>
               <CardTitle>Generate Custom Report</CardTitle>
-              <CardDescription>Create a custom report by selecting metrics and date ranges.</CardDescription>
+              <CardDescription>
+                Create a custom report by selecting metrics and date ranges.
+              </CardDescription>
             </CardHeader>
             <CardContent>
               <ReportGenerator />
@@ -47,7 +57,9 @@ export default function ReportsPage() {
           <Card>
             <CardHeader>
               <CardTitle>Scheduled Reports</CardTitle>
-              <CardDescription>Manage your scheduled reports and delivery settings.</CardDescription>
+              <CardDescription>
+                Manage your scheduled reports and delivery settings.
+              </CardDescription>
             </CardHeader>
             <CardContent>
               <p>Scheduled reports feature coming soon.</p>
@@ -56,6 +68,5 @@ export default function ReportsPage() {
         </TabsContent>
       </Tabs>
     </div>
-  )
+  );
 }
-

@@ -1,26 +1,29 @@
-import { Avatar } from "@/components/ui/avatar"
-import { Card } from "@/components/ui/card"
+import { Avatar } from "@/components/ui/avatar";
+import { Card } from "@/components/ui/card";
 
 const testimonials = [
   {
     name: "Sarah Johnson",
     role: "E-commerce Entrepreneur",
-    content: "SellSmart Pro transformed our Amazon business. The PPC optimization alone increased our ROI by 40% while reducing ACoS. The analytics dashboard gives us insights we never had before.",
-    image: "/testimonials/sarah.svg"
+    content:
+      "SellSmart Pro transformed our Amazon business. The PPC optimization alone increased our ROI by 40% while reducing ACoS. The analytics dashboard gives us insights we never had before.",
+    image: "/testimonials/sarah.svg",
   },
   {
     name: "Michael Chen",
     role: "Amazon FBA Seller",
-    content: "The keyword research and competitor analysis tools are game-changers. We've seen a 25% increase in organic rankings and our conversion rates have never been better.",
-    image: "/testimonials/michael.svg"
+    content:
+      "The keyword research and competitor analysis tools are game-changers. We've seen a 25% increase in organic rankings and our conversion rates have never been better.",
+    image: "/testimonials/michael.svg",
   },
   {
     name: "Emma Davis",
     role: "Digital Marketing Manager",
-    content: "The automation features save us countless hours every week. From inventory management to price optimization, SellSmart Pro has streamlined our entire operation.",
-    image: "/testimonials/emma.svg"
-  }
-]
+    content:
+      "The automation features save us countless hours every week. From inventory management to price optimization, SellSmart Pro has streamlined our entire operation.",
+    image: "/testimonials/emma.svg",
+  },
+];
 
 export function TestimonialsSection() {
   return (
@@ -47,7 +50,9 @@ export function TestimonialsSection() {
                 </Avatar>
                 <div>
                   <h3 className="font-semibold">{testimonial.name}</h3>
-                  <p className="text-sm text-muted-foreground">{testimonial.role}</p>
+                  <p className="text-sm text-muted-foreground">
+                    {testimonial.role}
+                  </p>
                 </div>
               </div>
               <blockquote className="mt-4">
@@ -58,5 +63,5 @@ export function TestimonialsSection() {
         </div>
       </div>
     </section>
-  )
+  );
 }

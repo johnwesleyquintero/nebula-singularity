@@ -1,6 +1,6 @@
 export interface Marketplace {
-  id: string
-  name: string
+  id: string;
+  name: string;
 }
 
 export const marketplaces: Marketplace[] = [
@@ -9,5 +9,5 @@ export const marketplaces: Marketplace[] = [
   { id: "uk", name: "United Kingdom (UK)" },
   { id: "de", name: "Germany (DE)" },
   { id: "fr", name: "France (FR)" },
-  { id: "it", name: "Italy (IT)" }
-]
+  { id: "it", name: "Italy (IT)" },
+];

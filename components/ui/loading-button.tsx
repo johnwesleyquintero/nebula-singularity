@@ -1,18 +1,17 @@
-import { Button } from "@/components/ui/button"
-import { Loader2 } from "lucide-react"
-import { ButtonProps } from "@radix-ui/react-button"
+import { Button, ButtonProps } from "@/components/ui/button";
+import { Loader2 } from "lucide-react";
 
 interface LoadingButtonProps extends ButtonProps {
-  isLoading: boolean
-  children: React.ReactNode
-  loadingText?: string
+  isLoading: boolean;
+  children: React.ReactNode;
+  loadingText?: string;
 }
 
-export function LoadingButton({ 
-  isLoading, 
-  children, 
+export function LoadingButton({
+  isLoading,
+  children,
   loadingText = "Updating...",
-  ...props 
+  ...props
 }: LoadingButtonProps) {
   return (
     <Button disabled={isLoading} {...props}>
@@ -25,5 +24,5 @@ export function LoadingButton({
         children
       )}
     </Button>
-  )
+  );
 }

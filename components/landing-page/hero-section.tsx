@@ -1,5 +1,5 @@
-import { Button } from "@/components/ui/button"
-import Link from "next/link"
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export function HeroSection() {
   return (
@@ -12,8 +12,8 @@ export function HeroSection() {
               <span className="text-primary"> SellSmart Pro</span>
             </h1>
             <p className="mx-auto max-w-[700px] text-muted-foreground md:text-xl">
-              Powerful analytics, automated PPC optimization, and intelligent tools to boost your
-              Amazon sales and profitability.
+              Powerful analytics, automated PPC optimization, and intelligent
+              tools to boost your Amazon sales and profitability.
             </p>
           </div>
           <div className="flex flex-col sm:flex-row gap-4">
@@ -36,5 +36,5 @@ export function HeroSection() {
         </div>
       </div>
     </section>
-  )
+  );
 }

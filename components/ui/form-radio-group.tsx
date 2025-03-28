@@ -1,20 +1,33 @@
-import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import {
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 export interface RadioOption {
-  value: string
-  label: string
+  value: string;
+  label: string;
 }
 
 interface FormRadioGroupProps {
-  control: any
-  name: string
-  label: string
-  description?: string
-  options: RadioOption[]
+  control: any;
+  name: string;
+  label: string;
+  description?: string;
+  options: RadioOption[];
 }
 
-export function FormRadioGroup({ control, name, label, description, options }: FormRadioGroupProps) {
+export function FormRadioGroup({
+  control,
+  name,
+  label,
+  description,
+  options,
+}: FormRadioGroupProps) {
   return (
     <FormField
       control={control}
@@ -29,7 +42,10 @@ export function FormRadioGroup({ control, name, label, description, options }: F
               className="flex flex-col space-y-1"
             >
               {options.map((option) => (
-                <FormItem key={option.value} className="flex items-center space-x-3 space-y-0">
+                <FormItem
+                  key={option.value}
+                  className="flex items-center space-x-3 space-y-0"
+                >
                   <FormControl>
                     <RadioGroupItem value={option.value} />
                   </FormControl>
@@ -43,5 +59,5 @@ export function FormRadioGroup({ control, name, label, description, options }: F
         </FormItem>
       )}
     />
-  )
+  );
 }

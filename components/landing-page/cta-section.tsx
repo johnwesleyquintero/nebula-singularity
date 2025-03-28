@@ -1,5 +1,5 @@
-import { Button } from "@/components/ui/button"
-import Link from "next/link"
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export function CTASection() {
   return (
@@ -11,7 +11,8 @@ export function CTASection() {
               Ready to Grow Your Amazon Business?
             </h2>
             <p className="mx-auto max-w-[700px] text-primary-foreground/90 md:text-xl">
-              Join thousands of successful sellers who trust SellSmart Pro. Start your 14-day free trial today.
+              Join thousands of successful sellers who trust SellSmart Pro.
+              Start your 14-day free trial today.
             </p>
           </div>
           <div className="flex flex-col sm:flex-row gap-4">
@@ -34,5 +35,5 @@ export function CTASection() {
         </div>
       </div>
     </section>
-  )
+  );
 }

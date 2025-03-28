@@ -1,17 +1,26 @@
-import type { Metadata } from "next"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import dynamic from 'next/dynamic'
-import { Suspense } from 'react'
+import SalesMetricsClient from "@/components/dashboard/sales-metrics-client";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { type Metadata } from "next";
+import dynamic from "next/dynamic";
 
-const Overview = dynamic(() => import('@/components/dashboard/overview'))
-const RecentSales = dynamic(() => import('@/components/dashboard/recent-sales'))
-import SalesMetricsClient from '@/components/dashboard/sales-metrics-client'
+const Overview = dynamic(() =>
+  import("@/components/dashboard/overview").then((mod) => mod.Overview),
+);
+const RecentSales = dynamic(() =>
+  import("@/components/dashboard/recent-sales").then((mod) => mod.RecentSales),
+);
 
 export const metadata: Metadata = {
   title: "Dashboard | SellSmart-Pro",
   description: "Analytics dashboard for Amazon sellers",
-}
+};
 
 export default function DashboardPage() {
   return (
@@ -29,7 +38,9 @@ export default function DashboardPage() {
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
+                <CardTitle className="text-sm font-medium">
+                  Total Revenue
+                </CardTitle>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
@@ -45,7 +56,9 @@ export default function DashboardPage() {
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">$45,231.89</div>
-                <p className="text-xs text-muted-foreground">+20.1% from last month</p>
+                <p className="text-xs text-muted-foreground">
+                  +20.1% from last month
+                </p>
               </CardContent>
             </Card>
             <Card>
@@ -67,7 +80,9 @@ export default function DashboardPage() {
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">+2,350</div>
-                <p className="text-xs text-muted-foreground">+10.1% from last month</p>
+                <p className="text-xs text-muted-foreground">
+                  +10.1% from last month
+                </p>
               </CardContent>
             </Card>
             <Card>
@@ -88,12 +103,16 @@ export default function DashboardPage() {
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">18.2%</div>
-                <p className="text-xs text-muted-foreground">-2.5% from last month</p>
+                <p className="text-xs text-muted-foreground">
+                  -2.5% from last month
+                </p>
               </CardContent>
             </Card>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Conversion Rate</CardTitle>
+                <CardTitle className="text-sm font-medium">
+                  Conversion Rate
+                </CardTitle>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
@@ -111,7 +130,9 @@ export default function DashboardPage() {
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">12.5%</div>
-                <p className="text-xs text-muted-foreground">+1.2% from last month</p>
+                <p className="text-xs text-muted-foreground">
+                  +1.2% from last month
+                </p>
               </CardContent>
             </Card>
           </div>
@@ -127,7 +148,9 @@ export default function DashboardPage() {
             <Card className="col-span-3">
               <CardHeader>
                 <CardTitle>Recent Sales</CardTitle>
-                <CardDescription>You made 265 sales this month.</CardDescription>
+                <CardDescription>
+                  You made 265 sales this month.
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 <RecentSales />
@@ -139,7 +162,9 @@ export default function DashboardPage() {
           <Card className="col-span-4">
             <CardHeader>
               <CardTitle>Sales Metrics</CardTitle>
-              <CardDescription>Detailed breakdown of your sales performance.</CardDescription>
+              <CardDescription>
+                Detailed breakdown of your sales performance.
+              </CardDescription>
             </CardHeader>
             <CardContent className="pl-2">
               <SalesMetricsClient />
@@ -150,7 +175,9 @@ export default function DashboardPage() {
           <Card>
             <CardHeader>
               <CardTitle>Reports</CardTitle>
-              <CardDescription>View and export your custom reports.</CardDescription>
+              <CardDescription>
+                View and export your custom reports.
+              </CardDescription>
             </CardHeader>
             <CardContent>
               <p>Report content will be displayed here.</p>
@@ -159,6 +186,5 @@ export default function DashboardPage() {
         </TabsContent>
       </Tabs>
     </div>
-  )
+  );
 }
-

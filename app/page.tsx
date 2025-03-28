@@ -1,11 +1,11 @@
-import { Header } from "@/components/ui/header"
-import { HeroSection } from "@/components/landing-page/hero-section"
-import { FeaturesSection } from "@/components/landing-page/features-section"
-import { PricingSection } from "@/components/landing-page/pricing-section"
-import { TestimonialsSection } from "@/components/landing-page/testimonials-section"
-import { FAQSection } from "@/components/landing-page/faq-section"
-import { CTASection } from "@/components/landing-page/cta-section"
-import { Footer } from "@/components/landing-page/footer"
+import { Header } from "@/components/ui/header";
+import { HeroSection } from "@/components/landing-page/hero-section";
+import { FeaturesSection } from "@/components/landing-page/features-section";
+import { PricingSection } from "@/components/landing-page/pricing-section";
+import { TestimonialsSection } from "@/components/landing-page/testimonials-section";
+import { FAQSection } from "@/components/landing-page/faq-section";
+import { CTASection } from "@/components/landing-page/cta-section";
+import { Footer } from "@/components/landing-page/footer";
 
 export default function LandingPage() {
   return (
@@ -21,7 +21,5 @@ export default function LandingPage() {
       </main>
       <Footer />
     </div>
-  )
+  );
 }
-
-

@@ -3,9 +3,11 @@
 export const ENV_CONFIG = {
   // Marketplace API configuration
   MARKETPLACE_API: {
-    BASE_URL: process.env.NEXT_PUBLIC_MARKETPLACE_API_URL || 'https://api.marketplace.com',
+    BASE_URL:
+      process.env.NEXT_PUBLIC_MARKETPLACE_API_URL ||
+      "https://api.marketplace.com",
     API_KEY: process.env.MARKETPLACE_API_KEY,
-    API_VERSION: 'v1',
+    API_VERSION: "v1",
     TIMEOUT: 10000, // 10 seconds
   },
 
@@ -13,7 +15,7 @@ export const ENV_CONFIG = {
   AUTH: {
     TOKEN_EXPIRY: 3600, // 1 hour in seconds
     REFRESH_TOKEN_EXPIRY: 2592000, // 30 days in seconds
-    SESSION_COOKIE_NAME: 'sellsmart_session',
+    SESSION_COOKIE_NAME: "sellsmart_session",
   },
 
   // Database configuration
@@ -32,7 +34,7 @@ export const ENV_CONFIG = {
   // Analytics settings
   ANALYTICS: {
     TRACKING_ID: process.env.ANALYTICS_TRACKING_ID,
-    ENABLE_TRACKING: process.env.NODE_ENV === 'production',
+    ENABLE_TRACKING: process.env.NODE_ENV === "production",
   },
 
   // Feature flags
@@ -45,15 +47,15 @@ export const ENV_CONFIG = {
 
   // Service endpoints
   ENDPOINTS: {
-    SALES_TRACKING: '/api/sales',
-    INVENTORY_MANAGEMENT: '/api/inventory',
-    PRICING_OPTIMIZATION: '/api/pricing',
-    COMPETITOR_ANALYSIS: '/api/competitors',
+    SALES_TRACKING: "/api/sales",
+    INVENTORY_MANAGEMENT: "/api/inventory",
+    PRICING_OPTIMIZATION: "/api/pricing",
+    COMPETITOR_ANALYSIS: "/api/competitors",
   },
 
   // Monitoring and logging
   MONITORING: {
-    LOG_LEVEL: process.env.NODE_ENV === 'production' ? 'error' : 'debug',
+    LOG_LEVEL: process.env.NODE_ENV === "production" ? "error" : "debug",
     ENABLE_PERFORMANCE_MONITORING: true,
     ERROR_REPORTING_SERVICE: process.env.ERROR_REPORTING_URL,
   },
@@ -64,4 +66,4 @@ export const ENV_CONFIG = {
     MAX_REQUESTS_PER_HOUR: 1000,
     ENABLE_RATE_LIMITING: true,
   },
-}
+};

@@ -1,68 +1,81 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Progress } from "@/components/ui/progress"
-import { Loader2, TrendingUp, TrendingDown, Info } from "lucide-react"
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Progress } from "@/components/ui/progress";
+import { Loader2, TrendingUp, TrendingDown, Info } from "lucide-react";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 type CampaignData = {
-  name: string
-  type: string
-  budget: number
-  spend: number
-  sales: number
-  acos: number
-  impressions: number
-  clicks: number
-  ctr: number
-  cpc: number
-  orders: number
-  conversionRate: number
-}
+  name: string;
+  type: string;
+  budget: number;
+  spend: number;
+  sales: number;
+  acos: number;
+  impressions: number;
+  clicks: number;
+  ctr: number;
+  cpc: number;
+  orders: number;
+  conversionRate: number;
+};
 
 type KeywordData = {
-  keyword: string
-  matchType: string
-  impressions: number
-  clicks: number
-  ctr: number
-  spend: number
-  sales: number
-  acos: number
-  orders: number
-  conversionRate: number
-  status: "high-performing" | "average" | "underperforming" | "new"
-}
+  keyword: string;
+  matchType: string;
+  impressions: number;
+  clicks: number;
+  ctr: number;
+  spend: number;
+  sales: number;
+  acos: number;
+  orders: number;
+  conversionRate: number;
+  status: "high-performing" | "average" | "underperforming" | "new";
+};
 
 type AuditResult = {
-  campaignScore: number
+  campaignScore: number;
   campaignFeedback: {
-    strengths: string[]
-    weaknesses: string[]
-    recommendations: string[]
-  }
+    strengths: string[];
+    weaknesses: string[];
+    recommendations: string[];
+  };
   keywordAnalysis: {
-    highPerforming: KeywordData[]
-    underperforming: KeywordData[]
-    negative: string[]
-  }
-}
+    highPerforming: KeywordData[];
+    underperforming: KeywordData[];
+    negative: string[];
+  };
+};
 
 export function PPCCampaignAuditor() {
-  const [isLoading, setIsLoading] = useState(false)
-  const [campaignData, setCampaignData] = useState<string>("")
-  const [keywordData, setKeywordData] = useState<string>("")
-  const [negativeKeywords, setNegativeKeywords] = useState<string>("")
-  const [auditResult, setAuditResult] = useState<AuditResult | null>(null)
+  const [isLoading, setIsLoading] = useState(false);
+  const [campaignData, setCampaignData] = useState<string>("");
+  const [keywordData, setKeywordData] = useState<string>("");
+  const [negativeKeywords, setNegativeKeywords] = useState<string>("");
+  const [auditResult, setAuditResult] = useState<AuditResult | null>(null);
 
   const analyzeCampaign = () => {
-    setIsLoading(true)
+    setIsLoading(true);
 
     // Simulate API call with timeout
     setTimeout(() => {
@@ -81,7 +94,7 @@ export function PPCCampaignAuditor() {
         cpc: 0.15,
         orders: 7,
         conversionRate: 5.6,
-      }
+      };
 
       // Generate mock keywords
       const mockKeywords: KeywordData[] = [
@@ -150,7 +163,7 @@ export function PPCCampaignAuditor() {
           conversionRate: 0,
           status: "underperforming",
         },
-      ]
+      ];
 
       // Parse negative keywords
       const mockNegativeKeywords = negativeKeywords
@@ -158,149 +171,211 @@ export function PPCCampaignAuditor() {
             .split(/[\n,]+/)
             .map((k) => k.trim())
             .filter(Boolean)
-        : ["cheap", "free", "used"]
+        : ["cheap", "free", "used"];
 
       // Generate audit result
-      const campaignScore = calculateCampaignScore(mockCampaign, mockKeywords, mockNegativeKeywords)
+      const campaignScore = calculateCampaignScore(
+        mockCampaign,
+        mockKeywords,
+        mockNegativeKeywords,
+      );
 
       const auditResult: AuditResult = {
         campaignScore,
-        campaignFeedback: generateFeedback(mockCampaign, mockKeywords, mockNegativeKeywords),
+        campaignFeedback: generateFeedback(
+          mockCampaign,
+          mockKeywords,
+          mockNegativeKeywords,
+        ),
         keywordAnalysis: {
-          highPerforming: mockKeywords.filter((k) => k.status === "high-performing"),
-          underperforming: mockKeywords.filter((k) => k.status === "underperforming"),
+          highPerforming: mockKeywords.filter(
+            (k) => k.status === "high-performing",
+          ),
+          underperforming: mockKeywords.filter(
+            (k) => k.status === "underperforming",
+          ),
           negative: mockNegativeKeywords,
         },
-      }
+      };
 
-      setAuditResult(auditResult)
-      setIsLoading(false)
-    }, 2000)
-  }
+      setAuditResult(auditResult);
+      setIsLoading(false);
+    }, 2000);
+  };
 
   const calculateCampaignScore = (
     campaign: CampaignData,
     keywords: KeywordData[],
     negativeKeywords: string[],
   ): number => {
-    let score = 0
+    let score = 0;
 
     // Score based on ACOS
-    if (campaign.acos < 15) score += 25
-    else if (campaign.acos < 25) score += 20
-    else if (campaign.acos < 35) score += 15
-    else if (campaign.acos < 45) score += 10
-    else score += 5
+    if (campaign.acos < 15) score += 25;
+    else if (campaign.acos < 25) score += 20;
+    else if (campaign.acos < 35) score += 15;
+    else if (campaign.acos < 45) score += 10;
+    else score += 5;
 
     // Score based on CTR
-    if (campaign.ctr > 3) score += 15
-    else if (campaign.ctr > 2) score += 10
-    else if (campaign.ctr > 1) score += 5
+    if (campaign.ctr > 3) score += 15;
+    else if (campaign.ctr > 2) score += 10;
+    else if (campaign.ctr > 1) score += 5;
 
     // Score based on conversion rate
-    if (campaign.conversionRate > 6) score += 20
-    else if (campaign.conversionRate > 4) score += 15
-    else if (campaign.conversionRate > 2) score += 10
-    else score += 5
+    if (campaign.conversionRate > 6) score += 20;
+    else if (campaign.conversionRate > 4) score += 15;
+    else if (campaign.conversionRate > 2) score += 10;
+    else score += 5;
 
     // Score based on keyword performance distribution
-    const highPerformingPercentage = keywords.filter((k) => k.status === "high-performing").length / keywords.length
-    if (highPerformingPercentage > 0.5) score += 20
-    else if (highPerformingPercentage > 0.3) score += 15
-    else if (highPerformingPercentage > 0.1) score += 10
-    else score += 5
+    const highPerformingPercentage =
+      keywords.filter((k) => k.status === "high-performing").length /
+      keywords.length;
+    if (highPerformingPercentage > 0.5) score += 20;
+    else if (highPerformingPercentage > 0.3) score += 15;
+    else if (highPerformingPercentage > 0.1) score += 10;
+    else score += 5;
 
     // Score based on negative keywords
-    if (negativeKeywords.length > 10) score += 20
-    else if (negativeKeywords.length > 5) score += 15
-    else if (negativeKeywords.length > 0) score += 10
+    if (negativeKeywords.length > 10) score += 20;
+    else if (negativeKeywords.length > 5) score += 15;
+    else if (negativeKeywords.length > 0) score += 10;
 
-    return Math.min(score, 100)
-  }
+    return Math.min(score, 100);
+  };
 
-  const generateFeedback = (campaign: CampaignData, keywords: KeywordData[], negativeKeywords: string[]) => {
-    const strengths = []
-    const weaknesses = []
-    const recommendations = []
+  const generateFeedback = (
+    campaign: CampaignData,
+    keywords: KeywordData[],
+    negativeKeywords: string[],
+  ) => {
+    const strengths = [];
+    const weaknesses = [];
+    const recommendations = [];
 
     // ACOS analysis
     if (campaign.acos < 20) {
-      strengths.push(`Strong ACOS of ${campaign.acos.toFixed(2)}%, well below the typical target of 25-30%`)
+      strengths.push(
+        `Strong ACOS of ${campaign.acos.toFixed(2)}%, well below the typical target of 25-30%`,
+      );
     } else if (campaign.acos < 30) {
-      strengths.push(`Good ACOS of ${campaign.acos.toFixed(2)}%, within the typical target range`)
+      strengths.push(
+        `Good ACOS of ${campaign.acos.toFixed(2)}%, within the typical target range`,
+      );
     } else {
-      weaknesses.push(`High ACOS of ${campaign.acos.toFixed(2)}%, above the typical target of 25-30%`)
-      recommendations.push("Consider pausing or adjusting bids for keywords with high ACOS")
+      weaknesses.push(
+        `High ACOS of ${campaign.acos.toFixed(2)}%, above the typical target of 25-30%`,
+      );
+      recommendations.push(
+        "Consider pausing or adjusting bids for keywords with high ACOS",
+      );
     }
 
     // CTR analysis
     if (campaign.ctr > 3) {
-      strengths.push(`Excellent CTR of ${campaign.ctr.toFixed(2)}%, indicating strong ad relevance`)
+      strengths.push(
+        `Excellent CTR of ${campaign.ctr.toFixed(2)}%, indicating strong ad relevance`,
+      );
     } else if (campaign.ctr > 1.5) {
-      strengths.push(`Good CTR of ${campaign.ctr.toFixed(2)}%, above the Amazon average`)
+      strengths.push(
+        `Good CTR of ${campaign.ctr.toFixed(2)}%, above the Amazon average`,
+      );
     } else {
-      weaknesses.push(`Low CTR of ${campaign.ctr.toFixed(2)}%, indicating potential issues with ad relevance`)
-      recommendations.push("Improve ad copy and ensure keywords are relevant to your product")
+      weaknesses.push(
+        `Low CTR of ${campaign.ctr.toFixed(2)}%, indicating potential issues with ad relevance`,
+      );
+      recommendations.push(
+        "Improve ad copy and ensure keywords are relevant to your product",
+      );
     }
 
     // Conversion rate analysis
     if (campaign.conversionRate > 5) {
-      strengths.push(`Strong conversion rate of ${campaign.conversionRate.toFixed(2)}%`)
+      strengths.push(
+        `Strong conversion rate of ${campaign.conversionRate.toFixed(2)}%`,
+      );
     } else if (campaign.conversionRate > 3) {
-      strengths.push(`Good conversion rate of ${campaign.conversionRate.toFixed(2)}%`)
+      strengths.push(
+        `Good conversion rate of ${campaign.conversionRate.toFixed(2)}%`,
+      );
     } else {
-      weaknesses.push(`Low conversion rate of ${campaign.conversionRate.toFixed(2)}%`)
-      recommendations.push("Optimize your product listing to improve conversion rate")
+      weaknesses.push(
+        `Low conversion rate of ${campaign.conversionRate.toFixed(2)}%`,
+      );
+      recommendations.push(
+        "Optimize your product listing to improve conversion rate",
+      );
     }
 
     // Budget utilization
-    const budgetUtilization = (campaign.spend / campaign.budget) * 100
+    const budgetUtilization = (campaign.spend / campaign.budget) * 100;
     if (budgetUtilization > 95) {
       weaknesses.push(
         `Budget is fully utilized (${budgetUtilization.toFixed(0)}%), potentially limiting campaign reach`,
-      )
-      recommendations.push("Consider increasing your daily budget to capture more sales")
+      );
+      recommendations.push(
+        "Consider increasing your daily budget to capture more sales",
+      );
     } else if (budgetUtilization < 50) {
       weaknesses.push(
         `Low budget utilization (${budgetUtilization.toFixed(0)}%), indicating potential targeting issues`,
-      )
-      recommendations.push("Expand keyword targeting or increase bids to utilize budget more effectively")
+      );
+      recommendations.push(
+        "Expand keyword targeting or increase bids to utilize budget more effectively",
+      );
     } else {
-      strengths.push(`Good budget utilization (${budgetUtilization.toFixed(0)}%)`)
+      strengths.push(
+        `Good budget utilization (${budgetUtilization.toFixed(0)}%)`,
+      );
     }
 
     // Keyword performance
-    const highPerformingCount = keywords.filter((k) => k.status === "high-performing").length
-    const underperformingCount = keywords.filter((k) => k.status === "underperforming").length
+    const highPerformingCount = keywords.filter(
+      (k) => k.status === "high-performing",
+    ).length;
+    const underperformingCount = keywords.filter(
+      (k) => k.status === "underperforming",
+    ).length;
 
     if (highPerformingCount > underperformingCount) {
-      strengths.push(`Strong keyword performance with ${highPerformingCount} high-performing keywords`)
+      strengths.push(
+        `Strong keyword performance with ${highPerformingCount} high-performing keywords`,
+      );
     } else if (underperformingCount > highPerformingCount) {
-      weaknesses.push(`${underperformingCount} underperforming keywords identified`)
-      recommendations.push("Pause or reduce bids for underperforming keywords")
+      weaknesses.push(
+        `${underperformingCount} underperforming keywords identified`,
+      );
+      recommendations.push("Pause or reduce bids for underperforming keywords");
     }
 
     // Negative keywords
     if (negativeKeywords.length > 10) {
-      strengths.push(`Good use of negative keywords (${negativeKeywords.length})`)
+      strengths.push(
+        `Good use of negative keywords (${negativeKeywords.length})`,
+      );
     } else {
-      weaknesses.push(`Limited use of negative keywords (${negativeKeywords.length})`)
-      recommendations.push("Add more negative keywords to reduce wasted spend")
+      weaknesses.push(
+        `Limited use of negative keywords (${negativeKeywords.length})`,
+      );
+      recommendations.push("Add more negative keywords to reduce wasted spend");
     }
 
     return {
       strengths,
       weaknesses,
       recommendations,
-    }
-  }
+    };
+  };
 
   return (
     <div className="space-y-6">
       <Tabs defaultValue="input">
         <TabsList>
           <TabsTrigger value="input">Campaign Data</TabsTrigger>
-          {auditResult && <TabsTrigger value="results">Audit Results</TabsTrigger>}
+          {auditResult && (
+            <TabsTrigger value="results">Audit Results</TabsTrigger>
+          )}
         </TabsList>
         <TabsContent value="input" className="space-y-6">
           <div className="space-y-4">
@@ -314,7 +389,8 @@ export function PPCCampaignAuditor() {
                 onChange={(e) => setCampaignData(e.target.value)}
               />
               <p className="text-sm text-muted-foreground">
-                For demo purposes, you can leave this blank and we'll use sample data
+                For demo purposes, you can leave this blank and we'll use sample
+                data
               </p>
             </div>
 
@@ -328,12 +404,15 @@ export function PPCCampaignAuditor() {
                 onChange={(e) => setKeywordData(e.target.value)}
               />
               <p className="text-sm text-muted-foreground">
-                For demo purposes, you can leave this blank and we'll use sample data
+                For demo purposes, you can leave this blank and we'll use sample
+                data
               </p>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="negative-keywords">Negative Keywords (Optional)</Label>
+              <Label htmlFor="negative-keywords">
+                Negative Keywords (Optional)
+              </Label>
               <Textarea
                 id="negative-keywords"
                 placeholder="Enter your negative keywords, separated by commas or new lines"
@@ -361,12 +440,19 @@ export function PPCCampaignAuditor() {
             <Card>
               <CardHeader>
                 <CardTitle>Campaign Performance Score</CardTitle>
-                <CardDescription>Based on ACOS, CTR, conversion rate, and keyword performance</CardDescription>
+                <CardDescription>
+                  Based on ACOS, CTR, conversion rate, and keyword performance
+                </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex flex-col items-center justify-center space-y-2">
-                  <div className="text-4xl font-bold">{auditResult.campaignScore}/100</div>
-                  <Progress value={auditResult.campaignScore} className="w-full" />
+                  <div className="text-4xl font-bold">
+                    {auditResult.campaignScore}/100
+                  </div>
+                  <Progress
+                    value={auditResult.campaignScore}
+                    className="w-full"
+                  />
                   <p className="text-sm text-muted-foreground">
                     {auditResult.campaignScore >= 80
                       ? "Excellent campaign performance"
@@ -388,12 +474,14 @@ export function PPCCampaignAuditor() {
                 </CardHeader>
                 <CardContent>
                   <ul className="space-y-2">
-                    {auditResult.campaignFeedback.strengths.map((strength, i) => (
-                      <li key={i} className="flex items-start">
-                        <span className="mr-2 text-green-500">•</span>
-                        {strength}
-                      </li>
-                    ))}
+                    {auditResult.campaignFeedback.strengths.map(
+                      (strength, i) => (
+                        <li key={i} className="flex items-start">
+                          <span className="mr-2 text-green-500">•</span>
+                          {strength}
+                        </li>
+                      ),
+                    )}
                   </ul>
                 </CardContent>
               </Card>
@@ -407,12 +495,14 @@ export function PPCCampaignAuditor() {
                 </CardHeader>
                 <CardContent>
                   <ul className="space-y-2">
-                    {auditResult.campaignFeedback.weaknesses.map((weakness, i) => (
-                      <li key={i} className="flex items-start">
-                        <span className="mr-2 text-red-500">•</span>
-                        {weakness}
-                      </li>
-                    ))}
+                    {auditResult.campaignFeedback.weaknesses.map(
+                      (weakness, i) => (
+                        <li key={i} className="flex items-start">
+                          <span className="mr-2 text-red-500">•</span>
+                          {weakness}
+                        </li>
+                      ),
+                    )}
                   </ul>
                 </CardContent>
               </Card>
@@ -421,16 +511,20 @@ export function PPCCampaignAuditor() {
             <Card>
               <CardHeader>
                 <CardTitle>Recommendations</CardTitle>
-                <CardDescription>Actionable steps to improve your campaign performance</CardDescription>
+                <CardDescription>
+                  Actionable steps to improve your campaign performance
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 <ul className="space-y-2">
-                  {auditResult.campaignFeedback.recommendations.map((recommendation, i) => (
-                    <li key={i} className="flex items-start">
-                      <span className="mr-2 text-primary">→</span>
-                      {recommendation}
-                    </li>
-                  ))}
+                  {auditResult.campaignFeedback.recommendations.map(
+                    (recommendation, i) => (
+                      <li key={i} className="flex items-start">
+                        <span className="mr-2 text-primary">→</span>
+                        {recommendation}
+                      </li>
+                    ),
+                  )}
                 </ul>
               </CardContent>
             </Card>
@@ -438,7 +532,9 @@ export function PPCCampaignAuditor() {
             <Card>
               <CardHeader>
                 <CardTitle>High-Performing Keywords</CardTitle>
-                <CardDescription>Keywords with strong performance metrics</CardDescription>
+                <CardDescription>
+                  Keywords with strong performance metrics
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 <Table>
@@ -452,17 +548,27 @@ export function PPCCampaignAuditor() {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {auditResult.keywordAnalysis.highPerforming.map((keyword, index) => (
-                      <TableRow key={index}>
-                        <TableCell className="font-medium">{keyword.keyword}</TableCell>
-                        <TableCell>{keyword.matchType}</TableCell>
-                        <TableCell className="text-right">{keyword.ctr.toFixed(2)}%</TableCell>
-                        <TableCell className="text-right">{keyword.conversionRate.toFixed(2)}%</TableCell>
-                        <TableCell className="text-right">
-                          {keyword.acos === Number.POSITIVE_INFINITY ? "∞" : `${keyword.acos.toFixed(2)}%`}
-                        </TableCell>
-                      </TableRow>
-                    ))}
+                    {auditResult.keywordAnalysis.highPerforming.map(
+                      (keyword, index) => (
+                        <TableRow key={index}>
+                          <TableCell className="font-medium">
+                            {keyword.keyword}
+                          </TableCell>
+                          <TableCell>{keyword.matchType}</TableCell>
+                          <TableCell className="text-right">
+                            {keyword.ctr.toFixed(2)}%
+                          </TableCell>
+                          <TableCell className="text-right">
+                            {keyword.conversionRate.toFixed(2)}%
+                          </TableCell>
+                          <TableCell className="text-right">
+                            {keyword.acos === Number.POSITIVE_INFINITY
+                              ? "∞"
+                              : `${keyword.acos.toFixed(2)}%`}
+                          </TableCell>
+                        </TableRow>
+                      ),
+                    )}
                   </TableBody>
                 </Table>
               </CardContent>
@@ -471,7 +577,9 @@ export function PPCCampaignAuditor() {
             <Card>
               <CardHeader>
                 <CardTitle>Underperforming Keywords</CardTitle>
-                <CardDescription>Keywords that need optimization or pausing</CardDescription>
+                <CardDescription>
+                  Keywords that need optimization or pausing
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 <Table>
@@ -485,17 +593,27 @@ export function PPCCampaignAuditor() {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {auditResult.keywordAnalysis.underperforming.map((keyword, index) => (
-                      <TableRow key={index}>
-                        <TableCell className="font-medium">{keyword.keyword}</TableCell>
-                        <TableCell>{keyword.matchType}</TableCell>
-                        <TableCell className="text-right">${keyword.spend.toFixed(2)}</TableCell>
-                        <TableCell className="text-right">${keyword.sales.toFixed(2)}</TableCell>
-                        <TableCell className="text-right">
-                          {keyword.acos === Number.POSITIVE_INFINITY ? "∞" : `${keyword.acos.toFixed(2)}%`}
-                        </TableCell>
-                      </TableRow>
-                    ))}
+                    {auditResult.keywordAnalysis.underperforming.map(
+                      (keyword, index) => (
+                        <TableRow key={index}>
+                          <TableCell className="font-medium">
+                            {keyword.keyword}
+                          </TableCell>
+                          <TableCell>{keyword.matchType}</TableCell>
+                          <TableCell className="text-right">
+                            ${keyword.spend.toFixed(2)}
+                          </TableCell>
+                          <TableCell className="text-right">
+                            ${keyword.sales.toFixed(2)}
+                          </TableCell>
+                          <TableCell className="text-right">
+                            {keyword.acos === Number.POSITIVE_INFINITY
+                              ? "∞"
+                              : `${keyword.acos.toFixed(2)}%`}
+                          </TableCell>
+                        </TableRow>
+                      ),
+                    )}
                   </TableBody>
                 </Table>
               </CardContent>
@@ -505,14 +623,14 @@ export function PPCCampaignAuditor() {
               <Info className="h-4 w-4" />
               <AlertTitle>Next Steps</AlertTitle>
               <AlertDescription>
-                Use these insights to optimize your campaign. Focus on pausing underperforming keywords and increasing
-                bids on high-performing ones.
+                Use these insights to optimize your campaign. Focus on pausing
+                underperforming keywords and increasing bids on high-performing
+                ones.
               </AlertDescription>
             </Alert>
           </TabsContent>
         )}
       </Tabs>
     </div>
-  )
+  );
 }
-

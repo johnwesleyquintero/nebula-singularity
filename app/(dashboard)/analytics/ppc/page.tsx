@@ -1,13 +1,19 @@
-import type { Metadata } from "next"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { PPCOverview } from "@/components/analytics/ppc-overview"
-import { PPCCampaigns } from "@/components/analytics/ppc-campaigns"
+import { PPCCampaigns } from "@/components/analytics/ppc-campaigns";
+import { PPCOverview } from "@/components/analytics/ppc-overview";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "PPC Analytics | SellSmart-Pro",
   description: "Pay-Per-Click performance tracking for Amazon sellers",
-}
+};
 
 export default function PPCAnalyticsPage() {
   return (
@@ -25,7 +31,9 @@ export default function PPCAnalyticsPage() {
           <Card>
             <CardHeader>
               <CardTitle>PPC Performance Overview</CardTitle>
-              <CardDescription>Your advertising performance metrics for the last 30 days.</CardDescription>
+              <CardDescription>
+                Your advertising performance metrics for the last 30 days.
+              </CardDescription>
             </CardHeader>
             <CardContent className="pl-2">
               <PPCOverview />
@@ -36,7 +44,9 @@ export default function PPCAnalyticsPage() {
           <Card>
             <CardHeader>
               <CardTitle>Campaign Performance</CardTitle>
-              <CardDescription>Detailed breakdown of your campaign performance.</CardDescription>
+              <CardDescription>
+                Detailed breakdown of your campaign performance.
+              </CardDescription>
             </CardHeader>
             <CardContent>
               <PPCCampaigns />
@@ -47,7 +57,9 @@ export default function PPCAnalyticsPage() {
           <Card>
             <CardHeader>
               <CardTitle>Keyword Performance</CardTitle>
-              <CardDescription>Detailed breakdown of your keyword performance.</CardDescription>
+              <CardDescription>
+                Detailed breakdown of your keyword performance.
+              </CardDescription>
             </CardHeader>
             <CardContent>
               <p>Keyword performance data will be displayed here.</p>
@@ -56,6 +68,5 @@ export default function PPCAnalyticsPage() {
         </TabsContent>
       </Tabs>
     </div>
-  )
+  );
 }
-

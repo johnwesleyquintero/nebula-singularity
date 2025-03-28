@@ -1,7 +1,7 @@
-import { ModeToggle } from "@/components/mode-toggle"
-import { Button } from "@/components/ui/button"
-import Image from "next/image"
-import Link from "next/link"
+import { ModeToggle } from "@/components/mode-toggle";
+import { Button } from "@/components/ui/button";
+import Image from "next/image";
+import Link from "next/link";
 
 export function Header() {
   return (
@@ -9,7 +9,13 @@ export function Header() {
       <div className="container flex h-14 items-center justify-between">
         <Link href="/" className="flex items-center space-x-2">
           <div className="relative h-8 w-8">
-            <Image src="/logo.svg" alt="SellSmart-Pro Logo" fill priority className="rounded-md object-contain" />
+            <Image
+              src="/logo.svg"
+              alt="SellSmart-Pro Logo"
+              fill
+              priority
+              className="rounded-md object-contain"
+            />
           </div>
           <span className="font-bold">SellSmart-Pro</span>
         </Link>
@@ -52,5 +58,5 @@ export function Header() {
         </div>
       </div>
     </header>
-  )
+  );
 }

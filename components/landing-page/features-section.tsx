@@ -1,37 +1,50 @@
-import { BarChart3, Rocket, Search, ShoppingCart, Target, Zap } from "lucide-react"
+import {
+  BarChart3,
+  Rocket,
+  Search,
+  ShoppingCart,
+  Target,
+  Zap,
+} from "lucide-react";
 
 const features = [
   {
     icon: BarChart3,
     title: "Advanced Analytics",
-    description: "Get real-time insights into your Amazon business performance with detailed metrics and trends."
+    description:
+      "Get real-time insights into your Amazon business performance with detailed metrics and trends.",
   },
   {
     icon: Rocket,
     title: "PPC Optimization",
-    description: "Automate and optimize your Amazon PPC campaigns for maximum ROI and reduced ACoS."
+    description:
+      "Automate and optimize your Amazon PPC campaigns for maximum ROI and reduced ACoS.",
   },
   {
     icon: Search,
     title: "Keyword Research",
-    description: "Discover high-performing keywords and optimize your product listings for better visibility."
+    description:
+      "Discover high-performing keywords and optimize your product listings for better visibility.",
   },
   {
     icon: Target,
     title: "Competitor Analysis",
-    description: "Track competitor prices, rankings, and strategies to stay ahead in your market."
+    description:
+      "Track competitor prices, rankings, and strategies to stay ahead in your market.",
   },
   {
     icon: ShoppingCart,
     title: "Inventory Management",
-    description: "Smart inventory forecasting and restock alerts to prevent stockouts and lost sales."
+    description:
+      "Smart inventory forecasting and restock alerts to prevent stockouts and lost sales.",
   },
   {
     icon: Zap,
     title: "Automated Tools",
-    description: "Save time with our suite of automation tools for pricing, reviews, and listing optimization."
-  }
-]
+    description:
+      "Save time with our suite of automation tools for pricing, reviews, and listing optimization.",
+  },
+];
 
 export function FeaturesSection() {
   return (
@@ -42,7 +55,8 @@ export function FeaturesSection() {
             Everything You Need to Succeed on Amazon
           </h2>
           <p className="mx-auto max-w-[700px] text-muted-foreground md:text-lg">
-            Powerful tools and insights to grow your Amazon business and maximize profitability
+            Powerful tools and insights to grow your Amazon business and
+            maximize profitability
           </p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -61,5 +75,5 @@ export function FeaturesSection() {
         </div>
       </div>
     </section>
-  )
+  );
 }

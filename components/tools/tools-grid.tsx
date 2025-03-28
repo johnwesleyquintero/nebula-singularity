@@ -1,26 +1,45 @@
-"use client"
+"use client";
 
-import { ACOSCalculator } from "@/components/tools/acos-calculator"
-import { DescriptionEditor } from "@/components/tools/description-editor"
-import { FBACalculator } from "@/components/tools/fba-calculator"
-import { KeywordAnalyzer } from "@/components/tools/keyword-analyzer"
-import { KeywordDeduplicator } from "@/components/tools/keyword-deduplicator"
-import { ListingQualityChecker } from "@/components/tools/listing-quality-checker"
-import { PPCCampaignAuditor } from "@/components/tools/ppc-campaign-auditor"
-import { SalesEstimator } from "@/components/tools/sales-estimator"
-import { Button } from "@/components/ui/button"
-import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { BarChart2, Calculator, CheckSquare, FileText, Filter, PieChart, Search, TrendingUp } from "lucide-react"
-import { useState } from "react"
-
-
+import { ACOSCalculator } from "@/components/tools/acos-calculator";
+import { DescriptionEditor } from "@/components/tools/description-editor";
+import { FBACalculator } from "@/components/tools/fba-calculator";
+import { KeywordAnalyzer } from "@/components/tools/keyword-analyzer";
+import { KeywordDeduplicator } from "@/components/tools/keyword-deduplicator";
+import { ListingQualityChecker } from "@/components/tools/listing-quality-checker";
+import { PPCCampaignAuditor } from "@/components/tools/ppc-campaign-auditor";
+import { SalesEstimator } from "@/components/tools/sales-estimator";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import {
+  BarChart2,
+  Calculator,
+  CheckSquare,
+  FileText,
+  Filter,
+  PieChart,
+  Search,
+  TrendingUp,
+} from "lucide-react";
+import { useState } from "react";
 
 export type ToolsGridProps = {
-  searchQuery: string
-  selectedCategory: string
-}
+  searchQuery: string;
+  selectedCategory: string;
+};
 
 const tools = [
   {
@@ -42,7 +61,8 @@ const tools = [
   {
     id: "listing-quality-checker",
     title: "Listing Quality Checker",
-    description: "Evaluate the quality and optimization of your product listings",
+    description:
+      "Evaluate the quality and optimization of your product listings",
     icon: CheckSquare,
     component: ListingQualityChecker,
     category: "listings",
@@ -87,19 +107,21 @@ const tools = [
     component: SalesEstimator,
     category: "analytics",
   },
-]
+];
 
 export function ToolsGrid({ searchQuery, selectedCategory }: ToolsGridProps) {
-  const [selectedTool, setSelectedTool] = useState<string | null>(null)
+  const [selectedTool, setSelectedTool] = useState<string | null>(null);
 
   const filteredTools = tools.filter((tool) => {
-    const matchesSearch = tool.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      tool.description.toLowerCase().includes(searchQuery.toLowerCase())
-    const matchesCategory = selectedCategory === "all" || tool.category === selectedCategory
-    return matchesSearch && matchesCategory
-  })
+    const matchesSearch =
+      tool.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      tool.description.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesCategory =
+      selectedCategory === "all" || tool.category === selectedCategory;
+    return matchesSearch && matchesCategory;
+  });
 
-  const selectedToolData = tools.find((tool) => tool.id === selectedTool)
+  const selectedToolData = tools.find((tool) => tool.id === selectedTool);
 
   return (
     <>
@@ -114,7 +136,10 @@ export function ToolsGrid({ searchQuery, selectedCategory }: ToolsGridProps) {
               <CardDescription>{tool.description}</CardDescription>
             </CardHeader>
             <CardFooter className="mt-auto">
-              <Button onClick={() => setSelectedTool(tool.id)} className="w-full">
+              <Button
+                onClick={() => setSelectedTool(tool.id)}
+                className="w-full"
+              >
                 Open Tool
               </Button>
             </CardFooter>
@@ -126,7 +151,9 @@ export function ToolsGrid({ searchQuery, selectedCategory }: ToolsGridProps) {
         <DialogContent className="max-w-4xl">
           <DialogHeader>
             <DialogTitle>{selectedToolData?.title}</DialogTitle>
-            <DialogDescription>{selectedToolData?.description}</DialogDescription>
+            <DialogDescription>
+              {selectedToolData?.description}
+            </DialogDescription>
           </DialogHeader>
           <ScrollArea className="max-h-[80vh]">
             {selectedToolData?.component && <selectedToolData.component />}
@@ -134,6 +161,5 @@ export function ToolsGrid({ searchQuery, selectedCategory }: ToolsGridProps) {
         </DialogContent>
       </Dialog>
     </>
-  )
+  );
 }
-

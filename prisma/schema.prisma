@@ -7,7 +7,47 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// Add your database models here
-model Example {
-  id String @id @default(uuid())
+model User {
+  id              String         @id @default(uuid())
+  name            String?
+  email           String         @unique
+  role            String         @default("user")
+  image           String?
+  stripeCustomerId String?       @unique
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+  subscriptions   Subscription[]
+  payments        Payment[]
+}
+
+model Subscription {
+  id                    String @id @default(uuid())
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id])
+  stripe_subscription_id String    @unique
+  stripe_customer_id    String
+  plan_id              String
+  status               String
+  current_period_start DateTime
+  current_period_end   DateTime
+  cancel_at            DateTime?
+  canceled_at          DateTime?
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
+  payments             Payment[]
+}
+
+model Payment {
+  id                      String       @id @default(uuid())
+  userId                  String
+  user                    User         @relation(fields: [userId], references: [id])
+  subscription_id         String?
+  subscription            Subscription? @relation(fields: [subscription_id], references: [id])
+  stripe_payment_intent_id String
+  amount                  Float
+  currency                String
+  status                  String
+  payment_method          String?
+  createdAt               DateTime     @default(now())
+  updatedAt               DateTime     @updatedAt
 }

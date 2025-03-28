@@ -1,61 +1,61 @@
-import { Stripe } from 'stripe';
+import { Stripe } from "stripe";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
-  apiVersion: '2023-10-16',
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "", {
+  apiVersion: "2023-10-16",
 });
 
 export type SubscriptionPlan = {
   id: string;
   name: string;
   price: number;
-  interval: 'month' | 'year';
+  interval: "month" | "year";
   features: string[];
 };
 
 export const subscriptionPlans: SubscriptionPlan[] = [
   {
-    id: 'starter',
-    name: 'Starter',
+    id: "starter",
+    name: "Starter",
     price: 49,
-    interval: 'month',
+    interval: "month",
     features: [
-      'Basic Analytics Dashboard',
-      'PPC Campaign Management',
-      'Keyword Research Tool',
-      '5 Product Listings',
-      'Email Support'
-    ]
+      "Basic Analytics Dashboard",
+      "PPC Campaign Management",
+      "Keyword Research Tool",
+      "5 Product Listings",
+      "Email Support",
+    ],
   },
   {
-    id: 'professional',
-    name: 'Professional',
+    id: "professional",
+    name: "Professional",
     price: 99,
-    interval: 'month',
+    interval: "month",
     features: [
-      'Advanced Analytics & Reporting',
-      'Automated PPC Optimization',
-      'Advanced Keyword Research',
-      'Unlimited Product Listings',
-      'Competitor Analysis',
-      'Inventory Management',
-      'Priority Support'
-    ]
+      "Advanced Analytics & Reporting",
+      "Automated PPC Optimization",
+      "Advanced Keyword Research",
+      "Unlimited Product Listings",
+      "Competitor Analysis",
+      "Inventory Management",
+      "Priority Support",
+    ],
   },
   {
-    id: 'enterprise',
-    name: 'Enterprise',
+    id: "enterprise",
+    name: "Enterprise",
     price: 199,
-    interval: 'month',
+    interval: "month",
     features: [
-      'Custom Analytics & API Access',
-      'AI-Powered PPC Optimization',
-      'Advanced Competitor Tracking',
-      'Unlimited Everything',
-      'Dedicated Account Manager',
-      'Custom Integration Support',
-      '24/7 Priority Support'
-    ]
-  }
+      "Custom Analytics & API Access",
+      "AI-Powered PPC Optimization",
+      "Advanced Competitor Tracking",
+      "Unlimited Everything",
+      "Dedicated Account Manager",
+      "Custom Integration Support",
+      "24/7 Priority Support",
+    ],
+  },
 ];
 
 export const stripeService = {
@@ -70,9 +70,9 @@ export const stripeService = {
     return stripe.subscriptions.create({
       customer: customerId,
       items: [{ price: priceId }],
-      payment_behavior: 'default_incomplete',
-      payment_settings: { save_default_payment_method: 'on_subscription' },
-      expand: ['latest_invoice.payment_intent'],
+      payment_behavior: "default_incomplete",
+      payment_settings: { save_default_payment_method: "on_subscription" },
+      expand: ["latest_invoice.payment_intent"],
     });
   },
 
@@ -87,10 +87,12 @@ export const stripeService = {
   async updateSubscription(subscriptionId: string, priceId: string) {
     const subscription = await stripe.subscriptions.retrieve(subscriptionId);
     return stripe.subscriptions.update(subscriptionId, {
-      items: [{
-        id: subscription.items.data[0].id,
-        price: priceId,
-      }],
+      items: [
+        {
+          id: subscription.items.data[0].id,
+          price: priceId,
+        },
+      ],
     });
   },
 

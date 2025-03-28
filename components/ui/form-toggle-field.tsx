@@ -1,14 +1,25 @@
-import { FormControl, FormDescription, FormField, FormItem, FormLabel } from "@/components/ui/form"
-import { Switch } from "@/components/ui/switch"
+import {
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+} from "@/components/ui/form";
+import { Switch } from "@/components/ui/switch";
 
 interface FormToggleFieldProps {
-  control: any
-  name: string
-  label: string
-  description: string
+  control: any;
+  name: string;
+  label: string;
+  description: string;
 }
 
-export function FormToggleField({ control, name, label, description }: FormToggleFieldProps) {
+export function FormToggleField({
+  control,
+  name,
+  label,
+  description,
+}: FormToggleFieldProps) {
   return (
     <FormField
       control={control}
@@ -25,5 +36,5 @@ export function FormToggleField({ control, name, label, description }: FormToggl
         </FormItem>
       )}
     />
-  )
+  );
 }

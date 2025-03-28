@@ -1,32 +1,42 @@
-"use client"
+"use client";
 
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import * as z from "zod"
-import { useFormSubmit } from "@/hooks/use-form-submit"
-import { FormToggleField } from "@/components/ui/form-toggle-field"
-import { Form, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { LoadingButton } from "@/components/ui/loading-button"
-import { MarketplaceToggle } from "@/components/ui/marketplace-toggle"
-import { marketplaces } from "@/config/marketplaces"
+import {
+  Form,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { FormToggleField } from "@/components/ui/form-toggle-field";
+import { LoadingButton } from "@/components/ui/loading-button";
+import { MarketplaceToggle } from "@/components/ui/marketplace-toggle";
+import { marketplaces } from "@/config/marketplaces";
+import { useFormSubmit } from "@/hooks/use-form-submit";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 
-import { accountFormSchema, type AccountFormValues, accountFormDefaults } from "@/config/forms"
+import {
+  accountFormDefaults,
+  accountFormSchema,
+  type AccountFormValues,
+} from "@/config/forms";
 
 export function AccountForm() {
   const { isLoading, handleSubmit } = useFormSubmit({
     successMessage: "Account settings updated successfully!",
-    simulateDelay: true
-  })
+    simulateDelay: true,
+  });
 
   const form = useForm<AccountFormValues>({
     resolver: zodResolver(accountFormSchema),
     defaultValues: accountFormDefaults,
     mode: "onChange",
-  })
+  });
 
-  const onSubmit = handleSubmit(async (data: AccountFormValues) => {
-    console.log(data)
-  })
+  const onSubmit = async (data: AccountFormValues) => {
+    console.log(data);
+  };
 
   return (
     <Form {...form}>
@@ -37,7 +47,9 @@ export function AccountForm() {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Amazon Marketplaces</FormLabel>
-              <FormDescription>Select the Amazon marketplaces where you sell products.</FormDescription>
+              <FormDescription>
+                Select the Amazon marketplaces where you sell products.
+              </FormDescription>
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
                 {marketplaces.map((marketplace) => (
                   <MarketplaceToggle
@@ -69,6 +81,5 @@ export function AccountForm() {
         </LoadingButton>
       </form>
     </Form>
-  )
+  );
 }
-

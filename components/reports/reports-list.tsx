@@ -1,10 +1,23 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Download, FileSpreadsheet, FileText, MoreHorizontal, Search } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { useState } from "react";
+import {
+  Download,
+  FileSpreadsheet,
+  FileText,
+  MoreHorizontal,
+  Search,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,16 +25,16 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@/components/ui/dropdown-menu";
 
 type Report = {
-  id: string
-  name: string
-  type: "sales" | "inventory" | "ppc" | "custom"
-  format: "csv" | "pdf"
-  dateCreated: string
-  size: string
-}
+  id: string;
+  name: string;
+  type: "sales" | "inventory" | "ppc" | "custom";
+  format: "csv" | "pdf";
+  dateCreated: string;
+  size: string;
+};
 
 const reports: Report[] = [
   {
@@ -64,36 +77,38 @@ const reports: Report[] = [
     dateCreated: "2023-06-24",
     size: "720 KB",
   },
-]
+];
 
 export function ReportsList() {
-  const [searchQuery, setSearchQuery] = useState("")
+  const [searchQuery, setSearchQuery] = useState("");
 
-  const filteredReports = reports.filter((report) => report.name.toLowerCase().includes(searchQuery.toLowerCase()))
+  const filteredReports = reports.filter((report) =>
+    report.name.toLowerCase().includes(searchQuery.toLowerCase()),
+  );
 
   const formatDate = (dateString: string) => {
-    const date = new Date(dateString)
+    const date = new Date(dateString);
     return new Intl.DateTimeFormat("en-US", {
       year: "numeric",
       month: "short",
       day: "numeric",
-    }).format(date)
-  }
+    }).format(date);
+  };
 
   const getTypeIcon = (type: string) => {
     switch (type) {
       case "sales":
-        return <FileSpreadsheet className="h-4 w-4 text-green-500" />
+        return <FileSpreadsheet className="h-4 w-4 text-green-500" />;
       case "inventory":
-        return <FileSpreadsheet className="h-4 w-4 text-blue-500" />
+        return <FileSpreadsheet className="h-4 w-4 text-blue-500" />;
       case "ppc":
-        return <FileText className="h-4 w-4 text-amber-500" />
+        return <FileText className="h-4 w-4 text-amber-500" />;
       case "custom":
-        return <FileText className="h-4 w-4 text-purple-500" />
+        return <FileText className="h-4 w-4 text-purple-500" />;
       default:
-        return <FileText className="h-4 w-4" />
+        return <FileText className="h-4 w-4" />;
     }
-  }
+  };
 
   return (
     <div className="w-full">
@@ -152,7 +167,9 @@ export function ReportsList() {
                           <DropdownMenuItem>View details</DropdownMenuItem>
                           <DropdownMenuItem>Share report</DropdownMenuItem>
                           <DropdownMenuSeparator />
-                          <DropdownMenuItem className="text-destructive">Delete report</DropdownMenuItem>
+                          <DropdownMenuItem className="text-destructive">
+                            Delete report
+                          </DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
                     </div>
@@ -170,6 +187,5 @@ export function ReportsList() {
         </Table>
       </div>
     </div>
-  )
+  );
 }
-

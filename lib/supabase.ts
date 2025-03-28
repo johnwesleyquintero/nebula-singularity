@@ -1,15 +1,15 @@
-import { createClient } from "@supabase/supabase-js"
-import type { Database } from "@/types/supabase"
+import { createClient } from "@supabase/supabase-js";
+import type { Database } from "@/types/supabase";
 
 // Initialize the Supabase client
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL as string
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL as string;
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string;
 
 if (!supabaseUrl || !supabaseKey) {
-  throw new Error("Missing Supabase environment variables")
+  throw new Error("Missing Supabase environment variables");
 }
 
-export const supabase = createClient<Database>(supabaseUrl, supabaseKey)
+export const supabase = createClient<Database>(supabaseUrl, supabaseKey);
 
 // Helper function for server-side Supabase calls
 export const createServerSupabaseClient = () => {
@@ -21,6 +21,5 @@ export const createServerSupabaseClient = () => {
         persistSession: false,
       },
     },
-  )
-}
-
+  );
+};

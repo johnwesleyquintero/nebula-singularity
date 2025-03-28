@@ -1,13 +1,22 @@
-import { FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form"
-import { Switch } from "@/components/ui/switch"
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+} from "@/components/ui/form";
+import { Switch } from "@/components/ui/switch";
 
 interface MarketplaceToggleProps {
-  control: any
-  marketplaceId: string
-  marketplaceName: string
+  control: any;
+  marketplaceId: string;
+  marketplaceName: string;
 }
 
-export function MarketplaceToggle({ control, marketplaceId, marketplaceName }: MarketplaceToggleProps) {
+export function MarketplaceToggle({
+  control,
+  marketplaceId,
+  marketplaceName,
+}: MarketplaceToggleProps) {
   return (
     <FormField
       control={control}
@@ -20,7 +29,11 @@ export function MarketplaceToggle({ control, marketplaceId, marketplaceName }: M
               onCheckedChange={(checked) => {
                 return checked
                   ? field.onChange([...field.value, marketplaceId])
-                  : field.onChange(field.value?.filter((value: string) => value !== marketplaceId))
+                  : field.onChange(
+                      field.value?.filter(
+                        (value: string) => value !== marketplaceId,
+                      ),
+                    );
               }}
             />
           </FormControl>
@@ -28,5 +41,5 @@ export function MarketplaceToggle({ control, marketplaceId, marketplaceName }: M
         </FormItem>
       )}
     />
-  )
+  );
 }

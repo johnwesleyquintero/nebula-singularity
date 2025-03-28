@@ -1,7 +1,11 @@
-"use client"
+"use client";
 
-import { Line, LineChart, ResponsiveContainer, XAxis, YAxis } from "recharts"
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
+import { Line, LineChart, ResponsiveContainer, XAxis, YAxis } from "recharts";
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@/components/ui/chart";
 
 const data = [
   {
@@ -52,7 +56,7 @@ const data = [
     name: "Dec",
     total: 5200,
   },
-]
+];
 
 export function Overview() {
   return (
@@ -75,7 +79,13 @@ export function Overview() {
             bottom: 0,
           }}
         >
-          <XAxis dataKey="name" stroke="#888888" fontSize={12} tickLine={false} axisLine={false} />
+          <XAxis
+            dataKey="name"
+            stroke="#888888"
+            fontSize={12}
+            tickLine={false}
+            axisLine={false}
+          />
           <YAxis
             stroke="#888888"
             fontSize={12}
@@ -84,10 +94,15 @@ export function Overview() {
             tickFormatter={(value) => `$${value}`}
           />
           <ChartTooltip content={<ChartTooltipContent />} />
-          <Line type="monotone" dataKey="total" stroke="var(--color-total)" strokeWidth={2} activeDot={{ r: 6 }} />
+          <Line
+            type="monotone"
+            dataKey="total"
+            stroke="var(--color-total)"
+            strokeWidth={2}
+            activeDot={{ r: 6 }}
+          />
         </LineChart>
       </ResponsiveContainer>
     </ChartContainer>
-  )
+  );
 }
-

@@ -1,17 +1,15 @@
-"use client"
+"use client";
 
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Select } from "@/components/ui/select"
-
-
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Select } from "@/components/ui/select";
 
 type ToolsSearchProps = {
-  searchQuery: string
-  onSearchChange: (value: string) => void
-  selectedCategory: string
-  onCategoryChange: (value: string) => void
-}
+  searchQuery: string;
+  onSearchChange: (value: string) => void;
+  selectedCategory: string;
+  onCategoryChange: (value: string) => void;
+};
 
 const categories = [
   { value: "all", label: "All Tools" },
@@ -19,7 +17,7 @@ const categories = [
   { value: "keywords", label: "Keywords & SEO" },
   { value: "listings", label: "Listings & Content" },
   { value: "analytics", label: "Analytics & Performance" },
-]
+];
 
 export function ToolsSearch({
   searchQuery,
@@ -48,7 +46,6 @@ export function ToolsSearch({
           Filter by category
         </Label>
         <Select
-          id="category-select"
           value={selectedCategory}
           onValueChange={onCategoryChange}
           aria-label="Filter tools by category"
@@ -61,5 +58,5 @@ export function ToolsSearch({
         </Select>
       </div>
     </div>
-  )
+  );
 }

@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import { useState } from "react"
+import { useState } from "react";
 import {
   type ColumnDef,
   type ColumnFiltersState,
@@ -12,10 +12,10 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
-} from "@tanstack/react-table"
-import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
+} from "@tanstack/react-table";
+import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -24,24 +24,31 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Input } from "@/components/ui/input"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+} from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 type Campaign = {
-  id: string
-  name: string
-  status: "active" | "paused" | "archived"
-  type: "sponsored-products" | "sponsored-brands" | "sponsored-display"
-  budget: number
-  spend: number
-  sales: number
-  acos: number
-  impressions: number
-  clicks: number
-  ctr: number
-  cpc: number
-}
+  id: string;
+  name: string;
+  status: "active" | "paused" | "archived";
+  type: "sponsored-products" | "sponsored-brands" | "sponsored-display";
+  budget: number;
+  spend: number;
+  sales: number;
+  acos: number;
+  impressions: number;
+  clicks: number;
+  ctr: number;
+  cpc: number;
+};
 
 const data: Campaign[] = [
   {
@@ -114,14 +121,17 @@ const data: Campaign[] = [
     ctr: 2.81,
     cpc: 0.18,
   },
-]
+];
 
 export const columns: ColumnDef<Campaign>[] = [
   {
     id: "select",
     header: ({ table }) => (
       <Checkbox
-        checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && "indeterminate")}
+        checked={
+          table.getIsAllPageRowsSelected() ||
+          (table.getIsSomePageRowsSelected() && "indeterminate")
+        }
         onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
         aria-label="Select all"
       />
@@ -139,111 +149,129 @@ export const columns: ColumnDef<Campaign>[] = [
   {
     accessorKey: "name",
     header: "Campaign Name",
-    cell: ({ row }) => <div className="font-medium">{row.getValue("name")}</div>,
+    cell: ({ row }) => (
+      <div className="font-medium">{row.getValue("name")}</div>
+    ),
   },
   {
     accessorKey: "status",
     header: "Status",
     cell: ({ row }) => {
-      const status = row.getValue("status") as string
+      const status = row.getValue("status") as string;
       return (
         <div className="capitalize">
           <span
             className={
-              status === "active" ? "text-green-500" : status === "paused" ? "text-amber-500" : "text-gray-500"
+              status === "active"
+                ? "text-green-500"
+                : status === "paused"
+                  ? "text-amber-500"
+                  : "text-gray-500"
             }
           >
             {status}
           </span>
         </div>
-      )
+      );
     },
   },
   {
     accessorKey: "type",
     header: "Type",
     cell: ({ row }) => {
-      const type = row.getValue("type") as string
-      return <div className="capitalize">{type.replace("-", " ")}</div>
+      const type = row.getValue("type") as string;
+      return <div className="capitalize">{type.replace("-", " ")}</div>;
     },
   },
   {
     accessorKey: "budget",
     header: ({ column }) => {
       return (
-        <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
           Budget
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
-      )
+      );
     },
     cell: ({ row }) => {
-      const budget = Number.parseFloat(row.getValue("budget"))
+      const budget = Number.parseFloat(row.getValue("budget"));
       const formatted = new Intl.NumberFormat("en-US", {
         style: "currency",
         currency: "USD",
-      }).format(budget)
-      return <div className="text-right font-medium">{formatted}</div>
+      }).format(budget);
+      return <div className="text-right font-medium">{formatted}</div>;
     },
   },
   {
     accessorKey: "spend",
     header: ({ column }) => {
       return (
-        <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
           Spend
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
-      )
+      );
     },
     cell: ({ row }) => {
-      const spend = Number.parseFloat(row.getValue("spend"))
+      const spend = Number.parseFloat(row.getValue("spend"));
       const formatted = new Intl.NumberFormat("en-US", {
         style: "currency",
         currency: "USD",
-      }).format(spend)
-      return <div className="text-right font-medium">{formatted}</div>
+      }).format(spend);
+      return <div className="text-right font-medium">{formatted}</div>;
     },
   },
   {
     accessorKey: "sales",
     header: ({ column }) => {
       return (
-        <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
           Sales
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
-      )
+      );
     },
     cell: ({ row }) => {
-      const sales = Number.parseFloat(row.getValue("sales"))
+      const sales = Number.parseFloat(row.getValue("sales"));
       const formatted = new Intl.NumberFormat("en-US", {
         style: "currency",
         currency: "USD",
-      }).format(sales)
-      return <div className="text-right font-medium">{formatted}</div>
+      }).format(sales);
+      return <div className="text-right font-medium">{formatted}</div>;
     },
   },
   {
     accessorKey: "acos",
     header: ({ column }) => {
       return (
-        <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
           ACOS
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
-      )
+      );
     },
     cell: ({ row }) => {
-      const acos = Number.parseFloat(row.getValue("acos"))
-      return <div className="text-right font-medium">{acos.toFixed(2)}%</div>
+      const acos = Number.parseFloat(row.getValue("acos"));
+      return <div className="text-right font-medium">{acos.toFixed(2)}%</div>;
     },
   },
   {
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-      const campaign = row.original
+      const campaign = row.original;
 
       return (
         <DropdownMenu>
@@ -255,7 +283,9 @@ export const columns: ColumnDef<Campaign>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem onClick={() => navigator.clipboard.writeText(campaign.id)}>
+            <DropdownMenuItem
+              onClick={() => navigator.clipboard.writeText(campaign.id)}
+            >
               Copy campaign ID
             </DropdownMenuItem>
             <DropdownMenuSeparator />
@@ -263,19 +293,21 @@ export const columns: ColumnDef<Campaign>[] = [
             <DropdownMenuItem>Edit campaign</DropdownMenuItem>
             <DropdownMenuItem>Duplicate campaign</DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="text-destructive">Delete campaign</DropdownMenuItem>
+            <DropdownMenuItem className="text-destructive">
+              Delete campaign
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-      )
+      );
     },
   },
-]
+];
 
 export function PPCCampaigns() {
-  const [sorting, setSorting] = useState<SortingState>([])
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
-  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
-  const [rowSelection, setRowSelection] = useState({})
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+  const [rowSelection, setRowSelection] = useState({});
 
   const table = useReactTable({
     data,
@@ -294,7 +326,7 @@ export function PPCCampaigns() {
       columnVisibility,
       rowSelection,
     },
-  })
+  });
 
   return (
     <div className="w-full">
@@ -302,7 +334,9 @@ export function PPCCampaigns() {
         <Input
           placeholder="Filter campaigns..."
           value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
-          onChange={(event) => table.getColumn("name")?.setFilterValue(event.target.value)}
+          onChange={(event) =>
+            table.getColumn("name")?.setFilterValue(event.target.value)
+          }
           className="max-w-sm"
         />
         <DropdownMenu>
@@ -321,11 +355,13 @@ export function PPCCampaigns() {
                     key={column.id}
                     className="capitalize"
                     checked={column.getIsVisible()}
-                    onCheckedChange={(value) => column.toggleVisibility(!!value)}
+                    onCheckedChange={(value) =>
+                      column.toggleVisibility(!!value)
+                    }
                   >
                     {column.id}
                   </DropdownMenuCheckboxItem>
-                )
+                );
               })}
           </DropdownMenuContent>
         </DropdownMenu>
@@ -338,9 +374,14 @@ export function PPCCampaigns() {
                 {headerGroup.headers.map((header) => {
                   return (
                     <TableHead key={header.id}>
-                      {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(
+                            header.column.columnDef.header,
+                            header.getContext(),
+                          )}
                     </TableHead>
-                  )
+                  );
                 })}
               </TableRow>
             ))}
@@ -348,15 +389,26 @@ export function PPCCampaigns() {
           <TableBody>
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
-                <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
+                <TableRow
+                  key={row.id}
+                  data-state={row.getIsSelected() && "selected"}
+                >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
+                    <TableCell key={cell.id}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext(),
+                      )}
+                    </TableCell>
                   ))}
                 </TableRow>
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={columns.length} className="h-24 text-center">
+                <TableCell
+                  colSpan={columns.length}
+                  className="h-24 text-center"
+                >
                   No results.
                 </TableCell>
               </TableRow>
@@ -366,8 +418,8 @@ export function PPCCampaigns() {
       </div>
       <div className="flex items-center justify-end space-x-2 py-4">
         <div className="flex-1 text-sm text-muted-foreground">
-          {table.getFilteredSelectedRowModel().rows.length} of {table.getFilteredRowModel().rows.length} row(s)
-          selected.
+          {table.getFilteredSelectedRowModel().rows.length} of{" "}
+          {table.getFilteredRowModel().rows.length} row(s) selected.
         </div>
         <div className="space-x-2">
           <Button
@@ -378,12 +430,16 @@ export function PPCCampaigns() {
           >
             Previous
           </Button>
-          <Button variant="outline" size="sm" onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => table.nextPage()}
+            disabled={!table.getCanNextPage()}
+          >
             Next
           </Button>
         </div>
       </div>
     </div>
-  )
+  );
 }
-

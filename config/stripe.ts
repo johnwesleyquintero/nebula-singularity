@@ -18,8 +18,8 @@ export const stripeConfig = {
 
   // Metadata keys
   metadata: {
-    userId: 'user_id',
-    planId: 'plan_id',
+    userId: "user_id",
+    planId: "plan_id",
   },
 };
 

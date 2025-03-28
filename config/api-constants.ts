@@ -6,7 +6,7 @@ export const API_CONSTANTS = {
     TIMEOUT: 10000, // 10 seconds
     MAX_RETRIES: 3,
     RETRY_DELAY: 1000, // 1 second
-    MAX_BATCH_SIZE: 100
+    MAX_BATCH_SIZE: 100,
   },
 
   // Rate limiting
@@ -14,7 +14,7 @@ export const API_CONSTANTS = {
     REQUESTS_PER_SECOND: 5,
     REQUESTS_PER_MINUTE: 60,
     REQUESTS_PER_HOUR: 1000,
-    BURST_SIZE: 10
+    BURST_SIZE: 10,
   },
 
   // Cache settings
@@ -23,19 +23,19 @@ export const API_CONSTANTS = {
     KEYWORD_TTL: 86400, // 24 hours
     PRODUCT_TTL: 3600, // 1 hour
     PPC_TTL: 300, // 5 minutes
-    DEFAULT_TTL: 3600 // 1 hour
+    DEFAULT_TTL: 3600, // 1 hour
   },
 
   // Marketplace endpoints
   ENDPOINTS: {
-    AUTH: '/auth',
-    TOKEN: '/auth/token',
-    REFRESH: '/auth/refresh',
-    PRODUCTS: '/products',
-    BSR: '/products/:asin/bsr',
-    KEYWORDS: '/keywords/metrics',
-    PPC: '/ppc/campaigns',
-    LISTINGS: '/listings'
+    AUTH: "/auth",
+    TOKEN: "/auth/token",
+    REFRESH: "/auth/refresh",
+    PRODUCTS: "/products",
+    BSR: "/products/:asin/bsr",
+    KEYWORDS: "/keywords/metrics",
+    PPC: "/ppc/campaigns",
+    LISTINGS: "/listings",
   },
 
   // Response codes
@@ -47,18 +47,18 @@ export const API_CONSTANTS = {
     FORBIDDEN: 403,
     NOT_FOUND: 404,
     RATE_LIMITED: 429,
-    SERVER_ERROR: 500
+    SERVER_ERROR: 500,
   },
 
   // Error types
   ERROR_TYPES: {
-    API_ERROR: 'API_ERROR',
-    AUTH_ERROR: 'AUTH_ERROR',
-    VALIDATION_ERROR: 'VALIDATION_ERROR',
-    RATE_LIMIT_ERROR: 'RATE_LIMIT_ERROR',
-    NETWORK_ERROR: 'NETWORK_ERROR',
-    CACHE_ERROR: 'CACHE_ERROR',
-    DATABASE_ERROR: 'DATABASE_ERROR'
+    API_ERROR: "API_ERROR",
+    AUTH_ERROR: "AUTH_ERROR",
+    VALIDATION_ERROR: "VALIDATION_ERROR",
+    RATE_LIMIT_ERROR: "RATE_LIMIT_ERROR",
+    NETWORK_ERROR: "NETWORK_ERROR",
+    CACHE_ERROR: "CACHE_ERROR",
+    DATABASE_ERROR: "DATABASE_ERROR",
   },
 
   // Validation constants
@@ -67,6 +67,6 @@ export const API_CONSTANTS = {
     MAX_KEYWORDS_PER_REQUEST: 100,
     MIN_CAMPAIGN_BUDGET: 1,
     MAX_CAMPAIGN_BUDGET: 1000000,
-    MAX_BULK_OPERATIONS: 1000
-  }
-}
+    MAX_BULK_OPERATIONS: 1000,
+  },
+};

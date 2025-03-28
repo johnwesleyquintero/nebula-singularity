@@ -1,31 +1,34 @@
-"use client"
+"use client";
 
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import * as z from "zod"
-import { useFormSubmit } from "@/hooks/use-form-submit"
-import { FormToggleField } from "@/components/ui/form-toggle-field"
-import { FormRadioGroup } from "@/components/ui/form-radio-group"
-import { Form } from "@/components/ui/form"
-import { LoadingButton } from "@/components/ui/loading-button"
+import { Form } from "@/components/ui/form";
+import { FormRadioGroup } from "@/components/ui/form-radio-group";
+import { FormToggleField } from "@/components/ui/form-toggle-field";
+import { LoadingButton } from "@/components/ui/loading-button";
+import { useFormSubmit } from "@/hooks/use-form-submit";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 
-import { notificationsFormSchema, type NotificationsFormValues, notificationsFormDefaults } from "@/config/forms"
+import {
+  notificationsFormDefaults,
+  notificationsFormSchema,
+  type NotificationsFormValues,
+} from "@/config/forms";
 
 export function NotificationsForm() {
   const { isLoading, handleSubmit } = useFormSubmit({
     successMessage: "Notification preferences updated successfully!",
-    simulateDelay: true
-  })
+    simulateDelay: true,
+  });
 
   const form = useForm<NotificationsFormValues>({
     resolver: zodResolver(notificationsFormSchema),
     defaultValues: notificationsFormDefaults,
     mode: "onChange",
-  })
+  });
 
-  const onSubmit = handleSubmit(async (data: NotificationsFormValues) => {
-    console.log(data)
-  })
+  const onSubmit = async (data: NotificationsFormValues) => {
+    console.log(data);
+  };
 
   return (
     <Form {...form}>
@@ -59,7 +62,7 @@ export function NotificationsForm() {
           options={[
             { value: "immediate", label: "Immediate" },
             { value: "daily", label: "Daily Digest" },
-            { value: "weekly", label: "Weekly Digest" }
+            { value: "weekly", label: "Weekly Digest" },
           ]}
         />
 
@@ -68,6 +71,5 @@ export function NotificationsForm() {
         </LoadingButton>
       </form>
     </Form>
-  )
+  );
 }
-

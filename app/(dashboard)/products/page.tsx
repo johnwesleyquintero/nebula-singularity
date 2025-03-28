@@ -1,10 +1,10 @@
-import type { Metadata } from "next"
-import { ProductsTable } from "@/components/products/products-table"
+import type { Metadata } from "next";
+import { ProductsTable } from "@/components/products/products-table";
 
 export const metadata: Metadata = {
   title: "Products | SellSmart-Pro",
   description: "Product management and insights for Amazon sellers",
-}
+};
 
 export default function ProductsPage() {
   return (
@@ -14,6 +14,5 @@ export default function ProductsPage() {
       </div>
       <ProductsTable />
     </div>
-  )
+  );
 }
-

@@ -1,33 +1,33 @@
 // Configuration for the Listing Quality Checker
 
 export interface ScoreConfig {
-  name: string
-  maxScore: number
+  name: string;
+  maxScore: number;
   thresholds: {
-    excellent: number
-    good: number
-  }
+    excellent: number;
+    good: number;
+  };
   feedbackMessages: {
-    excellent: string
-    good: string
-    poor: string
-  }
+    excellent: string;
+    good: string;
+    poor: string;
+  };
 }
 
 export interface ListingQualityConfig {
-  title: ScoreConfig
-  bulletPoints: ScoreConfig
-  description: ScoreConfig
-  keywords: ScoreConfig
+  title: ScoreConfig;
+  bulletPoints: ScoreConfig;
+  description: ScoreConfig;
+  keywords: ScoreConfig;
   overallScoreThresholds: {
-    excellent: number
-    good: number
-  }
+    excellent: number;
+    good: number;
+  };
   overallFeedback: {
-    excellent: string
-    good: string
-    poor: string
-  }
+    excellent: string;
+    good: string;
+    poor: string;
+  };
 }
 
 export const listingQualityConfig: ListingQualityConfig = {
@@ -92,4 +92,4 @@ export const listingQualityConfig: ListingQualityConfig = {
     good: "Good listing quality with room for improvement",
     poor: "Listing needs significant improvement",
   },
-}
+};

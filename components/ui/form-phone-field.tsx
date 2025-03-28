@@ -1,40 +1,48 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { FormControl, FormItem, FormLabel, FormMessage, useFormField } from "./form"
-import { Input } from "./input"
+import * as React from "react";
+import {
+  FormControl,
+  FormItem,
+  FormLabel,
+  FormMessage,
+  useFormField,
+} from "./form";
+import { Input } from "./input";
 
-interface FormPhoneFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
-  label?: string
-  countryCode?: string
-  error?: string
+interface FormPhoneFieldProps
+  extends React.InputHTMLAttributes<HTMLInputElement> {
+  label?: string;
+  countryCode?: string;
+  error?: string;
 }
 
 const FormPhoneField = React.forwardRef<HTMLInputElement, FormPhoneFieldProps>(
   ({ label, countryCode = "+1", className, error, ...props }, ref) => {
-    const { formItemId, formDescriptionId, formMessageId } = useFormField()
+    const { formItemId, formDescriptionId, formMessageId } = useFormField();
 
     const formatPhoneNumber = (value: string) => {
-      const numbers = value.replace(/[^\d]/g, "")
-      if (numbers.length <= 3) return numbers
-      if (numbers.length <= 6) return `${numbers.slice(0, 3)}-${numbers.slice(3)}`
-      return `${numbers.slice(0, 3)}-${numbers.slice(3, 6)}-${numbers.slice(6, 10)}`
-    }
+      const numbers = value.replace(/[^\d]/g, "");
+      if (numbers.length <= 3) return numbers;
+      if (numbers.length <= 6)
+        return `${numbers.slice(0, 3)}-${numbers.slice(3)}`;
+      return `${numbers.slice(0, 3)}-${numbers.slice(3, 6)}-${numbers.slice(6, 10)}`;
+    };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      const value = e.target.value.replace(/[^\d-]/g, "")
-      const formattedValue = formatPhoneNumber(value)
+      const value = e.target.value.replace(/[^\d-]/g, "");
+      const formattedValue = formatPhoneNumber(value);
       if (formattedValue.length <= 12) {
         const event = {
           ...e,
           target: {
             ...e.target,
-            value: formattedValue
-          }
-        }
-        props.onChange?.(event)
+            value: formattedValue,
+          },
+        };
+        props.onChange?.(event);
       }
-    }
+    };
 
     return (
       <FormItem>
@@ -62,10 +70,10 @@ const FormPhoneField = React.forwardRef<HTMLInputElement, FormPhoneFieldProps>(
         </FormControl>
         <FormMessage />
       </FormItem>
-    )
-  }
-)
+    );
+  },
+);
 
-FormPhoneField.displayName = "FormPhoneField"
+FormPhoneField.displayName = "FormPhoneField";
 
-export { FormPhoneField }
+export { FormPhoneField };

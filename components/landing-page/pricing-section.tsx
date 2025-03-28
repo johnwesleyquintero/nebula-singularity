@@ -1,23 +1,25 @@
-import { Button } from "@/components/ui/button"
-import { Check } from "lucide-react"
+import { Button } from "@/components/ui/button";
+import { Check } from "lucide-react";
 
 const plans = [
   {
     name: "Starter",
     price: "$49",
-    description: "Perfect for new Amazon sellers looking to grow their business",
+    description:
+      "Perfect for new Amazon sellers looking to grow their business",
     features: [
       "Basic Analytics Dashboard",
       "PPC Campaign Management",
       "Keyword Research Tool",
       "5 Product Listings",
-      "Email Support"
-    ]
+      "Email Support",
+    ],
   },
   {
     name: "Professional",
     price: "$99",
-    description: "Ideal for established sellers wanting to scale their operations",
+    description:
+      "Ideal for established sellers wanting to scale their operations",
     features: [
       "Advanced Analytics & Reporting",
       "Automated PPC Optimization",
@@ -25,14 +27,15 @@ const plans = [
       "Unlimited Product Listings",
       "Competitor Analysis",
       "Inventory Management",
-      "Priority Support"
+      "Priority Support",
     ],
-    popular: true
+    popular: true,
   },
   {
     name: "Enterprise",
     price: "$199",
-    description: "For large-scale sellers needing maximum power and customization",
+    description:
+      "For large-scale sellers needing maximum power and customization",
     features: [
       "Custom Analytics & API Access",
       "AI-Powered PPC Optimization",
@@ -40,10 +43,10 @@ const plans = [
       "Unlimited Everything",
       "Dedicated Account Manager",
       "Custom Integration Support",
-      "24/7 Priority Support"
-    ]
-  }
-]
+      "24/7 Priority Support",
+    ],
+  },
+];
 
 export function PricingSection() {
   return (
@@ -61,7 +64,7 @@ export function PricingSection() {
           {plans.map((plan, index) => (
             <div
               key={index}
-              className={`relative flex flex-col p-6 bg-background rounded-xl border ${plan.popular ? 'border-primary shadow-lg' : ''}`}
+              className={`relative flex flex-col p-6 bg-background rounded-xl border ${plan.popular ? "border-primary shadow-lg" : ""}`}
             >
               {plan.popular && (
                 <div className="absolute -top-4 left-0 right-0 mx-auto w-fit px-3 py-1 rounded-full bg-primary text-primary-foreground text-sm font-medium">
@@ -74,7 +77,9 @@ export function PricingSection() {
                   <span className="text-4xl font-bold">{plan.price}</span>
                   <span className="text-muted-foreground">/month</span>
                 </div>
-                <p className="mt-3 text-muted-foreground text-sm">{plan.description}</p>
+                <p className="mt-3 text-muted-foreground text-sm">
+                  {plan.description}
+                </p>
               </div>
               <ul className="space-y-3 mb-8 flex-1">
                 {plan.features.map((feature, featureIndex) => (
@@ -95,5 +100,5 @@ export function PricingSection() {
         </div>
       </div>
     </section>
-  )
+  );
 }

@@ -1,7 +1,19 @@
-"use client"
+"use client";
 
-import { Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, XAxis, YAxis } from "recharts"
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Legend,
+  ResponsiveContainer,
+  XAxis,
+  YAxis,
+} from "recharts";
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@/components/ui/chart";
 
 const data = [
   {
@@ -34,7 +46,7 @@ const data = [
     organic: 3800,
     ppc: 2390,
   },
-]
+];
 
 export function SalesMetrics() {
   return (
@@ -71,6 +83,5 @@ export function SalesMetrics() {
         </BarChart>
       </ResponsiveContainer>
     </ChartContainer>
-  )
+  );
 }
-

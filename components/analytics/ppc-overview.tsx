@@ -1,7 +1,19 @@
-"use client"
+"use client";
 
-import { Area, AreaChart, CartesianGrid, Legend, ResponsiveContainer, XAxis, YAxis } from "recharts"
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
+import {
+  Area,
+  AreaChart,
+  CartesianGrid,
+  Legend,
+  ResponsiveContainer,
+  XAxis,
+  YAxis,
+} from "recharts";
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@/components/ui/chart";
 
 const data = [
   {
@@ -64,7 +76,7 @@ const data = [
     sales: 380,
     acos: 6.6,
   },
-]
+];
 
 export function PPCOverview() {
   return (
@@ -128,6 +140,5 @@ export function PPCOverview() {
         </AreaChart>
       </ResponsiveContainer>
     </ChartContainer>
-  )
+  );
 }
-

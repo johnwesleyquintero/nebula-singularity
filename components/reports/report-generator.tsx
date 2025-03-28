@@ -1,20 +1,38 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { CalendarIcon, Loader2 } from "lucide-react"
-import { format } from "date-fns"
-import { Button } from "@/components/ui/button"
-import { Calendar } from "@/components/ui/calendar"
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Input } from "@/components/ui/input"
-import { cn } from "@/lib/utils"
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import * as z from "zod"
-import { toast } from "sonner"
+import { useState } from "react";
+import { CalendarIcon, Loader2 } from "lucide-react";
+import { format } from "date-fns";
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Input } from "@/components/ui/input";
+import { cn } from "@/lib/utils";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import { toast } from "sonner";
 
 const reportFormSchema = z.object({
   reportName: z.string().min(3, {
@@ -37,14 +55,14 @@ const reportFormSchema = z.object({
   metrics: z.array(z.string()).refine((value) => value.length > 0, {
     message: "You must select at least one metric.",
   }),
-})
+});
 
-type ReportFormValues = z.infer<typeof reportFormSchema>
+type ReportFormValues = z.infer<typeof reportFormSchema>;
 
 const defaultValues: Partial<ReportFormValues> = {
   reportName: "",
   metrics: ["sales", "orders", "conversion_rate"],
-}
+};
 
 const metrics = [
   {
@@ -87,25 +105,25 @@ const metrics = [
     id: "ctr",
     label: "CTR",
   },
-]
+];
 
 export function ReportGenerator() {
-  const [isGenerating, setIsGenerating] = useState(false)
+  const [isGenerating, setIsGenerating] = useState(false);
 
   const form = useForm<ReportFormValues>({
     resolver: zodResolver(reportFormSchema),
     defaultValues,
-  })
+  });
 
   function onSubmit(data: ReportFormValues) {
-    setIsGenerating(true)
+    setIsGenerating(true);
 
     // Simulate API call
     setTimeout(() => {
-      setIsGenerating(false)
-      toast.success("Report generated successfully!")
-      console.log(data)
-    }, 2000)
+      setIsGenerating(false);
+      toast.success("Report generated successfully!");
+      console.log(data);
+    }, 2000);
   }
 
   return (
@@ -121,7 +139,9 @@ export function ReportGenerator() {
                 <FormControl>
                   <Input placeholder="Enter report name" {...field} />
                 </FormControl>
-                <FormDescription>Give your report a descriptive name.</FormDescription>
+                <FormDescription>
+                  Give your report a descriptive name.
+                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -133,7 +153,10 @@ export function ReportGenerator() {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Report Type</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder="Select report type" />
@@ -146,7 +169,9 @@ export function ReportGenerator() {
                     <SelectItem value="custom">Custom Report</SelectItem>
                   </SelectContent>
                 </Select>
-                <FormDescription>Select the type of report you want to generate.</FormDescription>
+                <FormDescription>
+                  Select the type of report you want to generate.
+                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -173,7 +198,8 @@ export function ReportGenerator() {
                       {field.value?.from ? (
                         field.value.to ? (
                           <>
-                            {format(field.value.from, "LLL dd, y")} - {format(field.value.to, "LLL dd, y")}
+                            {format(field.value.from, "LLL dd, y")} -{" "}
+                            {format(field.value.to, "LLL dd, y")}
                           </>
                         ) : (
                           format(field.value.from, "LLL dd, y")
@@ -185,10 +211,17 @@ export function ReportGenerator() {
                   </FormControl>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0" align="start">
-                  <Calendar mode="range" selected={field.value} onSelect={field.onChange} initialFocus />
+                  <Calendar
+                    mode="range"
+                    selected={field.value}
+                    onSelect={field.onChange}
+                    initialFocus
+                  />
                 </PopoverContent>
               </Popover>
-              <FormDescription>Select the date range for your report data.</FormDescription>
+              <FormDescription>
+                Select the date range for your report data.
+              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -212,7 +245,9 @@ export function ReportGenerator() {
                   <SelectItem value="xlsx">Excel</SelectItem>
                 </SelectContent>
               </Select>
-              <FormDescription>Choose the file format for your report.</FormDescription>
+              <FormDescription>
+                Choose the file format for your report.
+              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -225,7 +260,9 @@ export function ReportGenerator() {
             <FormItem>
               <div className="mb-4">
                 <FormLabel className="text-base">Metrics</FormLabel>
-                <FormDescription>Select the metrics to include in your report.</FormDescription>
+                <FormDescription>
+                  Select the metrics to include in your report.
+                </FormDescription>
               </div>
               <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
                 {metrics.map((metric) => (
@@ -235,20 +272,29 @@ export function ReportGenerator() {
                     name="metrics"
                     render={({ field }) => {
                       return (
-                        <FormItem key={metric.id} className="flex flex-row items-start space-x-3 space-y-0">
+                        <FormItem
+                          key={metric.id}
+                          className="flex flex-row items-start space-x-3 space-y-0"
+                        >
                           <FormControl>
                             <Checkbox
                               checked={field.value?.includes(metric.id)}
                               onCheckedChange={(checked) => {
                                 return checked
                                   ? field.onChange([...field.value, metric.id])
-                                  : field.onChange(field.value?.filter((value) => value !== metric.id))
+                                  : field.onChange(
+                                      field.value?.filter(
+                                        (value) => value !== metric.id,
+                                      ),
+                                    );
                               }}
                             />
                           </FormControl>
-                          <FormLabel className="font-normal">{metric.label}</FormLabel>
+                          <FormLabel className="font-normal">
+                            {metric.label}
+                          </FormLabel>
                         </FormItem>
-                      )
+                      );
                     }}
                   />
                 ))}
@@ -270,6 +316,5 @@ export function ReportGenerator() {
         </Button>
       </form>
     </Form>
-  )
+  );
 }
-

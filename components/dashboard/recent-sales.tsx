@@ -1,4 +1,4 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export function RecentSales() {
   return (
@@ -21,7 +21,9 @@ export function RecentSales() {
         </Avatar>
         <div className="ml-4 space-y-1">
           <p className="text-sm font-medium leading-none">Jane Miller</p>
-          <p className="text-sm text-muted-foreground">jane.miller@example.com</p>
+          <p className="text-sm text-muted-foreground">
+            jane.miller@example.com
+          </p>
         </div>
         <div className="ml-auto font-medium">+$149.00</div>
       </div>
@@ -32,7 +34,9 @@ export function RecentSales() {
         </Avatar>
         <div className="ml-4 space-y-1">
           <p className="text-sm font-medium leading-none">Robert Williams</p>
-          <p className="text-sm text-muted-foreground">robert.williams@example.com</p>
+          <p className="text-sm text-muted-foreground">
+            robert.williams@example.com
+          </p>
         </div>
         <div className="ml-auto font-medium">+$99.00</div>
       </div>
@@ -43,7 +47,9 @@ export function RecentSales() {
         </Avatar>
         <div className="ml-4 space-y-1">
           <p className="text-sm font-medium leading-none">Sarah Davis</p>
-          <p className="text-sm text-muted-foreground">sarah.davis@example.com</p>
+          <p className="text-sm text-muted-foreground">
+            sarah.davis@example.com
+          </p>
         </div>
         <div className="ml-auto font-medium">+$39.00</div>
       </div>
@@ -54,11 +60,12 @@ export function RecentSales() {
         </Avatar>
         <div className="ml-4 space-y-1">
           <p className="text-sm font-medium leading-none">Michael Brown</p>
-          <p className="text-sm text-muted-foreground">michael.brown@example.com</p>
+          <p className="text-sm text-muted-foreground">
+            michael.brown@example.com
+          </p>
         </div>
         <div className="ml-auto font-medium">+$199.00</div>
       </div>
     </div>
-  )
+  );
 }
-

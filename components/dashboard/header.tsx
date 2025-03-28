@@ -1,17 +1,17 @@
-"use client"
-import { Bell, Search } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { ModeToggle } from "@/components/mode-toggle"
-import { UserNav } from "@/components/dashboard/user-nav"
-import { SidebarTrigger } from "@/components/ui/sidebar"
+"use client";
+import { Bell, Search } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { ModeToggle } from "@/components/mode-toggle";
+import { UserNav } from "@/components/dashboard/user-nav";
+import { SidebarTrigger } from "@/components/ui/sidebar";
 
 interface HeaderProps {
   user: {
-    name?: string | null
-    email?: string | null
-    image?: string | null
-  }
+    name?: string | null;
+    email?: string | null;
+    image?: string | null;
+  };
 }
 
 export function Header({ user }: HeaderProps) {
@@ -40,6 +40,5 @@ export function Header({ user }: HeaderProps) {
         <UserNav user={user} />
       </div>
     </header>
-  )
+  );
 }
-

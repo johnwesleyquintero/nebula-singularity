@@ -1,5 +1,5 @@
-import { Github, Linkedin, Twitter } from "lucide-react"
-import Link from "next/link"
+import { Github, Linkedin, Twitter } from "lucide-react";
+import Link from "next/link";
 
 const footerLinks = [
   {
@@ -8,8 +8,8 @@ const footerLinks = [
       { name: "Features", href: "#features" },
       { name: "Pricing", href: "#pricing" },
       { name: "Help", href: "/help" },
-      { name: "FAQ", href: "#faq" }
-    ]
+      { name: "FAQ", href: "#faq" },
+    ],
   },
   {
     title: "Company",
@@ -17,8 +17,8 @@ const footerLinks = [
       { name: "About", href: "/about" },
       { name: "Blog", href: "/blog" },
       { name: "Careers", href: "/careers" },
-      { name: "Contact", href: "/contact" }
-    ]
+      { name: "Contact", href: "/contact" },
+    ],
   },
   {
     title: "Legal",
@@ -26,16 +26,20 @@ const footerLinks = [
       { name: "Privacy Policy", href: "/privacy" },
       { name: "Terms of Service", href: "/terms" },
       { name: "Cookie Policy", href: "/cookies" },
-      { name: "Security", href: "/security" }
-    ]
-  }
-]
+      { name: "Security", href: "/security" },
+    ],
+  },
+];
 
 const socialLinks = [
   { name: "Twitter", href: "https://twitter.com/sellsmartpro", icon: Twitter },
-  { name: "LinkedIn", href: "https://linkedin.com/company/sellsmartpro", icon: Linkedin },
-  { name: "GitHub", href: "https://github.com/sellsmartpro", icon: Github }
-]
+  {
+    name: "LinkedIn",
+    href: "https://linkedin.com/company/sellsmartpro",
+    icon: Linkedin,
+  },
+  { name: "GitHub", href: "https://github.com/sellsmartpro", icon: Github },
+];
 
 export function Footer() {
   return (
@@ -48,7 +52,8 @@ export function Footer() {
               <span className="font-bold">SellSmart Pro</span>
             </Link>
             <p className="mt-4 text-sm text-muted-foreground">
-              Empowering Amazon sellers with intelligent tools and analytics for business growth.
+              Empowering Amazon sellers with intelligent tools and analytics for
+              business growth.
             </p>
           </div>
           {footerLinks.map((group, index) => (
@@ -90,5 +95,5 @@ export function Footer() {
         </div>
       </div>
     </footer>
-  )
+  );
 }
